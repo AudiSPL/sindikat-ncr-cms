@@ -1,0 +1,21 @@
+{
+  "membership.application": "Prijava za Članstvo",
+  "form.fullName": "Ime i Prezime *",
+  "form.email": "Email *",
+  "form.quicklookId": "Quicklook ID *",
+  "form.city": "Grad *",
+  "form.organization": "Organizacija",
+  "form.submit": "Pošalji Prijavu",
+  "form.sending": "Slanje...",
+  "submitted.title": "Prijava poslata!",
+  "submitted.subtitle": "Kontaktiraćemo vas uskoro.",
+  "consents.acceptRules": "Prihvatam Statut i Pravila *",
+  "consents.gdpr": "Saglasnost za obradu podataka (GDPR) *",
+  "consents.privacy.prefix": "Potvrđujem da sam pročitao/la i razumeo/la",
+  "consents.privacy.link": "Politiku privatnosti",
+  "consents.newsletter": "Dajem saglasnost da primam informativne e-mail poruke.",
+  "lang.sr": "SR",
+  "lang.en": "EN"
+}
+
+

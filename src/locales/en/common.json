@@ -1,0 +1,21 @@
+{
+  "membership.application": "Membership Application",
+  "form.fullName": "Full Name *",
+  "form.email": "Email *",
+  "form.quicklookId": "Quicklook ID *",
+  "form.city": "City *",
+  "form.organization": "Organization",
+  "form.submit": "Submit Application",
+  "form.sending": "Sending...",
+  "submitted.title": "Application Submitted!",
+  "submitted.subtitle": "We will contact you shortly.",
+  "consents.acceptRules": "I accept the Statute and Rules *",
+  "consents.gdpr": "Consent to data processing (GDPR) *",
+  "consents.privacy.prefix": "I confirm that I have read and understood the",
+  "consents.privacy.link": "Privacy Policy",
+  "consents.newsletter": "I consent to receive informational email messages.",
+  "lang.sr": "SR",
+  "lang.en": "EN"
+}
+
+
