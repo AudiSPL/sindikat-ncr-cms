@@ -8,24 +8,39 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY!
 );
 
+// Posle kreiranja klijenta, dodaj log:
+console.log('[SUPABASE] URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+
 export async function POST(req: NextRequest) {
   try {
+    const body = await req.json();
+    // Runtime zaštita: nikad ne šalji is_active_member
+    delete (body as any).is_active_member;
+    delete (body as any).isActiveMember;
+
+    // (Log za dev) potvrdi koji projekat koristiš
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[API] Using Supabase:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+    }
+    
     // Rate limit
     const identifier = getRateLimitIdentifier(req);
     const rl = rateLimit(identifier, 5, 60000);
     if (!rl.success) {
       return NextResponse.json({ error: 'Previše zahteva. Pokušajte ponovo za minut.' }, { status: 429, headers: { 'X-RateLimit-Remaining': '0' } });
     }
-    const body = await req.json();
-    const raw = body;
-    const fullName = sanitizeInput(raw.fullName);
-    const email = sanitizeEmail(raw.email);
-    const quicklookId = sanitizeQuicklookId(raw.quicklookId);
-    const city = sanitizeInput(raw.city);
-    const organization = sanitizeInput(raw.organization);
-    const agreeJoin = !!raw.agreeJoin;
-    const agreeGDPR = !!raw.agreeGDPR;
-    const agreeNewsletter = !!raw.agreeNewsletter;
+
+    const {
+      fullName, 
+      email, 
+      quicklookId, 
+      city, 
+      organization,
+      agreeJoin,
+      agreeGDPR,
+      isAnonymous,
+      recaptchaToken 
+    } = body;
 
     // Verify reCAPTCHA if provided
     try {
@@ -83,23 +98,32 @@ export async function POST(req: NextRequest) {
       }, { status: 409 });
     }
 
-    // Insert u bazu
-    const { data: member, error: insertError } = await supabase
+    const payload = {
+      full_name: sanitizeInput(fullName),
+      email: sanitizeEmail(email),
+      quicklook_id: sanitizeQuicklookId(quicklookId),
+      city: sanitizeInput(city),
+      organization: sanitizeInput(organization) || null,
+      status: 'active',
+      consent: true,
+      agree_join: !!agreeJoin,
+      agree_gdpr: !!agreeGDPR,
+      is_anonymous: isAnonymous ?? true,
+      special_status: 'clan',
+      active_participation: false,
+      send_copy: false,
+      language: 'sr',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('INSERT payload →', JSON.stringify(payload, null, 2));
+    }
+
+    const { error: insertError } = await supabase
       .from('members')
-      .insert({
-        full_name: fullName,
-        email: email,
-        quicklook_id: quicklookId,
-        city: city,
-        organization: organization || null,
-        status: 'pending',
-        active_participation: false,
-        send_copy: !!agreeNewsletter,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
+      .insert(payload); // bez .select()
 
     if (insertError) {
       console.error('Supabase insert error:', insertError);
@@ -108,25 +132,32 @@ export async function POST(req: NextRequest) {
       }, { status: 500 });
     }
 
-    console.log('✅ Member created:', member.id);
+    console.log('✅ Member created successfully');
 
     // Generate membership number on submit: MBR-000123
     try {
-      const membershipNumber = `MBR-${String(member.id).padStart(6, '0')}`;
-      const { data: updatedMember, error: updateError } = await supabase
+      // Get the latest member ID (since we didn't use .select())
+      const { data: latestMember } = await supabase
         .from('members')
-        .update({
-          member_id: membershipNumber,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', member.id)
-        .select()
+        .select('id')
+        .eq('email', email)
         .single();
+      
+      if (latestMember) {
+        const membershipNumber = `MBR-${String(latestMember.id).padStart(6, '0')}`;
+        const { error: updateError } = await supabase
+          .from('members')
+          .update({
+            member_id: membershipNumber,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', latestMember.id);
 
-      if (updateError) {
-        console.error('⚠️ Failed to set membership number:', updateError.message);
-      } else {
-        console.log('🔢 Membership number set:', updatedMember.member_id);
+        if (updateError) {
+          console.error('⚠️ Failed to set membership number:', updateError.message);
+        } else {
+          console.log('🔢 Membership number set:', membershipNumber);
+        }
       }
     } catch (mnErr: any) {
       console.error('Membership number generation error:', mnErr?.message || mnErr);
@@ -144,13 +175,12 @@ export async function POST(req: NextRequest) {
           to: email,
           type: 'initial',
           memberData: {
-            id: member.id,
             fullName,
             email,
             quicklookId,
             city,
             organization,
-            status: 'pending',
+            status: 'active',
           },
           ccUnion: true,
         }),
@@ -166,13 +196,12 @@ export async function POST(req: NextRequest) {
             to: unionEmail,
             type: 'admin-notify',
             memberData: {
-              id: member.id,
               fullName,
               email,
               quicklookId,
               city,
               organization,
-              status: 'pending',
+              status: 'active',
             },
           }),
         });
@@ -183,10 +212,7 @@ export async function POST(req: NextRequest) {
       console.error('✉️ Email dispatch error (non-fatal):', emailErr);
     }
 
-    return NextResponse.json({
-      success: true,
-      memberId: member.id,
-    });
+    return NextResponse.json({ ok: true });
 
   } catch (error: any) {
     console.error('❌ Submit application error:', error);

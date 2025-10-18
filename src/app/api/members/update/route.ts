@@ -1,10 +1,22 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
-import { supabase } from "@/lib/supabase";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
-export async function PUT(req: Request) {
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+
+export async function PUT(req: NextRequest) {
   try {
+    // Sanity guard – odmah prekini ako nema service key-a
+    if (!process.env.SUPABASE_SERVICE_KEY) {
+      throw new Error('SUPABASE_SERVICE_KEY is missing');
+    }
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[API /members/update] URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log('[API /members/update] SERVICE KEY PRESENT:', !!process.env.SUPABASE_SERVICE_KEY);
+    }
+
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
@@ -15,38 +27,41 @@ export async function PUT(req: Request) {
     }
 
     const body = await req.json();
+
+    // Zabranjena polja (generated/read-only)
+    delete (body as any).is_active_member;
+    delete (body as any).created_at;
+    delete (body as any).updated_at;
+    delete (body as any).member_id;
+    delete (body as any).approved_by;
+
     const { id, ids, updates } = body;
-    // Whitelist only known columns in 'members' table
-    const allowedKeys = new Set([
-      'full_name',
-      'email',
-      'quicklook_id',
-      'city',
-      'organization',
-      'status',
-      'member_id',
-      'send_copy',
-    ]);
-    const safeUpdates: Record<string, any> = {};
-    if (updates && typeof updates === 'object') {
-      Object.keys(updates).forEach((k) => {
-        if (allowedKeys.has(k)) {
-          (safeUpdates as any)[k] = (updates as any)[k];
-        }
-      });
-    }
+    // ✅ whitelist za update
+    const updateData: any = {};
+    if (updates?.full_name !== undefined) updateData.full_name = updates.full_name;
+    if (updates?.email !== undefined) updateData.email = updates.email;
+    if (updates?.quicklook_id !== undefined) updateData.quicklook_id = updates.quicklook_id;
+    if (updates?.city !== undefined) updateData.city = updates.city;
+    if (updates?.organization !== undefined) updateData.organization = updates.organization;
+    if (updates?.status !== undefined) updateData.status = updates.status;
+    if (updates?.special_status !== undefined) updateData.special_status = updates.special_status;
+    if (updates?.is_anonymous !== undefined) updateData.is_anonymous = !!updates.is_anonymous;
+    if (updates?.consent !== undefined) updateData.consent = !!updates.consent;
+    if (updates?.agree_join !== undefined) updateData.agree_join = !!updates.agree_join;
+    if (updates?.agree_gdpr !== undefined) updateData.agree_gdpr = !!updates.agree_gdpr;
+    if (updates?.active_participation !== undefined) updateData.active_participation = !!updates.active_participation;
+    if (updates?.send_copy !== undefined) updateData.send_copy = !!updates.send_copy;
+    if (updates?.language !== undefined) updateData.language = updates.language;
+    if (updates?.notes !== undefined) updateData.notes = updates.notes;
+
+    updateData.updated_at = new Date().toISOString();
 
     // Single member update
-    if (id && Object.keys(safeUpdates).length > 0) {
-      const { data, error } = await supabase
+    if (id && Object.keys(updateData).length > 0) {
+      const { error } = await supabaseAdmin
         .from("members")
-        .update({
-          ...safeUpdates,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", id)
-        .select()
-        .single();
+        .update(updateData)
+        .eq("id", id);
 
       if (error) {
         throw new Error(`Failed to update member: ${error.message}`);
@@ -54,15 +69,23 @@ export async function PUT(req: Request) {
 
       // If member approved -> ensure joined_at and member_id, then generate PDFs and send activation email
       try {
-        if (updates?.status === 'active' && data?.email) {
+        if (updates?.status === 'active') {
           const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-          // Work with an effective member snapshot
-          let effective = data as any;
+          // Get member data for activation
+          const { data: memberData } = await supabaseAdmin
+            .from('members')
+            .select('*')
+            .eq('id', id)
+            .single();
+          
+          if (memberData) {
+            // Work with an effective member snapshot
+            let effective = memberData as any;
           const shouldSetJoin = !effective.joined_at;
           const shouldSetMemberId = !effective.member_id;
           if (shouldSetJoin || shouldSetMemberId) {
             const membershipNumber = shouldSetMemberId ? `MBR-${String(effective.id).padStart(6, '0')}` : effective.member_id;
-            const { data: ensured } = await supabase
+            const { data: ensured } = await supabaseAdmin
               .from('members')
               .update({
                 joined_at: shouldSetJoin ? new Date().toISOString() : effective.joined_at,
@@ -136,28 +159,21 @@ export async function PUT(req: Request) {
               },
             }),
           });
+          }
         }
       } catch (mailErr) {
         console.error('Activation email dispatch error:', mailErr);
       }
 
-      return NextResponse.json({
-        success: true,
-        data,
-        message: "Member updated successfully",
-      });
+      return NextResponse.json({ success: true });
     }
 
     // Bulk update
-    if (ids && Array.isArray(ids) && Object.keys(safeUpdates).length > 0) {
-      const { data, error } = await supabase
+    if (ids && Array.isArray(ids) && Object.keys(updateData).length > 0) {
+      const { error } = await supabaseAdmin
         .from("members")
-        .update({
-          ...safeUpdates,
-          updated_at: new Date().toISOString(),
-        })
-        .in("id", ids)
-        .select();
+        .update(updateData)
+        .in("id", ids);
 
       if (error) {
         throw new Error(`Failed to bulk update: ${error.message}`);
@@ -165,9 +181,8 @@ export async function PUT(req: Request) {
 
       return NextResponse.json({
         success: true,
-        data,
-        count: data?.length || 0,
-        message: `${data?.length || 0} members updated successfully`,
+        count: ids.length,
+        message: `${ids.length} members updated successfully`,
       });
     }
 

@@ -1,13 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import path from "path";
 import { promises as fs } from "fs";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -19,7 +20,7 @@ export async function GET(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     const { data, error } = await supabase
       .from("members")
@@ -61,9 +62,65 @@ export async function GET(
   }
 }
 
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { id } = await params;
+    const body = await req.json();
+    
+    const updateData: Record<string, unknown> = {
+      updated_at: new Date().toISOString(),
+    };
+
+    // Allow updating these fields (whitelist approach)
+    if (body.full_name !== undefined) updateData.full_name = body.full_name;
+    if (body.email !== undefined) updateData.email = body.email;
+    if (body.quicklook_id !== undefined) updateData.quicklook_id = body.quicklook_id;
+    if (body.city !== undefined) updateData.city = body.city;
+    if (body.organization !== undefined) updateData.organization = body.organization;
+    if (body.status !== undefined) updateData.status = body.status;
+    if (body.special_status !== undefined) updateData.special_status = body.special_status;
+    if (body.is_anonymous !== undefined) updateData.is_anonymous = body.is_anonymous;
+    if (body.notes !== undefined) updateData.notes = body.notes;
+
+    const { data: member, error } = await supabaseAdmin
+      .from('members')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // Log audit
+    await supabaseAdmin.from('audit_logs').insert({
+      admin_id: (session.user as Record<string, unknown>).id,
+      action: 'UPDATE_MEMBER',
+      target_type: 'member',
+      target_id: id,
+      details: { changes: updateData },
+      created_at: new Date().toISOString(),
+    });
+
+    return NextResponse.json({ member });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
+  }
+}
+
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -75,15 +132,22 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
-    // Delete from database
-    const { error } = await supabase
+    // Brza dijagnostika
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[SUPABASE ADMIN URL]:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log('[SERVICE KEY SET]:', !!process.env.SUPABASE_SERVICE_KEY);
+    }
+
+    // Delete from database using admin client
+    const { error } = await supabaseAdmin
       .from("members")
       .delete()
       .eq("id", id);
 
     if (error) {
+      console.error('Delete member supabase error:', error);
       throw new Error(`Failed to delete member: ${error.message}`);
     }
 
@@ -97,10 +161,11 @@ export async function DELETE(
       // Don't fail the request if document deletion fails
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Member deleted successfully",
-    });
+    // Ako brišeš i fajlove iz Storage-a, koristi admin klijent:
+    // const storageRes = await supabaseAdmin.storage.from('member_docs').remove([...paths])
+    // if (storageRes.error) throw new Error(`Storage delete failed: ${storageRes.error.message}`);
+
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error("Delete member error:", error);
     return NextResponse.json(

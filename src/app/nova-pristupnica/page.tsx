@@ -26,7 +26,7 @@ function PristupnicaInner() {
     organization: '',
     agreeJoin: false,
     agreeGDPR: false,
-    agreeNewsletter: false,
+    isAnonymous: true,
   });
 
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -82,12 +82,39 @@ function PristupnicaInner() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-[#F8FAFC] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-white p-4">
         <Card className="max-w-md">
-          <CardContent className="pt-6 text-center">
-            <CheckCircle className="w-16 h-16 text-[#22c55e] mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">{t('submitted.title')}</h2>
-            <p className="text-gray-600">{t('submitted.subtitle')}</p>
+          <CardContent className="pt-6 text-center space-y-4">
+            <CheckCircle className="w-16 h-16 text-[#005B99] mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-[#0B2C49]">
+              {lang === 'sr' 
+                ? 'Hvala što si se priključio/la!'
+                : 'Thanks for joining!'}
+            </h2>
+            <p className="text-[#6B7280]">
+              {lang === 'sr'
+                ? 'Ako želiš, možeš se uključiti u radne grupe. Kontaktiraj nas na'
+                : 'If you wish, you can join working groups. Contact us via email'}
+              {' '}
+              <a 
+                href="mailto:office@sindikatncr.com"
+                className="text-[#005B99] font-medium hover:underline"
+              >
+                office@sindikatncr.com
+              </a>
+            </p>
+            <Button
+              onClick={() => {
+                setSubmitted(false);
+                setFormData({
+                  fullName: '', email: '', quicklookId: '', city: '', organization: '',
+                  agreeJoin: false, agreeGDPR: false, isAnonymous: true
+                });
+              }}
+              className="mt-4 bg-[#F28C38] hover:bg-[#d97a2e]"
+            >
+              {lang === 'sr' ? 'Nova prijava' : 'New application'}
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -170,37 +197,82 @@ function PristupnicaInner() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
                   <Checkbox
                     id="join"
                     required
                     checked={formData.agreeJoin}
                     onCheckedChange={(checked) => setFormData({...formData, agreeJoin: !!checked})}
+                    className="mt-1"
                   />
-                  <Label htmlFor="join">{t('consents.acceptRules')}</Label>
+                  <div className="flex-1">
+                    <Label 
+                      htmlFor="join" 
+                      className="cursor-pointer text-[#0B2C49] font-medium leading-relaxed"
+                    >
+                      {t('consents.acceptRules')} <span className="text-[#C63B3B]">*</span>
+                    </Label>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-start space-x-3">
                   <Checkbox
                     id="privacy"
                     checked={formData.agreeGDPR}
                     onCheckedChange={(checked) => setFormData({...formData, agreeGDPR: !!checked})}
+                    className="mt-1"
                   />
-                  <Label htmlFor="privacy">
-                    <span>
-                      {t('consents.privacy.prefix')} <a href="/politika-privatnosti" className="underline text-[#005B99]" target="_blank" rel="noopener noreferrer">{t('consents.privacy.link')}</a>.
-                    </span>
-                  </Label>
+                  <div className="flex-1">
+                    <Label 
+                      htmlFor="privacy" 
+                      className="cursor-pointer text-[#0B2C49] font-medium leading-relaxed"
+                    >
+                      <span>
+                        {t('consents.privacy.prefix')} <a href="/politika-privatnosti" className="underline text-[#005B99]" target="_blank" rel="noopener noreferrer">{t('consents.privacy.link')}</a>.
+                      </span>
+                    </Label>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="newsletter"
-                    checked={formData.agreeNewsletter}
-                    onCheckedChange={(checked) => setFormData({...formData, agreeNewsletter: !!checked})}
-                  />
-                  <Label htmlFor="newsletter">{t('consents.newsletter')}</Label>
+                {/* Anonymous Checkbox - NEW */}
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="anonymous"
+                      checked={formData.isAnonymous}
+                      onCheckedChange={(checked) => 
+                        setFormData({ ...formData, isAnonymous: !!checked })
+                      }
+                      className="mt-1"
+                    />
+                    <div className="flex-1">
+                      <Label 
+                        htmlFor="anonymous" 
+                        className="cursor-pointer text-[#0B2C49] font-medium leading-relaxed"
+                      >
+                        {lang === 'sr' 
+                          ? 'Želim da ostanem anoniman/na do sticanja reprezentativnosti.'
+                          : 'I want to remain anonymous until representativeness is achieved.'}
+                      </Label>
+                      <p className="text-sm text-[#6B7280] mt-1">
+                        {lang === 'sr'
+                          ? 'Možeš uvek promeniti na vidljivo i uključiti se u radne grupe.'
+                          : 'You can switch to visible and join working groups at any time.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Show info when not anonymous */}
+                  {!formData.isAnonymous && (
+                    <div className="bg-[#005B99] bg-opacity-10 border border-[#005B99] rounded-lg p-4">
+                      <p className="text-sm text-[#0B2C49]">
+                        {lang === 'sr'
+                          ? '✓ Biće ti omogućeno da se uključiš u radne grupe i budeš vidljiv/a drugim članovima.'
+                          : '✓ You will be able to join working groups and be visible to other members.'}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 

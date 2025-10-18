@@ -76,6 +76,7 @@ async function buildAttachments(memberId: string | number) {
   const wanted = [
     { file: "confirmation.pdf", name: "Potvrda o članstvu.pdf" },
     { file: "card.pdf",         name: "Clanska kartica.pdf"   },
+    { file: "policy.pdf",       name: "Pravilnik o članstvu.pdf" },
   ];
   const out: Array<{ filename: string; content: Buffer }> = [];
   for (const w of wanted) {

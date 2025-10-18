@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
+import { SPECIAL_STATUS_LABELS, SpecialStatus } from '@/types/member';
 import {
   ResponsiveContainer,
   PieChart,
@@ -22,7 +23,16 @@ import {
   Bar
 } from 'recharts';
 
-type Member = { id: number; status: string; created_at: string; organization?: string | null; city?: string | null; card_sent?: boolean | null };
+type Member = { 
+  id: number; 
+  status: string; 
+  created_at: string; 
+  organization?: string | null; 
+  city?: string | null; 
+  card_sent?: boolean | null;
+  special_status?: string;
+  is_active_member?: boolean;
+};
 
 const GOAL = 334;
 const TOTAL_EMPLOYEES = 2222;
@@ -115,7 +125,24 @@ export default function AnalyticsPage() {
     return all.slice(-days);
   }, [members, timeRange]);
 
-  // Chart 6: Funnel (pending/active/card_sent)
+  // Chart 6: Special Status Distribution
+  const specialStatusData = useMemo(() => {
+    const statusCounts = activeMembers.reduce((acc: Record<string, number>, m) => {
+      const status = m.special_status || 'clan';
+      acc[status] = (acc[status] || 0) + 1;
+      return acc;
+    }, {});
+
+    const colors = ['#005B99', '#F28C38', '#0B2C49', '#C63B3B', '#6B7280', '#22c55e', '#f59e0b', '#8b5cf6'];
+    
+    return Object.entries(statusCounts).map(([status, count], idx) => ({
+      name: SPECIAL_STATUS_LABELS[status as SpecialStatus]?.sr || status,
+      value: count,
+      fill: colors[idx % colors.length]
+    }));
+  }, [activeMembers]);
+
+  // Chart 7: Funnel (pending/active/card_sent)
   const funnelData = useMemo(() => {
     const pending = members.filter(m => m.status === 'pending').length;
     const approved = members.filter(m => m.status === 'active').length;
@@ -127,7 +154,15 @@ export default function AnalyticsPage() {
     ];
   }, [members]);
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: any) => {
+  const renderCustomLabel = (props: {
+    cx: number;
+    cy: number;
+    midAngle: number;
+    innerRadius: number;
+    outerRadius: number;
+    percent: number;
+  }) => {
+    const { cx, cy, midAngle, innerRadius, outerRadius, percent } = props;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
     const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
@@ -203,7 +238,7 @@ export default function AnalyticsPage() {
               {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
-                    <Pie data={goalData} cx="50%" cy="50%" labelLine={false} label={renderCustomLabel} outerRadius={100} dataKey="value">
+                    <Pie data={goalData} cx="50%" cy="50%" labelLine={false} outerRadius={100} dataKey="value">
                       {goalData.map((entry, index) => (<Cell key={`cell-g-${index}`} fill={(entry as any).fill} />))}
                     </Pie>
                     <Tooltip /><Legend />
@@ -219,7 +254,7 @@ export default function AnalyticsPage() {
               {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
-                    <Pie data={penetrationData} cx="50%" cy="50%" labelLine={false} label={renderCustomLabel} outerRadius={100} dataKey="value">
+                    <Pie data={penetrationData} cx="50%" cy="50%" labelLine={false} outerRadius={100} dataKey="value">
                       {penetrationData.map((entry, index) => (<Cell key={`cell-p-${index}`} fill={(entry as any).fill} />))}
                     </Pie>
                     <Tooltip /><Legend />
@@ -255,6 +290,32 @@ export default function AnalyticsPage() {
                       ))}
                     </Pie>
                     <Tooltip /><Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader><CardTitle className="text-lg text-[#0B2C49]">👔 Specijalni Statusi</CardTitle></CardHeader>
+            <CardContent>
+              {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={specialStatusData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={100}
+                      dataKey="value"
+                    >
+                      {specialStatusData.map((entry, index) => (
+                        <Cell key={`cell-status-${index}`} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               )}
