@@ -1,0 +1,39 @@
+# Next.js build cache (this is the main culprit)
+.next/
+.next/cache/
+
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# OS files
+.DS_Store
+.env.local
+.env.*.local
+
+# Env (do NOT commit secrets)
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Coverage
+coverage/
+
+# Vercel
+.vercel/
+
+# Editor
+.vscode/
+*.swp
+*.swo
+
+# Windows
+Thumbs.db
