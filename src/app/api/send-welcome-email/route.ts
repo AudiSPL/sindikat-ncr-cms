@@ -1,11 +1,11 @@
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const preferredRegion = "fra1";
 
 import { NextResponse } from "next/server";
+import { sendMail } from '@/lib/mailer';
 import path from "path";
 import { promises as fs } from "fs";
-// Use dynamic import to avoid build-time resolution issues if dependency isn't installed yet
 
 type Member = {
   id: string;
@@ -25,8 +25,6 @@ type Body = {
   memberData: Member;
   type?: "initial" | "activation" | "admin-notify";
   attachFiles?: boolean;
-  ccSelf?: boolean;
-  ccUnion?: boolean;
   bccUnion?: boolean;
   bcc?: string | string[];
 };
@@ -91,7 +89,6 @@ async function buildAttachments(memberId: string | number) {
 
 export async function POST(req: Request) {
   try {
-    const nodemailer = (await import("nodemailer")).default;
     const body = (await req.json()) as Body;
     const to = ensureString(body.to);
     const m = body.memberData;
@@ -100,17 +97,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Missing 'to' or 'memberData.email'." }, { status: 400 });
     }
 
-    const host = process.env.EMAIL_HOST || "smtp.gmail.com";
-    const user = process.env.EMAIL_USER || "";
-    const pass = process.env.EMAIL_PASS || "";
-    const union = process.env.UNION_EMAIL || "";
-
-    if (!user || !pass) {
-      return NextResponse.json({ success: false, error: "EMAIL_USER or EMAIL_PASS not configured" }, { status: 500 });
-    }
-
-    const transporter = nodemailer.createTransport({ host, port: 587, secure: false, auth: { user, pass } });
-
     const subject =
       type === "activation"
         ? `Aktivacija članstva – ${m.fullName || ""}`
@@ -118,43 +104,29 @@ export async function POST(req: Request) {
         ? `ADMIN – Nova prijava / akcija – ${m.fullName || ""}`
         : `Prijava primljena – Sindikat radnika NCR Atleos Beograd`;
 
-    const attachments = (body.attachFiles && m?.id) ? await buildAttachments(m.id) : [];
+    // Build BCC list (no CC usage)
+    const bcc: string[] = [];
+    if (body.bccUnion) bcc.push('office@sindikatncr.com');
+    if (body.bcc) bcc.push(...(Array.isArray(body.bcc) ? body.bcc : [body.bcc]));
 
-    const mailOptions = {
-      from: `"Sindikat NCR Atleos" <${user}>`,
+    // Note: Resend doesn't support attachments in the same way as Nodemailer
+    // For now, we'll send without attachments. In production, you might want to:
+    // 1. Upload files to Supabase Storage and include download links
+    // 2. Use a different email service that supports attachments
+    // 3. Generate attachments on-demand via separate API calls
+
+    const resp = await sendMail({
       to,
       subject,
       html: renderHtml(type, m),
-      attachments: attachments.length ? attachments : undefined,
-    };
+      bcc: bcc.length > 0 ? bcc : undefined,
+    });
 
-    // CC i BCC
-    const cc: string[] = [];
-    if (body.ccUnion && union) cc.push(union);
-    if (body.ccSelf && m.email && m.email !== to) cc.push(m.email);
-    if (cc.length) (mailOptions as any).cc = cc.join(",");
-    else delete (mailOptions as any).cc; // Explicitly remove if empty
-
-    const bcc: string[] = [];
-    if (body.bccUnion && union) bcc.push(union);
-    if (body.bcc) bcc.push(...(Array.isArray(body.bcc) ? body.bcc : [body.bcc]));
-    if (bcc.length) (mailOptions as any).bcc = bcc.join(",");
-    else delete (mailOptions as any).bcc; // Explicitly remove if empty
-
-    // Also ensure attachments is properly set
-    if (!attachments.length) delete (mailOptions as any).attachments;
-
-    const info = await transporter.sendMail(mailOptions);
-
-    // Make sure info is serializable
-    const response = {
+    return NextResponse.json({
       success: true,
-      messageId: info.messageId || '',
-      accepted: Array.isArray(info.accepted) ? info.accepted : [],
-      attachments: attachments.map(a => a.filename),
-    };
-
-    return NextResponse.json(response);
+      messageId: (resp as any)?.id || '',
+      attachments: [], // No attachments with Resend for now
+    });
   } catch (e: any) {
     console.error('Email error:', e);
     return NextResponse.json(

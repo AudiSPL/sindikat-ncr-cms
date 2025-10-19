@@ -1,7 +1,12 @@
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+export const preferredRegion = 'fra1';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { sanitizeInput, sanitizeEmail, sanitizeQuicklookId } from '@/lib/sanitize';
 import { rateLimit, getRateLimitIdentifier } from '@/lib/rate-limit';
+import { sendMail } from '@/lib/mailer';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -163,53 +168,23 @@ export async function POST(req: NextRequest) {
       console.error('Membership number generation error:', mnErr?.message || mnErr);
     }
 
-    // Slanje emailova
+    // Slanje emailova (Resend helper)
     try {
-      const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-
-      // 1) Potvrda prijave kandidatu
-      await fetch(`${baseUrl}/api/send-welcome-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: email,
-          type: 'initial',
-          memberData: {
-            fullName,
-            email,
-            quicklookId,
-            city,
-            organization,
-            status: 'active',
-          },
-          ccUnion: true,
-        }),
+      await sendMail({
+        to: email,
+        subject: 'Hvala na prijavi – Sindikat NCR',
+        html: `<p>Zdravo ${sanitizeInput(fullName)},</p><p>Hvala na prijavi. Uskoro se javljamo.</p>`,
+        bcc: 'sindikatncratleos@gmail.com',
       });
 
-      // 2) Notifikacija adminu
-      const unionEmail = process.env.UNION_EMAIL;
-      if (unionEmail) {
-        await fetch(`${baseUrl}/api/send-welcome-email`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            to: unionEmail,
-            type: 'admin-notify',
-            memberData: {
-              fullName,
-              email,
-              quicklookId,
-              city,
-              organization,
-              status: 'active',
-            },
-          }),
-        });
-      } else {
-        console.warn('⚠️ UNION_EMAIL is not set; admin notification email skipped');
-      }
-    } catch (emailErr) {
-      console.error('✉️ Email dispatch error (non-fatal):', emailErr);
+      await sendMail({
+        to: 'office@sindikatncr.com',
+        subject: `Nova prijava: ${sanitizeInput(fullName)}`,
+        html: `<p><b>Email:</b> ${sanitizeEmail(email)}<br/><b>Grad:</b> ${sanitizeInput(city) ?? '-'}<br/><b>Anoniman:</b> ${(isAnonymous ?? true) ? 'Da' : 'Ne'}</p>`,
+      });
+    } catch (e) {
+      console.error('Mail error (submit-application):', e);
+      // non-fatal
     }
 
     return NextResponse.json({ ok: true });
