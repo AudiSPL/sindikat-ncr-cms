@@ -22,7 +22,7 @@ export const authOptions: NextAuthOptions = {
 
         if (!credentials?.email || !credentials?.password) {
           console.log('[LOGIN DEBUG] ❌ Missing credentials');
-          throw new Error('Email i password su obavezni');
+          return null; // Return null instead of throwing error
         }
 
         console.log('[LOGIN DEBUG] 🔍 Step 1: Checking Supabase Auth...');
@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
         if (authError || !authData.user) {
           console.log('[LOGIN DEBUG] ❌ Supabase Auth failed:', authError?.message);
-          throw new Error('Pogrešan email ili password');
+          return null; // Return null instead of throwing error
         }
 
         console.log('[LOGIN DEBUG] ✅ Step 1 passed: Supabase Auth successful');
@@ -62,7 +62,7 @@ export const authOptions: NextAuthOptions = {
 
         if (error || !admin) {
           console.log('[LOGIN DEBUG] ❌ Admin not found in table:', error?.message);
-          throw new Error('Korisnik nije admin');
+          return null; // Return null instead of throwing error
         }
 
         console.log('[LOGIN DEBUG] ✅ Step 2 passed: Admin found in table');
