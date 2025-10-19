@@ -1,8 +1,12 @@
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+export const preferredRegion = 'fra1';
+
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import path from "path";
 import { promises as fs } from "fs";
 
@@ -90,7 +94,7 @@ export async function PUT(
     if (body.is_anonymous !== undefined) updateData.is_anonymous = body.is_anonymous;
     if (body.notes !== undefined) updateData.notes = body.notes;
 
-    const { data: member, error } = await supabaseAdmin
+    const { data: member, error } = await getSupabaseAdmin()
       .from('members')
       .update(updateData)
       .eq('id', id)
@@ -102,7 +106,7 @@ export async function PUT(
     }
 
     // Log audit
-    await supabaseAdmin.from('audit_logs').insert({
+    await getSupabaseAdmin().from('audit_logs').insert({
       admin_id: (session.user as Record<string, unknown>).id,
       action: 'UPDATE_MEMBER',
       target_type: 'member',
@@ -141,7 +145,7 @@ export async function DELETE(
     }
 
     // Delete from database using admin client
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from("members")
       .delete()
       .eq("id", id);
@@ -162,7 +166,7 @@ export async function DELETE(
     }
 
     // Ako brišeš i fajlove iz Storage-a, koristi admin klijent:
-    // const storageRes = await supabaseAdmin.storage.from('member_docs').remove([...paths])
+    // const storageRes = await getSupabaseAdmin().storage.from('member_docs').remove([...paths])
     // if (storageRes.error) throw new Error(`Storage delete failed: ${storageRes.error.message}`);
 
     return NextResponse.json({ success: true });

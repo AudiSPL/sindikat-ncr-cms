@@ -1,7 +1,8 @@
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const preferredRegion = 'fra1';
 
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -58,7 +59,7 @@ export async function PUT(req: NextRequest) {
 
     // Single member update
     if (id && Object.keys(updateData).length > 0) {
-      const { error } = await supabaseAdmin
+      const { error } = await getSupabaseAdmin()
         .from("members")
         .update(updateData)
         .eq("id", id);
@@ -71,12 +72,12 @@ export async function PUT(req: NextRequest) {
       try {
         if (updates?.status === 'active') {
           const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-          // Get member data for activation
-          const { data: memberData } = await supabaseAdmin
-            .from('members')
-            .select('*')
-            .eq('id', id)
-            .single();
+                  // Get member data for activation
+                  const { data: memberData } = await getSupabaseAdmin()
+                    .from('members')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
           
           if (memberData) {
             // Work with an effective member snapshot
@@ -85,7 +86,7 @@ export async function PUT(req: NextRequest) {
           const shouldSetMemberId = !effective.member_id;
           if (shouldSetJoin || shouldSetMemberId) {
             const membershipNumber = shouldSetMemberId ? `MBR-${String(effective.id).padStart(6, '0')}` : effective.member_id;
-            const { data: ensured } = await supabaseAdmin
+            const { data: ensured } = await getSupabaseAdmin()
               .from('members')
               .update({
                 joined_at: shouldSetJoin ? new Date().toISOString() : effective.joined_at,
@@ -170,7 +171,7 @@ export async function PUT(req: NextRequest) {
 
     // Bulk update
     if (ids && Array.isArray(ids) && Object.keys(updateData).length > 0) {
-      const { error } = await supabaseAdmin
+      const { error } = await getSupabaseAdmin()
         .from("members")
         .update(updateData)
         .in("id", ids);

@@ -1,14 +1,16 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const serviceKey = process.env.SUPABASE_SERVICE_KEY!;
+let _admin: SupabaseClient | null = null;
 
-export const supabaseAdmin = createClient(url, serviceKey, {
-  auth: { persistSession: false },
-});
+export function getSupabaseAdmin(): SupabaseClient {
+  // Lazy init u runtime-u (ne na top-level-u)
+  if (_admin) return _admin;
 
-// (DEV log – bez odavanja ključa)
-if (process.env.NODE_ENV !== 'production') {
-  console.log('[ADMIN] Supabase URL:', url);
-  console.log('[ADMIN] Service key present:', !!serviceKey, 'len:', serviceKey?.length || 0);
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !serviceKey) {
+    throw new Error('Supabase admin env missing: check NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_KEY');
+  }
+  _admin = createClient(url, serviceKey, { auth: { persistSession: false } });
+  return _admin;
 }
