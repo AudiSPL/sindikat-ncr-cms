@@ -33,10 +33,11 @@ export async function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.google.com https://www.gstatic.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co;"
-  );
+  // Temporarily disable CSP to test reCAPTCHA
+  // response.headers.set(
+  //   'Content-Security-Policy',
+  //   "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://www.google.com/recaptcha/ https://cdn.jsdelivr.net; frame-src 'self' https://www.google.com/recaptcha/ https://recaptcha.google.com/; connect-src 'self' https://*.supabase.co https://www.google.com/recaptcha/ https://recaptcha.google.com/; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:;"
+  // );
 
   return response;
 }
