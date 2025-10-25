@@ -111,7 +111,7 @@ function PristupnicaInner() {
                   agreeJoin: false, agreeGDPR: false, isAnonymous: true
                 });
               }}
-              className="mt-4 bg-[#F28C38] hover:bg-[#d97a2e]"
+              className="mt-4"
             >
               {lang === 'sr' ? 'Nova prijava' : 'New application'}
             </Button>
@@ -125,13 +125,13 @@ function PristupnicaInner() {
     <div className="min-h-screen bg-gradient-to-br from-[#F8FAFC] to-[#F8FAFC] p-4">
       <div className="w-full max-w-2xl mx-auto py-6 px-3 sm:px-4">
         <div className="flex justify-end mb-3">
-          <button onClick={() => history.back()} className="mr-auto inline-flex items-center gap-2 text-[#005B99] underline text-sm">
+          <button onClick={() => history.back()} className="mr-auto inline-flex items-center gap-2 text-primary underline text-sm focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Go back">
             <ArrowLeft className="h-4 w-4" />
             Nazad
           </button>
           <div className="inline-flex rounded overflow-hidden border">
-            <button className={`px-3 py-1 text-sm ${lang==='sr' ? 'bg-[#005B99] text-white' : 'bg-white'}`} onClick={() => setLang('sr')}>{t('lang.sr')}</button>
-            <button className={`px-3 py-1 text-sm ${lang==='en' ? 'bg-[#005B99] text-white' : 'bg-white'}`} onClick={() => setLang('en')}>{t('lang.en')}</button>
+            <button className={`px-3 py-1 text-sm ${lang==='sr' ? 'bg-primary text-primary-foreground' : 'bg-background'} focus:outline-none focus:ring-2 focus:ring-primary`} onClick={() => setLang('sr')} aria-label="Switch to Serbian">{t('lang.sr')}</button>
+            <button className={`px-3 py-1 text-sm ${lang==='en' ? 'bg-primary text-primary-foreground' : 'bg-background'} focus:outline-none focus:ring-2 focus:ring-primary`} onClick={() => setLang('en')} aria-label="Switch to English">{t('lang.en')}</button>
           </div>
         </div>
         <Card>
@@ -141,8 +141,9 @@ function PristupnicaInner() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label>{t('form.fullName')}</Label>
+                <Label htmlFor="fullName">{t('form.fullName')}</Label>
                 <Input
+                  id="fullName"
                   required
                   value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
@@ -150,8 +151,9 @@ function PristupnicaInner() {
               </div>
 
               <div>
-                <Label>{t('form.email')}</Label>
+                <Label htmlFor="email">{t('form.email')}</Label>
                 <Input
+                  id="email"
                   type="email"
                   required
                   value={formData.email}
@@ -160,11 +162,12 @@ function PristupnicaInner() {
               </div>
 
               <div>
-                <Label>
+                <Label htmlFor="quicklookId">
                   {t('form.quicklookId')}
                   <span className="text-[#6B7280] text-xs"> ({lang === 'sr' ? 'verifikacija zaposlenja u kompaniji' : 'employment verification'})</span>
                 </Label>
                 <Input
+                  id="quicklookId"
                   required
                   placeholder="AB123456"
                   value={formData.quicklookId}
@@ -173,15 +176,18 @@ function PristupnicaInner() {
                     setFormData({ ...formData, quicklookId: value });
                     validateQuicklookId(value);
                   }}
+                  aria-invalid={quicklookError ? "true" : "false"}
+                  aria-describedby={quicklookError ? "quicklook-error" : undefined}
                 />
                 {quicklookError && (
-                  <p className="text-sm text-[#C63B3B] mt-1">{quicklookError}</p>
+                  <p id="quicklook-error" className="text-sm text-[#C63B3B] mt-1" role="alert">{quicklookError}</p>
                 )}
               </div>
 
               <div>
-                <Label>{t('form.city')}</Label>
+                <Label htmlFor="city">{t('form.city')}</Label>
                 <Input
+                  id="city"
                   required
                   value={formData.city}
                   onChange={(e) => setFormData({...formData, city: e.target.value})}
@@ -189,8 +195,9 @@ function PristupnicaInner() {
               </div>
 
               <div>
-                <Label>{t('form.organization')}</Label>
+                <Label htmlFor="organization">{t('form.organization')}</Label>
                 <Input
+                  id="organization"
                   placeholder="FSC / Legal / HR / CSM / PS"
                   value={formData.organization}
                   onChange={(e) => setFormData({...formData, organization: e.target.value})}
@@ -276,7 +283,7 @@ function PristupnicaInner() {
                 </div>
               </div>
 
-              <Button type="submit" disabled={loading} className="w-full bg-[#F28C38] hover:bg-[#d97a2e] text-white">
+              <Button type="submit" disabled={loading} className="w-full">
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

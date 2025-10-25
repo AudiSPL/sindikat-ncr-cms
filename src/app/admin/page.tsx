@@ -259,8 +259,8 @@ export default function AdminDashboard() {
   const goal = 334;
   const currentCount = members.filter(m => m.status === 'active').length;
   const penetrationData = [
-    { name: 'Članovi', value: currentCount, fill: '#F28C38' },
-    { name: 'Preostalo do 334', value: Math.max(goal - currentCount, 0), fill: '#E5E7EB' },
+    { name: 'Članovi', value: currentCount, fill: 'hsl(var(--brand-orange))' },
+    { name: 'Preostalo do 334', value: Math.max(goal - currentCount, 0), fill: 'hsl(var(--muted))' },
   ];
 
   if (status === 'loading' || loading) {
@@ -276,13 +276,13 @@ export default function AdminDashboard() {
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-3">
           <div className="justify-self-start">
-            <Button variant="outline" className="gap-2" onClick={() => router.back()}>
+            <Button variant="outline" className="gap-2" onClick={() => router.back()} aria-label="Go back to previous page">
               <ArrowLeft className="h-4 w-4" />
               Nazad
             </Button>
           </div>
           <div className="text-center sm:text-left">
-            <h1 className="text-3xl font-bold text-[#0B2C49]">Administracija</h1>
+            <h1 className="text-3xl font-bold text-brand-navy">Administracija</h1>
           </div>
           <div className="justify-self-end flex flex-col sm:flex-row gap-2">
             <nav className="flex gap-2">
@@ -291,7 +291,7 @@ export default function AdminDashboard() {
               <Link href="/admin/analytics"><Button variant={pathname === '/admin/analytics' ? 'default' : 'outline'}>📊 Analitika</Button></Link>
               <Link href="/admin/repository"><Button variant={pathname === '/admin/repository' ? 'default' : 'outline'}>📁 Repozitorijum</Button></Link>
             </nav>
-            <Button onClick={() => router.push('/auth/login')}>Odjavi se</Button>
+            <Button onClick={() => router.push('/auth/login')} aria-label="Logout from admin panel">Odjavi se</Button>
           </div>
         </div>
 
@@ -299,7 +299,7 @@ export default function AdminDashboard() {
         <div className="max-w-3xl mx-auto mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-center text-[#0B2C49]">👥 Penetracija Članstva</CardTitle>
+              <CardTitle className="text-center text-brand-navy">👥 Penetracija Članstva</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -315,8 +315,8 @@ export default function AdminDashboard() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="text-center text-sm text-[#6B7280] mt-2">
-                Trenutno: <span className="font-semibold text-[#005B99]">{currentCount}</span> / Cilj: <span className="font-semibold">{goal}</span>
+              <div className="text-center text-sm text-muted-foreground mt-2">
+                Trenutno: <span className="font-semibold text-brand-blue">{currentCount}</span> / Cilj: <span className="font-semibold">{goal}</span>
               </div>
             </CardContent>
           </Card>
@@ -324,17 +324,17 @@ export default function AdminDashboard() {
 
         {/* Move boxes to top and chart to bottom already done; ensure boxes remain above */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          <Card onClick={() => goToList('approved')} className="cursor-pointer hover:bg-gray-50">
+          <Card onClick={() => goToList('approved')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Ukupno Članova</CardTitle>
-              <Users className="h-4 w-4 text-[#005B99]" />
+              <Users className="h-4 w-4 text-brand-blue" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.total}</div>
             </CardContent>
           </Card>
 
-          <Card onClick={() => goToList('pending')} className="cursor-pointer hover:bg-gray-50">
+          <Card onClick={() => goToList('pending')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Na čekanju</CardTitle>
               <Clock className="h-4 w-4 text-yellow-600" />
@@ -344,7 +344,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card onClick={() => goToList('approved')} className="cursor-pointer hover:bg-gray-50">
+          <Card onClick={() => goToList('approved')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Odobreno</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-600" />
@@ -354,7 +354,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card onClick={() => goToList('approved')} className="cursor-pointer hover:bg-gray-50">
+          <Card onClick={() => goToList('approved')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Odbijeno</CardTitle>
               <XCircle className="h-4 w-4 text-red-600" />
@@ -369,8 +369,8 @@ export default function AdminDashboard() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                <Button variant={activeTab==='pending' ? 'default' : 'secondary'} onClick={() => { setActiveTab('pending'); setSelected(null); }}>Na čekanju</Button>
-                <Button variant={activeTab==='approved' ? 'default' : 'secondary'} onClick={() => { setActiveTab('approved'); setSelected(null); }}>Odobreni</Button>
+                <Button variant={activeTab==='pending' ? 'default' : 'secondary'} onClick={() => { setActiveTab('pending'); setSelected(null); }} aria-label="View pending members">Na čekanju</Button>
+                <Button variant={activeTab==='approved' ? 'default' : 'secondary'} onClick={() => { setActiveTab('approved'); setSelected(null); }} aria-label="View approved members">Odobreni</Button>
               </div>
               <div className="flex items-center gap-3">
                 <CardTitle>{activeTab === 'pending' ? 'Prijave' : 'Članovi'}</CardTitle>
@@ -392,7 +392,7 @@ export default function AdminDashboard() {
                     <option value="inactive">Neaktivni</option>
                   </select>
                 </div>
-                <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={exportToCSV}>Eksportuj CSV</Button>
+                <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={exportToCSV} aria-label="Export members data to CSV file">Eksportuj CSV</Button>
               </div>
             </div>
           </CardHeader>
@@ -406,7 +406,7 @@ export default function AdminDashboard() {
                     ))}
                   </div>
                 ) : paginatedMembers.map((member) => (
-                  <div key={member.id} className={`p-3 bg-gray-50 rounded border ${selected?.id===member.id ? 'border-[#005B99]' : 'border-transparent'}`}>
+                  <div key={member.id} className={`p-3 bg-gray-50 rounded border ${selected?.id===member.id ? 'border-brand-blue' : 'border-transparent'}`}>
                     <div className="flex items-center justify-between">
                       <div className="cursor-pointer" onClick={() => { setSelected(member); setEditing(false); setEditData(member); }}>
                         <p className="font-medium">{member.full_name} {member.member_id ? `• ${member.member_id}` : ''}</p>
@@ -418,19 +418,19 @@ export default function AdminDashboard() {
                             <Button className="bg-[#F28C38] hover:bg-[#d97a2e] text-white" onClick={() => updateMemberStatus(member.id, 'active')} disabled={actionId === member.id}>
                               {actionId === member.id ? '...' : 'Odobri'}
                             </Button>
-                            <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => updateMemberStatus(member.id, 'inactive')} disabled={actionId === member.id}>
+                            <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => updateMemberStatus(member.id, 'inactive')} disabled={actionId === member.id}>
                               {actionId === member.id ? '...' : 'Odbij'}
                             </Button>
                           </>
                         ) : (
                           <>
                             {!member.member_id && (
-                              <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => assignMembershipNumber(member)} disabled={actionId === member.id}>
+                              <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => assignMembershipNumber(member)} disabled={actionId === member.id}>
                                 {actionId === member.id ? '...' : 'Dodeli broj'}
                               </Button>
                             )}
-                            <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => { setSelected(member); setEditing(true); setEditData(member); }}>Izmeni</Button>
-                            <Button className="bg-[#C63B3B] hover:bg-[#a53030] text-white" onClick={() => deleteMember(member.id)} disabled={actionId === member.id}>Obriši</Button>
+                            <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => { setSelected(member); setEditing(true); setEditData(member); }}>Izmeni</Button>
+                            <Button className="bg-brand-red hover:opacity-90 text-white" onClick={() => deleteMember(member.id)} disabled={actionId === member.id}>Obriši</Button>
                           </>
                         )}
                       </div>
@@ -440,9 +440,9 @@ export default function AdminDashboard() {
 
                 {!loading && totalPages > 1 && (
                   <div className="flex items-center justify-between pt-2">
-                    <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Prethodna</Button>
+                    <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Prethodna</Button>
                     <div className="text-sm">Strana {currentPage} od {totalPages}</div>
-                    <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>Sledeća</Button>
+                    <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>Sledeća</Button>
                   </div>
                 )}
               </div>
@@ -460,14 +460,14 @@ export default function AdminDashboard() {
                         <div className="mt-3">
                           <b>Dokumenti:</b>
                           <div className="flex gap-3 mt-1 text-sm">
-                            <a className="text-[#005B99] underline" href={`/members/${selected.id}/confirmation.pdf`} target="_blank" rel="noopener noreferrer">Potvrda</a>
-                            <a className="text-[#005B99] underline" href={`/members/${selected.id}/card.pdf`} target="_blank" rel="noopener noreferrer">Kartica</a>
+                            <a className="text-brand-blue underline" href={`/members/${selected.id}/confirmation.pdf`} target="_blank" rel="noopener noreferrer">Potvrda</a>
+                            <a className="text-brand-blue underline" href={`/members/${selected.id}/card.pdf`} target="_blank" rel="noopener noreferrer">Kartica</a>
                             {/* Policy link temporarily removed */}
                           </div>
                         </div>
                         <div className="mt-3 flex gap-2">
-                          <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => setEditing(true)}>Uredi podatke</Button>
-                          <Button className="bg-[#F28C38] hover:bg-[#d97a2e] text-white" onClick={resendEmail} disabled={resending}>{resending ? 'Slanje...' : 'Pošalji email ponovo'}</Button>
+                          <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => setEditing(true)}>Uredi podatke</Button>
+                          <Button className="bg-brand-orange hover:opacity-90 text-white" onClick={resendEmail} disabled={resending}>{resending ? 'Slanje...' : 'Pošalji email ponovo'}</Button>
                         </div>
                       </div>
                     ) : (
@@ -493,8 +493,8 @@ export default function AdminDashboard() {
                           <input className="w-full border rounded p-2" value={editData.member_id || ''} onChange={e => setEditData({ ...editData, member_id: e.target.value })} />
                         </div>
                         <div className="flex gap-2">
-                          <Button className="bg-[#F28C38] hover:bg-[#d97a2e] text-white" onClick={saveEdits} disabled={actionId === selected.id}>{actionId === selected.id ? '...' : 'Sačuvaj'}</Button>
-                          <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" onClick={() => { setEditing(false); setEditData(selected); }}>Otkaži</Button>
+                          <Button className="bg-brand-orange hover:opacity-90 text-white" onClick={saveEdits} disabled={actionId === selected.id}>{actionId === selected.id ? '...' : 'Sačuvaj'}</Button>
+                          <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => { setEditing(false); setEditData(selected); }}>Otkaži</Button>
                         </div>
                       </div>
                     )}

@@ -1,9 +1,3 @@
-cd C:\Users\savin\sindikat-ncr-final
-notepad .cursorrules
-```
-
-**Kopiraj ovaj sadržaj:**
-```
 # SINDIKAT NCR ATLEOS - PROJECT RULES
 
 ## Tech Stack
@@ -46,7 +40,274 @@ notepad .cursorrules
 - Accents: #C63B3B (brand-red)
 - Never use default blue-500/600 classes
 
+---
+
+## VISUAL STYLING RULES (NEW)
+
+### Tailwind Class Rules - NEVER DO THIS
+- ❌ Hardcode colors: bg-blue-500, text-red-600
+- ❌ Use inline styles: style={{color: 'red'}}
+- ❌ Random spacing: p-3, p-5, gap-3, m-7
+- ❌ Skip focus states on buttons/links
+- ❌ Skip aria-labels on icon buttons
+- ❌ Missing htmlFor on form labels
+- ❌ Inconsistent breakpoints: use only md: and lg:
+
+### Tailwind Class Rules - ALWAYS DO THIS
+- ✅ Use semantic colors: bg-primary, text-accent, border-border
+- ✅ Import cn() from @/lib/utils to merge classes
+- ✅ Mobile-first: default classes = mobile layout
+- ✅ Add md: for tablet (768px+) and lg: for desktop (1024px+)
+- ✅ Spacing scale ONLY: p-2, p-4, p-6, p-8, gap-4, gap-6, m-4, m-6
+- ✅ All buttons: focus:outline-none focus:ring-2 focus:ring-blue-500
+- ✅ All icon buttons: aria-label="description"
+- ✅ All form inputs: connected <label htmlFor="id">
+- ✅ Accept className prop in every component
+
+### Spacing Standard (ENFORCE STRICTLY)
+```
+Padding:     p-2 (8px), p-4 (16px), p-6 (24px), p-8 (32px)
+Gap:         gap-2 (8px), gap-4 (16px), gap-6 (24px), gap-8 (32px)
+Margin:      m-2, m-4, m-6, m-8
+Between sections: py-8 md:py-12 lg:py-16
+Between components: gap-4 md:gap-6 lg:gap-8
+
+NEVER use: p-3, p-5, p-7, gap-3, gap-5, gap-7, m-3, m-5, m-7
+```
+
+### Responsive Pattern (REQUIRED)
+```
+Mobile-first approach:
+- Default classes = mobile (320px minimum)
+- md: prefix = tablet changes (768px+)
+- lg: prefix = desktop changes (1024px+)
+
+Example:
+<div className="
+  text-sm p-4 flex-col gap-4
+  md:text-base md:p-6 md:flex-row md:gap-6
+  lg:text-lg lg:p-8 lg:gap-8
+">
+
+Grid pattern:
+grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+
+Flex pattern:
+flex-col md:flex-row
+
+Visibility pattern:
+hidden md:flex  (show on tablet+)
+md:hidden       (hide on tablet+)
+```
+
+### Typography Hierarchy
+```
+H1: text-4xl md:text-5xl font-extrabold
+H2: text-3xl md:text-4xl font-bold
+H3: text-2xl md:text-3xl font-bold
+H4: text-xl md:text-2xl font-semibold
+Body: text-base text-foreground
+Small: text-sm text-muted-foreground
+Meta: text-xs text-muted-foreground uppercase tracking-wide
+```
+
+### Component Structure Template
+```tsx
+import { cn } from '@/lib/utils'
+
+interface ComponentProps {
+  children?: ReactNode
+  className?: string
+  // Other props
+}
+
+/**
+ * Brief description of what component does
+ * @param props Component props
+ * @returns JSX element
+ */
+export function ComponentName({ children, className, ...props }: ComponentProps) {
+  return (
+    <div className={cn(
+      'base-styles flex items-center',
+      'md:gap-6 md:p-6',
+      'lg:gap-8 lg:p-8',
+      className
+    )} {...props}>
+      {children}
+    </div>
+  )
+}
+```
+
+### Button Styles (THREE VARIANTS)
+
+**Primary Button (Main CTA):**
+```tsx
+<button className="px-4 py-2 bg-[#F28C38] text-white rounded-lg hover:opacity-90 transition-opacity font-medium focus:outline-none focus:ring-2 focus:ring-[#F28C38] focus:ring-offset-2" aria-label="Description">
+  Button Text
+</button>
+```
+
+**Secondary Button (Alternative):**
+```tsx
+<button className="px-4 py-2 border-2 border-[#005B99] text-[#005B99] rounded-lg hover:bg-blue-50 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2">
+  Button Text
+</button>
+```
+
+**Ghost Button (Minimal):**
+```tsx
+<button className="px-4 py-2 text-[#005B99] hover:bg-blue-50 transition-colors rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99]">
+  Button Text
+</button>
+```
+
+### Card/Container Pattern
+```tsx
+<div className="bg-white border-2 border-gray-200 rounded-lg p-4 md:p-6 shadow-sm hover:shadow-lg transition-shadow">
+  {/* Content */}
+</div>
+```
+
+### Form Input Pattern
+```tsx
+<div>
+  <label htmlFor="email" className="block text-sm font-medium mb-2">
+    Email Address
+  </label>
+  <input
+    id="email"
+    type="email"
+    className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:border-transparent"
+    placeholder="your@email.com"
+  />
+</div>
+```
+
+### Accessibility Requirements (MANDATORY)
+- ✅ All icon buttons: aria-label="description"
+- ✅ All form inputs: <label htmlFor="id"> connected
+- ✅ All clickable: focus:ring-2 focus:ring-offset-2
+- ✅ Error messages: role="alert" aria-invalid="true"
+- ✅ Error inputs: aria-describedby="error-id"
+- ✅ Test with Tab key: focus rings must be visible
+- ✅ Test with screen reader: semantic HTML
+
+### Dark Mode (if implemented)
+- Light mode: bg-white text-black
+- Dark mode: dark:bg-slate-950 dark:text-white
+- Use semantic vars: bg-background text-foreground (auto-adapts)
+- Always test dark mode toggle after changes
+
+### Color Usage Guide
+```
+Primary text/headers: #0B2C49 (brand-navy)
+Links/hover: #005B99 (brand-blue)
+CTA buttons: #F28C38 (brand-orange)
+Warning/error: #C63B3B (brand-red)
+Text secondary: gray-600
+Borders: gray-300
+Background hover: gray-50
+
+In Tailwind:
+bg-[#F28C38]
+text-[#0B2C49]
+border-[#005B99]
+hover:text-[#F28C38]
+```
+
+### Layout Templates
+
+**Centered Container:**
+```tsx
+<div className="max-w-screen-xl mx-auto px-4 md:px-6 py-8 md:py-12">
+  {/* Centered content */}
+</div>
+```
+
+**Grid Layout:**
+```tsx
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+  {items.map(item => <div key={item.id}>{/* Card */}</div>)}
+</div>
+```
+
+**Sidebar Layout:**
+```tsx
+<div className="flex flex-col md:flex-row gap-6">
+  <aside className="md:w-64 flex-shrink-0">Sidebar</aside>
+  <main className="flex-1">Content</main>
+</div>
+```
+
+---
+
 ## i18n
 - All user-facing text must support SR/EN
 - Use translation keys from @/locales
 - Language switcher required on all public pages
+
+---
+
+## CURSOR WORKFLOW
+
+When making visual styling changes:
+
+**Good prompts:**
+- "Update Header styling: make borders thicker, add spacing. NO content changes."
+- "Fix button styling: all buttons should use primary orange color. Maintain functionality."
+- "Update card styling: white background, borders, shadow. Don't change content."
+
+**Bad prompts:**
+- "Make the website better"
+- "Fix the hero section" (too vague)
+- "Change styling" (no specifics)
+
+**Always include in prompt:**
+- Specific visual changes needed
+- Files to update
+- "NO content changes"
+- "Keep all functionality"
+
+---
+
+## TESTING AFTER VISUAL CHANGES
+
+Mobile (320px):
+- [ ] Layout stacks properly
+- [ ] Text readable
+- [ ] Buttons tappable (48px+)
+- [ ] No overflow
+
+Tablet (768px):
+- [ ] Two-column layouts work
+- [ ] Spacing appropriate
+- [ ] Everything fits
+
+Desktop (1024px+):
+- [ ] Full layout spacious
+- [ ] Three-column works
+- [ ] Professional look
+
+Accessibility:
+- [ ] Tab key shows focus rings
+- [ ] aria-labels present
+- [ ] Form labels connected
+- [ ] Keyboard navigable
+
+Content:
+- [ ] No content changed
+- [ ] All links work
+- [ ] All forms functional
+
+---
+
+## PROTECTED FILES (DO NOT MODIFY)
+- i18n.ts
+- content.ts
+- languageContext.tsx
+- api.ts
+- node-build.ts
+- Authentication flows
+- Database schemas

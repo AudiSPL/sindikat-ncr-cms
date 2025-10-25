@@ -57,7 +57,7 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             {error && (
-              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
+              <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm" role="alert" aria-live="polite" id="login-error">
                 {error}
               </div>
             )}
@@ -71,6 +71,8 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@sindikatncr.com"
                 required
+                aria-invalid={error ? "true" : "false"}
+                aria-describedby={error ? "login-error" : undefined}
               />
             </div>
 
@@ -84,11 +86,13 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="pr-10"
+                  aria-invalid={error ? "true" : "false"}
+                  aria-describedby={error ? "login-error" : undefined}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 inline-flex items-center justify-center rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
@@ -100,7 +104,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full bg-[#F28C38] hover:bg-[#d97a2e] text-white">
+            <Button type="submit" disabled={loading} className="w-full">
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

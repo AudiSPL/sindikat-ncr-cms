@@ -1,0 +1,52 @@
+cd C:\Users\savin\sindikat-ncr-final
+notepad .cursorrules
+```
+
+**Kopiraj ovaj sadržaj:**
+```
+# SINDIKAT NCR ATLEOS - PROJECT RULES
+
+## Tech Stack
+- Next.js 15.5 (App Router)
+- TypeScript (strict mode)
+- Tailwind CSS
+- Supabase (PostgreSQL)
+- NextAuth.js
+
+## Code Style
+- Use TypeScript strict mode
+- Prefer arrow functions
+- Use async/await over promises
+- Always add error handling with try-catch
+- Console.log important steps with emoji prefixes
+- No inline styles - use Tailwind classes only
+
+## Naming Conventions
+- Components: PascalCase (UserCard.tsx)
+- Functions: camelCase (handleSubmit)
+- Constants: UPPER_SNAKE_CASE (API_URL)
+- Files: kebab-case for non-components (submit-application.ts)
+
+## API Routes
+- Always validate input
+- Always check auth with getServerSession
+- Always log errors with context
+- Return consistent JSON format: { success: boolean, data?: any, error?: string }
+
+## Database
+- Use Supabase client from @/lib/supabase
+- Always use SUPABASE_SERVICE_KEY for server-side operations
+- Check RLS policies before querying
+- Handle database errors gracefully
+
+## Branding Colors (MUST USE)
+- Primary headers: #0B2C49 (brand-navy)
+- Links/buttons: #005B99 (brand-blue)
+- CTA buttons: #F28C38 (brand-orange)
+- Accents: #C63B3B (brand-red)
+- Never use default blue-500/600 classes
+
+## i18n
+- All user-facing text must support SR/EN
+- Use translation keys from @/locales
+- Language switcher required on all public pages
