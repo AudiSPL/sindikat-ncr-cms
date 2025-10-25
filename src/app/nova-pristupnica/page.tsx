@@ -81,23 +81,23 @@ function PristupnicaInner() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-950 p-4">
-        <Card className="max-w-md bg-gray-900 border-gray-800">
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <Card className="max-w-md">
           <CardContent className="pt-6 text-center space-y-4">
-            <CheckCircle className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white">
+            <CheckCircle className="w-16 h-16 text-primary mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-foreground">
               {lang === 'sr' 
                 ? 'Hvala što si se priključio/la!'
                 : 'Thanks for joining!'}
             </h2>
-            <p className="text-gray-300">
+            <p className="text-muted-foreground">
               {lang === 'sr'
                 ? 'Ako želiš, možeš se uključiti u radne grupe. Kontaktiraj nas na'
                 : 'If you wish, you can join working groups. Contact us via email'}
               {' '}
               <a 
                 href="mailto:office@sindikatncr.com"
-                className="text-blue-400 font-medium hover:underline"
+                className="text-primary font-medium hover:underline"
               >
                 office@sindikatncr.com
               </a>
@@ -110,7 +110,7 @@ function PristupnicaInner() {
                   agreeJoin: false, agreeGDPR: false, isAnonymous: true
                 });
               }}
-              className="mt-4 bg-blue-600 hover:bg-blue-700"
+              className="mt-4"
             >
               {lang === 'sr' ? 'Nova prijava' : 'New application'}
             </Button>
@@ -121,27 +121,35 @@ function PristupnicaInner() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="w-full max-w-2xl mx-auto py-6 px-3 sm:px-4">
         <div className="flex justify-end mb-3">
           <button 
             onClick={() => history.back()} 
-            className="mr-auto inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 underline text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            className="mr-auto inline-flex items-center gap-2 text-primary hover:opacity-80 underline text-sm focus:outline-none focus:ring-2 focus:ring-ring" 
             aria-label="Go back"
           >
             <ArrowLeft className="h-4 w-4" />
-            Nazad
+            {lang === 'sr' ? 'Nazad' : 'Back'}
           </button>
-          <div className="inline-flex rounded overflow-hidden border border-gray-700">
+          <div className="inline-flex rounded overflow-hidden border border-border">
             <button 
-              className={`px-3 py-1 text-sm ${lang==='sr' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`} 
+              className={`px-3 py-1 text-sm transition-colors ${
+                lang==='sr' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-card text-card-foreground hover:bg-muted'
+              }`}
               onClick={() => setLang('sr')} 
               aria-label="Switch to Serbian"
             >
               {t('lang.sr')}
             </button>
             <button 
-              className={`px-3 py-1 text-sm ${lang==='en' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300'} focus:outline-none focus:ring-2 focus:ring-blue-500`} 
+              className={`px-3 py-1 text-sm transition-colors ${
+                lang==='en' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-card text-card-foreground hover:bg-muted'
+              }`}
               onClick={() => setLang('en')} 
               aria-label="Switch to English"
             >
@@ -149,39 +157,38 @@ function PristupnicaInner() {
             </button>
           </div>
         </div>
-        <Card className="bg-gray-900 border-gray-800">
+
+        <Card>
           <CardHeader>
-            <CardTitle className="text-2xl text-white">{t('membership.application')}</CardTitle>
+            <CardTitle className="text-2xl">{t('membership.application')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="fullName" className="text-gray-200">{t('form.fullName')}</Label>
+                <Label htmlFor="fullName">{t('form.fullName')}</Label>
                 <Input
                   id="fullName"
                   required
                   value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                  className="bg-gray-800 border-gray-700 text-white"
                 />
               </div>
 
               <div>
-                <Label htmlFor="email" className="text-gray-200">{t('form.email')}</Label>
+                <Label htmlFor="email">{t('form.email')}</Label>
                 <Input
                   id="email"
                   type="email"
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="bg-gray-800 border-gray-700 text-white"
                 />
               </div>
 
               <div>
-                <Label htmlFor="quicklookId" className="text-gray-200">
+                <Label htmlFor="quicklookId">
                   {t('form.quicklookId')}
-                  <span className="text-gray-400 text-xs"> ({lang === 'sr' ? 'verifikacija zaposlenja u kompaniji' : 'employment verification'})</span>
+                  <span className="text-muted-foreground text-xs"> ({lang === 'sr' ? 'verifikacija zaposlenja u kompaniji' : 'employment verification'})</span>
                 </Label>
                 <Input
                   id="quicklookId"
@@ -193,34 +200,31 @@ function PristupnicaInner() {
                     setFormData({ ...formData, quicklookId: value });
                     validateQuicklookId(value);
                   }}
-                  className="bg-gray-800 border-gray-700 text-white"
                   aria-invalid={quicklookError ? "true" : "false"}
                   aria-describedby={quicklookError ? "quicklook-error" : undefined}
                 />
                 {quicklookError && (
-                  <p id="quicklook-error" className="text-sm text-red-400 mt-1" role="alert">{quicklookError}</p>
+                  <p id="quicklook-error" className="text-sm text-destructive mt-1" role="alert">{quicklookError}</p>
                 )}
               </div>
 
               <div>
-                <Label htmlFor="city" className="text-gray-200">{t('form.city')}</Label>
+                <Label htmlFor="city">{t('form.city')}</Label>
                 <Input
                   id="city"
                   required
                   value={formData.city}
                   onChange={(e) => setFormData({...formData, city: e.target.value})}
-                  className="bg-gray-800 border-gray-700 text-white"
                 />
               </div>
 
               <div>
-                <Label htmlFor="organization" className="text-gray-200">{t('form.organization')}</Label>
+                <Label htmlFor="organization">{t('form.organization')}</Label>
                 <Input
                   id="organization"
                   placeholder="FSC / Legal / HR / CSM / PS"
                   value={formData.organization}
                   onChange={(e) => setFormData({...formData, organization: e.target.value})}
-                  className="bg-gray-800 border-gray-700 text-white"
                 />
               </div>
 
@@ -231,14 +235,14 @@ function PristupnicaInner() {
                     required
                     checked={formData.agreeJoin}
                     onCheckedChange={(checked) => setFormData({...formData, agreeJoin: !!checked})}
-                    className="mt-1 border-gray-600"
+                    className="mt-1"
                   />
                   <div className="flex-1">
                     <Label 
                       htmlFor="join" 
-                      className="cursor-pointer text-gray-200 font-medium leading-relaxed"
+                      className="cursor-pointer font-medium leading-relaxed"
                     >
-                      {t('consents.acceptRules')} <span className="text-red-400">*</span>
+                      {t('consents.acceptRules')} <span className="text-destructive">*</span>
                     </Label>
                   </div>
                 </div>
@@ -248,15 +252,15 @@ function PristupnicaInner() {
                     id="privacy"
                     checked={formData.agreeGDPR}
                     onCheckedChange={(checked) => setFormData({...formData, agreeGDPR: !!checked})}
-                    className="mt-1 border-gray-600"
+                    className="mt-1"
                   />
                   <div className="flex-1">
                     <Label 
                       htmlFor="privacy" 
-                      className="cursor-pointer text-gray-200 font-medium leading-relaxed"
+                      className="cursor-pointer font-medium leading-relaxed"
                     >
                       <span>
-                        {t('consents.privacy.prefix')} <a href="/politika-privatnosti" className="underline text-blue-400" target="_blank" rel="noopener noreferrer">{t('consents.privacy.link')}</a>.
+                        {t('consents.privacy.prefix')} <a href="/politika-privatnosti" className="underline text-primary hover:opacity-80" target="_blank" rel="noopener noreferrer">{t('consents.privacy.link')}</a>.
                       </span>
                     </Label>
                   </div>
@@ -270,18 +274,18 @@ function PristupnicaInner() {
                       onCheckedChange={(checked) => 
                         setFormData({ ...formData, isAnonymous: !!checked })
                       }
-                      className="mt-1 border-gray-600"
+                      className="mt-1"
                     />
                     <div className="flex-1">
                       <Label 
                         htmlFor="anonymous" 
-                        className="cursor-pointer text-gray-200 font-medium leading-relaxed"
+                        className="cursor-pointer font-medium leading-relaxed"
                       >
                         {lang === 'sr' 
                           ? 'Želim da ostanem anoniman/na do sticanja reprezentativnosti.'
                           : 'I want to remain anonymous until representativeness is achieved.'}
                       </Label>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {lang === 'sr'
                           ? 'Možeš uvek promeniti na vidljivo i uključiti se u radne grupe.'
                           : 'You can switch to visible and join working groups at any time.'}
@@ -290,8 +294,8 @@ function PristupnicaInner() {
                   </div>
 
                   {!formData.isAnonymous && (
-                    <div className="bg-blue-950 border border-blue-800 rounded-lg p-4">
-                      <p className="text-sm text-gray-200">
+                    <div className="bg-primary/10 border border-primary rounded-lg p-4">
+                      <p className="text-sm text-foreground">
                         {lang === 'sr'
                           ? '✓ Biće ti omogućeno da se uključiš u radne grupe i budeš vidljiv/a drugim članovima.'
                           : '✓ You will be able to join working groups and be visible to other members.'}
@@ -301,7 +305,7 @@ function PristupnicaInner() {
                 </div>
               </div>
 
-              <Button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" disabled={loading} className="w-full">
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -314,15 +318,16 @@ function PristupnicaInner() {
             </form>
           </CardContent>
         </Card>
-        <div className="mt-6 text-[10.5px] sm:text-xs text-gray-400">
+
+        <div className="mt-6 text-[10.5px] sm:text-xs text-muted-foreground">
           <div className="flex flex-wrap md:flex-nowrap items-center gap-x-2 gap-y-1">
             <span>Prijava je anonimna do sticanja reprezentativnosti</span>
             <span className="hidden md:inline">•</span>
             <span>
               This site is protected by reCAPTCHA and the Google{' '}
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-blue-400">Privacy Policy</a>
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-primary hover:opacity-80">Privacy Policy</a>
               {' '}and{' '}
-              <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline text-blue-400">Terms of Service</a>
+              <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline text-primary hover:opacity-80">Terms of Service</a>
               {' '}apply
             </span>
             <span className="hidden md:inline">•</span>
