@@ -1,8 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n';
 
 export default function VoiceSection() {
+  const { lang } = useLanguage();
+  
   return (
     <section className="w-full bg-[#E67E22] py-7 md:py-10 lg:py-13">
       {/* Content Container */}
@@ -33,7 +36,7 @@ export default function VoiceSection() {
           </p>
 
           {/* CTA Button */}
-          <Link href="/pristupnica">
+          <Link href={`/${lang}/nova-pristupnica`}>
             <button className="
               inline-flex items-center justify-center gap-2
               px-7 sm:px-8 md:px-8 lg:px-8

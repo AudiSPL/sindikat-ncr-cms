@@ -34,7 +34,7 @@ export default async function BenefitiPage({ params }: BenefitiPageProps) {
     { href: `/${lang}/tema/ko-smo-mi`, label: content.nav.whoWeAre },
     { href: `/${lang}/tema/nas-plan`, label: content.nav.ourPlan },
     { href: `/${lang}/tema/anonimnost`, label: content.nav.confidentiality },
-    { href: `/${lang}/pristupnica`, label: content.nav.join },
+    { href: `/${lang}/nova-pristupnica`, label: content.nav.join },
   ];
 
   const icons = [Shield, Megaphone, Handshake, Lock, HelpCircle, TrendingUp];

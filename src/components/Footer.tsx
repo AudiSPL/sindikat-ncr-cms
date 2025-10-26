@@ -14,7 +14,7 @@ export function Footer({ lang }: FooterProps) {
   const pathname = usePathname();
   
   // Check if current page has reCAPTCHA (forms)
-  const hasRecaptcha = pathname?.includes('/pristupnica') || pathname?.includes('/kontakt');
+  const hasRecaptcha = pathname?.includes('/nova-pristupnica') || pathname?.includes('/kontakt');
 
   return (
     <footer className="border-t bg-brand-navy dark:bg-brand-navy">

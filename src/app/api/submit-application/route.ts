@@ -47,19 +47,27 @@ export async function POST(req: NextRequest) {
       recaptchaToken 
     } = body;
 
-    // Verify reCAPTCHA if provided
+    // Verify reCAPTCHA v2
     try {
       const recaptchaToken = (body as any)?.recaptchaToken;
       if (recaptchaToken && process.env.RECAPTCHA_SECRET_KEY) {
         const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
         const verifyRes = await fetch(verifyUrl, { method: 'POST' });
         const verifyData = await verifyRes.json();
-        if (!verifyData?.success || (typeof verifyData?.score === 'number' && verifyData.score < 0.5)) {
+        
+        console.log('reCAPTCHA verification response:', verifyData);
+        
+        if (!verifyData?.success) {
+          console.error('reCAPTCHA verification failed:', verifyData);
           return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
         }
+      } else if (!recaptchaToken) {
+        console.error('No reCAPTCHA token provided');
+        return NextResponse.json({ error: 'reCAPTCHA token is required' }, { status: 400 });
       }
     } catch (recaptchaErr) {
       console.warn('reCAPTCHA verification error:', recaptchaErr);
+      return NextResponse.json({ error: 'reCAPTCHA verification error' }, { status: 400 });
     }
 
     // Validacija

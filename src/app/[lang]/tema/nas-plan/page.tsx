@@ -30,7 +30,7 @@ export default async function NasPlanPage({ params }: NasPlanPageProps) {
   const relatedLinks = [
     { href: `/${lang}/tema/ko-smo-mi`, label: content.nav.whoWeAre },
     { href: `/${lang}/tema/benefiti`, label: content.nav.benefits },
-    { href: `/${lang}/pristupnica`, label: content.nav.join },
+    { href: `/${lang}/nova-pristupnica`, label: content.nav.join },
   ];
 
   return (

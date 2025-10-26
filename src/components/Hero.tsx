@@ -31,7 +31,7 @@ export function Hero({ lang }: HeroProps) {
           <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center">
             {/* Primary Button - Light mode: orange, Dark mode: brand orange */}
             <Button asChild className="bg-[#E67E22] hover:opacity-90 text-white px-6 py-3 rounded-lg transition-all duration-200 ease-out font-semibold w-full md:w-auto dark:bg-brand-orange">
-              <Link href={`/${lang}/pristupnica`}>
+              <Link href={`/${lang}/nova-pristupnica`}>
                 {content.hero.ctaPrimary} →
               </Link>
             </Button>

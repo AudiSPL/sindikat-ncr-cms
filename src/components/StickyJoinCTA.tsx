@@ -14,7 +14,7 @@ export function StickyJoinCTA({ lang }: StickyJoinCTAProps) {
   return (
     <div className="fixed bottom-6 right-6 z-50 md:hidden">
       <Button asChild size="lg" className="rounded-full shadow-lg bg-brand-orange hover:bg-brand-orange/90">
-        <Link href={`/${lang}/pristupnica`}>
+        <Link href={`/${lang}/nova-pristupnica`}>
           {ctaText}
         </Link>
       </Button>
