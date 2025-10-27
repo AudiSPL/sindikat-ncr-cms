@@ -47,23 +47,42 @@ export async function POST(req: NextRequest) {
       recaptchaToken 
     } = body;
 
-    // Verify reCAPTCHA v2
+    // Verify reCAPTCHA Enterprise v3
     try {
       const recaptchaToken = (body as any)?.recaptchaToken;
-      if (recaptchaToken && process.env.RECAPTCHA_SECRET_KEY) {
-        const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
-        const verifyRes = await fetch(verifyUrl, { method: 'POST' });
-        const verifyData = await verifyRes.json();
-        
-        console.log('reCAPTCHA verification response:', verifyData);
-        
-        if (!verifyData?.success) {
-          console.error('reCAPTCHA verification failed:', verifyData);
-          return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
-        }
-      } else if (!recaptchaToken) {
+      if (!recaptchaToken) {
         console.error('No reCAPTCHA token provided');
         return NextResponse.json({ error: 'reCAPTCHA token is required' }, { status: 400 });
+      }
+
+      const apiKey = process.env.RECAPTCHA_ENTERPRISE_API_KEY;
+      const projectId = process.env.RECAPTCHA_ENTERPRISE_PROJECT_ID;
+
+      if (!apiKey || !projectId) {
+        console.error('reCAPTCHA Enterprise credentials not configured');
+        return NextResponse.json({ error: 'reCAPTCHA Enterprise credentials not configured' }, { status: 500 });
+      }
+
+      const verifyUrl = `https://recaptchaenterprise.googleapis.com/v1/projects/${projectId}/assessments?key=${apiKey}`;
+      const verifyRes = await fetch(verifyUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: {
+            token: recaptchaToken,
+            expectedAction: 'submit',
+            siteKey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+          }
+        })
+      });
+
+      const verifyData = await verifyRes.json();
+      console.log('reCAPTCHA Enterprise verification response:', verifyData);
+
+      const score = verifyData.riskAnalysis?.score || 0;
+      if (score < 0.5) {
+        console.error('reCAPTCHA score too low:', score);
+        return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
       }
     } catch (recaptchaErr) {
       console.warn('reCAPTCHA verification error:', recaptchaErr);
