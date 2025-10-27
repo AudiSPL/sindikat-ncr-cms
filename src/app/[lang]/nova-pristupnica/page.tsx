@@ -98,7 +98,6 @@ export default function NovaPristupnica() {
           ? 'Korisnik je vec u bazi, kontaktirajte nas preko office@sindikatncr.com'
           : 'Unfortunately a user with these credentials is already registered. Please reach out to us on office@sindikatncr.com.';
         toast.error(msg);
-        setSubmitted(true);
       } else {
         throw new Error(`Server returned ${res.status}`);
       }
