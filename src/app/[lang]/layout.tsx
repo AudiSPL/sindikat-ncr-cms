@@ -3,11 +3,64 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { StickyJoinCTA } from '@/components/StickyJoinCTA';
 import { LanguagePersistence } from '@/components/LanguagePersistence';
-import { Language } from '@/lib/content';
+import { Language, getContent } from '@/lib/content';
+import type { Metadata } from 'next';
 
 interface LangLayoutProps {
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params;
+  
+  if (lang !== 'sr' && lang !== 'en') {
+    return {};
+  }
+
+  const content = getContent(lang as Language);
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://sindikat-ncr.vercel.app';
+  
+  return {
+    title: lang === 'sr' ? 'Sindikat NCR Atleos' : 'NCR Atleos Union',
+    description: lang === 'sr' 
+      ? 'Sindikat NCR Atleos - Zajedno smo jači' 
+      : 'NCR Atleos Union - Together We Are Stronger',
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: `/${lang}`,
+      languages: {
+        'sr': '/sr',
+        'en': '/en',
+      },
+    },
+    openGraph: {
+      title: lang === 'sr' ? 'Sindikat NCR Atleos' : 'NCR Atleos Union',
+      description: lang === 'sr' 
+        ? 'Sindikat NCR Atleos - Zajedno smo jači' 
+        : 'NCR Atleos Union - Together We Are Stronger',
+      url: `${baseUrl}/${lang}`,
+      siteName: 'Sindikat NCR Atleos',
+      images: [
+        {
+          url: '/brand/logo-sindikat-blackonwhite.png',
+          width: 1200,
+          height: 630,
+          alt: 'Sindikat NCR Atleos Logo',
+        },
+      ],
+      locale: lang === 'sr' ? 'sr_RS' : 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: lang === 'sr' ? 'Sindikat NCR Atleos' : 'NCR Atleos Union',
+      description: lang === 'sr' 
+        ? 'Sindikat NCR Atleos - Zajedno smo jači' 
+        : 'NCR Atleos Union - Together We Are Stronger',
+      images: ['/brand/logo-sindikat-blackonwhite.png'],
+    },
+  };
 }
 
 export default async function LangLayout({ children, params }: LangLayoutProps) {

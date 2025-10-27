@@ -13,47 +13,34 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  // Ensure theme class is applied to document.documentElement
+  // Force dark theme always
   useEffect(() => {
-    const applyThemeToDocument = () => {
-      const theme = localStorage.getItem(props.storageKey || 'theme') || 'system';
-      const htmlElement = document.documentElement;
-      
-      // Remove existing theme classes
-      htmlElement.classList.remove('light', 'dark');
-      
-      // Apply new theme class
-      if (theme === 'dark') {
-        htmlElement.classList.add('dark');
-      } else if (theme === 'light') {
-        htmlElement.classList.add('light');
-      }
+    const htmlElement = document.documentElement;
+    
+    // Always ensure dark class is present
+    const ensureDark = () => {
+      htmlElement.classList.remove('light');
+      htmlElement.classList.add('dark');
     };
-
-    // Apply theme on mount
-    applyThemeToDocument();
-
-    // Listen for theme changes
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === (props.storageKey || 'theme')) {
-        applyThemeToDocument();
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
+    
+    ensureDark();
+    
+    // Re-apply every 100ms to fight any changes
+    const interval = setInterval(ensureDark, 100);
     
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
     };
-  }, [props.storageKey]);
+  }, []);
 
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme={props.defaultTheme ?? 'system'}
-      enableSystem={props.enableSystem ?? true}
+      defaultTheme="dark"
+      enableSystem={false}
+      forcedTheme="dark"
       disableTransitionOnChange={props.disableTransitionOnChange ?? true}
-      storageKey={props.storageKey || 'theme'}
+      storageKey="theme-locked"
     >
       {children}
     </NextThemesProvider>

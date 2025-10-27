@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { ThemeToggle } from './theme-toggle';
+// import { ThemeToggle } from './theme-toggle';
 import { Logo } from './Logo';
 import { Language, getContent } from '@/lib/content';
 import { Menu, X } from 'lucide-react';
@@ -61,10 +61,8 @@ export function Header({ lang }: HeaderProps) {
             <LanguageSwitcher currentLang={lang} />
           </div>
           
-          {/* Theme Button - Hidden */}
-          <div style={{ display: 'none' }}>
-            <ThemeToggle />
-          </div>
+          {/* Theme Button - Disabled */}
+          {/* <ThemeToggle /> */}
 
           {/* Mobile Menu Button */}
           <button
@@ -86,21 +84,21 @@ export function Header({ lang }: HeaderProps) {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
             onClick={closeMobileMenu}
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-0 right-0 h-full w-80 bg-[#0F1419] dark:bg-[#0F1419] border-l border-[#2D3139] shadow-2xl z-50 lg:hidden animate-in slide-in-from-right duration-300">
+          <div className="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 shadow-2xl z-50 lg:hidden animate-in slide-in-from-right duration-300">
             <div className="flex flex-col h-full">
               {/* Mobile Menu Header */}
-              <div className="flex items-center justify-between p-6 border-b border-[#2D3139]">
-                <h2 className="text-xl font-bold text-white">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                   {lang === 'sr' ? 'Menj' : 'Menu'}
                 </h2>
                 <button
                   onClick={closeMobileMenu}
-                  className="p-2 text-white hover:bg-[#1A1D23] rounded-md transition-colors duration-200"
+                  className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-md transition-colors duration-200"
                   aria-label="Close menu"
                 >
                   <X className="h-6 w-6" />
@@ -114,7 +112,7 @@ export function Header({ lang }: HeaderProps) {
                     key={item.href}
                     href={item.href}
                     onClick={closeMobileMenu}
-                    className="block px-4 py-3 text-white hover:bg-[#1A1D23] hover:text-[#E67E22] rounded-lg transition-all duration-200 font-medium"
+                    className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white rounded-lg transition-all duration-200 font-medium text-sm"
                   >
                     {item.label}
                   </Link>
@@ -122,8 +120,8 @@ export function Header({ lang }: HeaderProps) {
               </nav>
 
               {/* Mobile Menu Footer */}
-              <div className="p-6 border-t border-[#2D3139]">
-                <p className="text-sm text-[#9CA3AF] text-center">
+              <div className="p-6 border-t border-gray-200 dark:border-slate-700">
+                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
                   {lang === 'sr' ? 'Sindikat NCR Atleos' : 'NCR Atleos Union'}
                 </p>
               </div>

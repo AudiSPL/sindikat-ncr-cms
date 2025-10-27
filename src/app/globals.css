@@ -407,3 +407,138 @@
     border-color: hsl(var(--brand-red));
   }
 }
+
+/* ========================================================================== */
+/* FORCE LIGHT THEME FOR ADMIN AND AUTH - SCOPED */
+/* ========================================================================== */
+
+.admin-container,
+.admin-container *,
+.auth-container,
+.auth-container * {
+  color-scheme: light !important;
+}
+
+/* Override CSS variables for light theme in admin */
+.admin-container {
+  --background: 0 0% 100% !important;
+  --foreground: 222.2 84% 4.9% !important;
+  --card: 0 0% 100% !important;
+  --card-foreground: 222.2 84% 4.9% !important;
+  --popover: 0 0% 100% !important;
+  --popover-foreground: 222.2 84% 4.9% !important;
+  --primary: 202 100% 32% !important;
+  --primary-foreground: 210 40% 98% !important;
+  --secondary: 210 40% 96% !important;
+  --secondary-foreground: 222.2 47.4% 11.2% !important;
+  --muted: 210 40% 96% !important;
+  --muted-foreground: 215.4 16.3% 46.9% !important;
+  --accent: 210 40% 96% !important;
+  --accent-foreground: 222.2 47.4% 11.2% !important;
+  --border: 214.3 31.8% 91.4% !important;
+  --input: 214.3 31.8% 91.4% !important;
+}
+
+/* Force white backgrounds for admin cards and components */
+.admin-container [class*="card"],
+.admin-container [class*="Card"] {
+  background-color: white !important;
+  color: #111827 !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+/* Force light theme for recharts in admin */
+.admin-container .recharts-surface {
+  background-color: white !important;
+}
+
+.admin-container .recharts-text {
+  fill: #111827 !important;
+}
+
+.admin-container .recharts-cartesian-grid line {
+  stroke: #E5E7EB !important;
+}
+
+/* Ensure buttons and inputs are visible */
+.admin-container button:not([class*="bg-"]),
+.admin-container input {
+  background-color: white !important;
+  color: #111827 !important;
+  border-color: #E5E7EB !important;
+}
+
+/* ========================================================================== */
+/* FORCE DARK THEME ON ALL PUBLIC PAGES - SAFE OVERRIDE */
+/* ========================================================================== */
+
+/* Force dark theme on html and body (except admin/auth) */
+html:not(:has(.admin-container)):not(:has(.auth-container)) {
+  color-scheme: dark !important;
+}
+
+html:not(:has(.admin-container)):not(:has(.auth-container)),
+html:not(:has(.admin-container)):not(:has(.auth-container)) body {
+  background-color: hsl(222.2 84% 4.9%) !important;
+  color: hsl(210 40% 98%) !important;
+}
+
+/* Force dark theme classes */
+html:not(:has(.admin-container)):not(:has(.auth-container)) {
+  --background: 222.2 84% 4.9% !important;
+  --foreground: 210 40% 98% !important;
+  --card: 222.2 84% 4.9% !important;
+  --card-foreground: 210 40% 98% !important;
+}
+
+/* Override any light class that might appear */
+html:not(:has(.admin-container)):not(:has(.auth-container)) .light,
+html:not(:has(.admin-container)):not(:has(.auth-container)).light {
+  background-color: hsl(222.2 84% 4.9%) !important;
+  color: hsl(210 40% 98%) !important;
+}
+
+/* ========================================================================== */
+/* FINAL FIX - CardTitle headers bright blue on dark pages */
+/* ========================================================================== */
+
+/* Force Card component backgrounds visible on dark pages */
+body:not(:has(.admin-container)) [class*="Card"],
+body:not(:has(.admin-container)) .card {
+  background-color: rgba(30, 41, 59, 0.4) !important;
+  border-color: rgba(71, 85, 105, 0.3) !important;
+}
+
+/* CardTitle - BRIGHT BLUE (overrides text-slate-900 and dark:text-white) */
+body:not(:has(.admin-container)) [class*="CardTitle"],
+body:not(:has(.admin-container)) h3[class*="text-slate-900"],
+body:not(:has(.admin-container)) [class*="CardHeader"] h3 {
+  color: #60a5fa !important;
+}
+
+/* Card content text readable */
+body:not(:has(.admin-container)) [class*="CardContent"] p,
+body:not(:has(.admin-container)) [class*="CardContent"] span {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Hero section text always white */
+body:not(:has(.admin-container)) section[class*="bg-brand"] h1,
+body:not(:has(.admin-container)) section[class*="bg-brand"] p {
+  color: white !important;
+}
+
+/* Force card titles - no JavaScript needed */
+.dark [data-slot="card-title"] {
+  color: #60a5fa !important;
+}
+
+[data-slot="card-title"] {
+  color: #1A202C !important;
+}
+
+/* Override any inline styles or classes */
+body:not(.admin-container) [data-slot="card-title"][class*="text-slate"],
+body:not(.admin-container) [data-slot="card-title"][class*="text-white"] {
+  color: #60a5fa !important;
+}

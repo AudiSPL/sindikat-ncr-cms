@@ -29,3 +29,4 @@ export function LanguagePersistence({ currentLang }: LanguagePersistenceProps) {
   // This component doesn't render anything
   return null;
 }
+

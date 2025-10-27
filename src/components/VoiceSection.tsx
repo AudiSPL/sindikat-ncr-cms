@@ -37,20 +37,8 @@ export default function VoiceSection() {
 
           {/* CTA Button */}
           <Link href={`/${lang}/nova-pristupnica`}>
-            <button className="
-              inline-flex items-center justify-center gap-2
-              px-7 sm:px-8 md:px-8 lg:px-8
-              py-2.5 sm:py-3 md:py-3 lg:py-3
-              bg-[#1A2332] hover:bg-[#0F1419]
-              text-white font-semibold text-xs sm:text-sm md:text-sm lg:text-sm
-              rounded-lg
-              transition-all duration-300 ease-in-out
-              hover:shadow-lg
-              active:scale-95
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E67E22]
-              cursor-pointer
-            ">
-              Priklučji se poverljivo
+            <button className="inline-flex items-center gap-2 px-8 py-4 bg-[#1A2332] hover:bg-[#0F1419] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+              Priključi se poverljivo
               <span className="text-base sm:text-base md:text-base lg:text-base ml-1">→</span>
             </button>
           </Link>

@@ -34,7 +34,7 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
   const coreDocuments = [
     {
       id: 1,
-      title: 'СТАТУТ',
+      title: 'STATUT',
       icon: FileText,
       description: isSerbian 
         ? 'Osnovni dokument koji definiše ciljeve, strukturu, principe i način rada sindikata NCR Atleos. Sadrži sve informacije o organizaciji, donošenju odluka i upravljanju sindikatom.'
@@ -43,7 +43,7 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
     },
     {
       id: 2,
-      title: isSerbian ? 'Правилник Синдиката' : 'Membership Rules',
+      title: isSerbian ? 'Pravilnik Sindikata' : 'Membership Rules',
       icon: Book,
       description: isSerbian
         ? 'Definiše uslove i procedure članstva, prava i obaveze članova sindikata. Obavezna literatura za sve nove članove.'

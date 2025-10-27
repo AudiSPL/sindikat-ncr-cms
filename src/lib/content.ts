@@ -243,7 +243,7 @@ export const content: Record<Language, Content> = {
     donations: {
       title: "Članarina i Donacije – Zajedno Gradimo Budućnost",
       content: "Započeli smo priču o sindikatu NCR ATM doo sa mnogo sati truda i sopstvenim troškovima, ali da bismo trajali i rasli, potrebna nam je tvoja pomoć. Svaka donacija, ma koliko mala, pomaže nam da nastavimo borbu za pravnu sigurnost, popuste i bolje uslove rada. Tvoj doprinos čini nas jačima! Kontaktiraj nas za više detalja…",
-      buttonText: "Pomogni nam",
+      buttonText: "Podrži Sindikat",
       buttonLink: "mailto:office@sindikatncr.com?subject=Donacija - Sindikat NCR ATM doo"
     },
     trustStrip: "",
