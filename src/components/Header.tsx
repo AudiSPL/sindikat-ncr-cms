@@ -57,10 +57,14 @@ export function Header({ lang }: HeaderProps) {
         {/* Header Right Side - Language, Theme, and Mobile Menu Button */}
         <div className="flex items-center gap-2">
           {/* Language Button */}
-          <LanguageSwitcher currentLang={lang} />
+          <div className="ml-auto">
+            <LanguageSwitcher currentLang={lang} />
+          </div>
           
-          {/* Theme Button */}
-          <ThemeToggle />
+          {/* Theme Button - Hidden */}
+          <div style={{ display: 'none' }}>
+            <ThemeToggle />
+          </div>
 
           {/* Mobile Menu Button */}
           <button

@@ -4,7 +4,6 @@ import { TeaserGrid } from '@/components/TeaserGrid';
 import { IconSection } from '@/components/IconSection';
 import { DidYouKnowCarousel } from '@/components/DidYouKnowCarousel';
 import { Donations } from '@/components/Donations';
-import { TrustStrip } from '@/components/TrustStrip';
 import VoiceSection from '@/components/VoiceSection';
 import { Language, getContent } from '@/lib/content';
 
@@ -41,25 +40,10 @@ export default async function HomePage({ params }: HomePageProps) {
     <>
       <Hero lang={lang as Language} />
       <TeaserGrid lang={lang as Language} />
-      
-      {/* Section Divider */}
-      <div className="border-t border-transparent dark:border-brand-blue my-10"></div>
-      
       <IconSection lang={lang as Language} />
-      
-      {/* Section Divider */}
-      <div className="border-t border-transparent dark:border-brand-blue my-10"></div>
-      
       <DidYouKnowCarousel lang={lang as Language} />
       <Donations lang={lang as Language} />
-      
-      {/* Section Divider */}
-      <div className="border-t border-transparent dark:border-brand-blue my-10"></div>
-      
-      {/* Voice Section */}
       <VoiceSection />
-      
-      <TrustStrip lang={lang as Language} />
       
       {/* Skip link for accessibility */}
       <a 
