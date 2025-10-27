@@ -542,3 +542,122 @@ body:not(.admin-container) [data-slot="card-title"][class*="text-slate"],
 body:not(.admin-container) [data-slot="card-title"][class*="text-white"] {
   color: #60a5fa !important;
 }
+
+/* ========================================================================== */
+/* ADMIN PANEL - FORCE LIGHT THEME */
+/* ========================================================================== */
+
+/* Force light theme on admin container */
+.admin-container,
+.admin-container * {
+  color-scheme: light !important;
+}
+
+/* All cards white with dark text */
+.admin-container [class*="card"],
+.admin-container [class*="Card"],
+.admin-container div[class*="bg-"],
+.admin-container div[class*="rounded"] {
+  background-color: white !important;
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
+}
+
+/* Headers dark in admin */
+.admin-container h1,
+.admin-container h2,
+.admin-container h3,
+.admin-container [data-slot="card-title"] {
+  color: #1e293b !important;
+}
+
+/* Charts white background */
+.admin-container .recharts-surface,
+.admin-container [class*="chart"] {
+  background-color: white !important;
+}
+
+.admin-container .recharts-text {
+  fill: #111827 !important;
+}
+
+/* Override any dark classes in admin */
+.admin-container .dark,
+.admin-container [class*="dark"] {
+  background-color: white !important;
+  color: #111827 !important;
+}
+
+/* Admin card text visible */
+.admin-container [class*="card"] p,
+.admin-container [class*="card"] span,
+.admin-container [class*="card"] div,
+.admin-container [class*="Card"] p,
+.admin-container [class*="Card"] span,
+.admin-container [class*="Card"] div {
+  color: #475569 !important;
+}
+
+/* Numbers/stats - make them stand out */
+.admin-container [class*="card"] [class*="text-"],
+.admin-container [class*="stat"],
+.admin-container [class*="number"] {
+  color: #1e293b !important;
+}
+
+/* Or if you want blue text for emphasis: */
+.admin-container [class*="card-title"] + * {
+  color: #2563eb !important;
+}
+
+/* Admin card headers - dark and bold */
+.admin-container [data-slot="card-title"],
+.admin-container h1,
+.admin-container h2,
+.admin-container h3,
+.admin-container h4 {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+/* Admin card content headers */
+.admin-container [class*="CardTitle"],
+.admin-container [class*="card"] h1,
+.admin-container [class*="card"] h2,
+.admin-container [class*="card"] h3 {
+  color: #1e293b !important;
+}
+
+/* Admin charts - blue colors instead of gray */
+.admin-container .recharts-pie-sector,
+.admin-container .recharts-sector {
+  fill: #3b82f6 !important;
+}
+
+/* Multiple colors for pie chart segments */
+.admin-container .recharts-pie .recharts-sector:nth-child(1) {
+  fill: #3b82f6 !important; /* Blue */
+}
+
+.admin-container .recharts-pie .recharts-sector:nth-child(2) {
+  fill: #f97316 !important; /* Orange */
+}
+
+.admin-container .recharts-pie .recharts-sector:nth-child(3) {
+  fill: #10b981 !important; /* Green */
+}
+
+.admin-container .recharts-pie .recharts-sector:nth-child(4) {
+  fill: #8b5cf6 !important; /* Purple */
+}
+
+/* Chart text dark */
+.admin-container .recharts-text,
+.admin-container .recharts-label {
+  fill: #111827 !important;
+}
+
+/* Chart legend text */
+.admin-container .recharts-legend-item-text {
+  color: #111827 !important;
+}
