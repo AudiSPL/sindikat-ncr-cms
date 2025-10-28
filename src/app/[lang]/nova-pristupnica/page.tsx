@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLanguage, useTranslations } from '@/lib/i18n';
 import toast from 'react-hot-toast';
 import { ArrowLeft, CheckCircle2, Info, CheckCircle } from 'lucide-react';
@@ -10,9 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
-declare global {
-  interface Window {}
-}
+
 
 export default function NovaPristupnica() {
   const t = useTranslations();
