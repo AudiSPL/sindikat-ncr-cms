@@ -12,9 +12,6 @@ interface FooterProps {
 export function Footer({ lang }: FooterProps) {
   const content = getContent(lang);
   const pathname = usePathname();
-  
-  // Check if current page has reCAPTCHA (forms)
-  const hasRecaptcha = pathname?.includes('/nova-pristupnica') || pathname?.includes('/kontakt');
 
   return (
     <footer className="border-t bg-brand-navy dark:bg-brand-navy">
@@ -70,44 +67,11 @@ export function Footer({ lang }: FooterProps) {
           </div>
         </div>
 
-        {/* Disclaimer */}
+        {/* Simplified footer */}
         <div className="mt-8 pt-8 border-t border-white/20">
-          <div className="text-center space-y-2">
-            <p className="text-[10.5px] sm:text-xs text-white/80 leading-relaxed">
-              {content.footer.disclaimer}
-            </p>
-            
-            {hasRecaptcha && (
-              <p className="text-[10.5px] sm:text-xs text-white/80 leading-relaxed">
-                {content.footer.recaptcha}
-                {lang === 'en' && (
-                  <>
-                    {' '}
-                    <a 
-                      href="https://policies.google.com/privacy" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-white hover:underline"
-                    >
-                      Privacy Policy
-                    </a>
-                    {' and '}
-                    <a 
-                      href="https://policies.google.com/terms" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-white hover:underline"
-                    >
-                      Terms of Service
-                    </a>
-                    {' apply.'}
-                  </>
-                )}
-              </p>
-            )}
-            
+          <div className="text-center">
             <p className="text-sm text-white/80">
-              {content.footer.rights}
+              © 2025 Sindikat NCR Atleos – Beograd
             </p>
           </div>
         </div>
