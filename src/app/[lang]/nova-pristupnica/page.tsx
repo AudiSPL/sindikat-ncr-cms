@@ -260,9 +260,9 @@ export default function NovaPristupnica() {
                         {t('consents.privacy.prefix')}{' '}
                         <a 
                           href="/documents/Privacy%20Policy.pdf" 
-                          target="_blank" 
+                          target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#005B99] hover:underline"
+                          className="text-blue-600 hover:underline"
                         >
                           {t('consents.privacy.link')}
                         </a>.
@@ -356,11 +356,7 @@ export default function NovaPristupnica() {
             </span>
             <span className="hidden md:inline">•</span>
             <span>
-              This site is protected by reCAPTCHA and the Google{' '}
-              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline text-[#E67E22] hover:opacity-80">Privacy Policy</a>
-              {' '}and{' '}
-              <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline text-[#E67E22] hover:opacity-80">Terms of Service</a>
-              {' '}apply
+              © 2025 Sindikat NCR Atleos – Beograd
             </span>
             <span className="hidden md:inline">•</span>
             <span>© 2025 Sindikat NCR Atleos – Beograd</span>
