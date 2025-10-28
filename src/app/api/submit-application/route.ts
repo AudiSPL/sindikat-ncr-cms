@@ -50,43 +50,70 @@ export async function POST(req: NextRequest) {
     // Verify reCAPTCHA Enterprise v3
     try {
       const recaptchaToken = (body as any)?.recaptchaToken;
+      
       if (!recaptchaToken) {
-        console.error('No reCAPTCHA token provided');
+        console.error('❌ No reCAPTCHA token provided');
         return NextResponse.json({ error: 'reCAPTCHA token is required' }, { status: 400 });
       }
 
+      console.log('📝 reCAPTCHA token received (first 20 chars):', recaptchaToken.substring(0, 20));
+
       const apiKey = process.env.RECAPTCHA_ENTERPRISE_API_KEY;
       const projectId = process.env.RECAPTCHA_ENTERPRISE_PROJECT_ID;
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+
+      console.log('🔑 Keys check:', {
+        hasApiKey: !!apiKey,
+        hasProjectId: !!projectId,
+        hasSiteKey: !!siteKey
+      });
 
       if (!apiKey || !projectId) {
-        console.error('reCAPTCHA Enterprise credentials not configured');
+        console.error('❌ reCAPTCHA Enterprise credentials not configured');
         return NextResponse.json({ error: 'reCAPTCHA Enterprise credentials not configured' }, { status: 500 });
       }
 
       const verifyUrl = `https://recaptchaenterprise.googleapis.com/v1/projects/${projectId}/assessments?key=${apiKey}`;
+      
+      const requestBody = {
+        event: {
+          token: recaptchaToken,
+          expectedAction: 'submit',
+          siteKey: siteKey
+        }
+      };
+
+      console.log('📤 Sending to Enterprise API:', {
+        url: verifyUrl.substring(0, 50) + '...',
+        requestBody: JSON.stringify(requestBody).substring(0, 100)
+      });
+
       const verifyRes = await fetch(verifyUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          event: {
-            token: recaptchaToken,
-            expectedAction: 'submit',
-            siteKey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
-          }
-        })
+        body: JSON.stringify(requestBody)
       });
 
       const verifyData = await verifyRes.json();
-      console.log('reCAPTCHA Enterprise verification response:', verifyData);
+      console.log('📥 Enterprise API response:', JSON.stringify(verifyData, null, 2));
+
+      if (verifyData.error) {
+        console.error('❌ Enterprise API error:', verifyData.error);
+        return NextResponse.json({ error: 'reCAPTCHA verification failed: ' + verifyData.error.message }, { status: 400 });
+      }
 
       const score = verifyData.riskAnalysis?.score || 0;
+      console.log('🎯 reCAPTCHA score:', score);
+
       if (score < 0.5) {
-        console.error('reCAPTCHA score too low:', score);
-        return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
+        console.error('❌ reCAPTCHA score too low:', score);
+        return NextResponse.json({ error: 'reCAPTCHA verification failed (low score)' }, { status: 400 });
       }
+
+      console.log('✅ reCAPTCHA verification passed');
     } catch (recaptchaErr) {
-      console.warn('reCAPTCHA verification error:', recaptchaErr);
-      return NextResponse.json({ error: 'reCAPTCHA verification error' }, { status: 400 });
+      console.error('❌ reCAPTCHA verification error:', recaptchaErr);
+      return NextResponse.json({ error: 'reCAPTCHA verification error: ' + (recaptchaErr as any).message }, { status: 400 });
     }
 
     // Validacija
