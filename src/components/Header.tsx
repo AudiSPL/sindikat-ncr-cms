@@ -89,30 +89,30 @@ export function Header({ lang }: HeaderProps) {
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 shadow-2xl z-50 lg:hidden animate-in slide-in-from-right duration-300">
+          <div className="fixed top-16 right-0 bottom-0 w-64 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 shadow-2xl z-50 lg:hidden overflow-y-auto">
             <div className="flex flex-col h-full">
               {/* Mobile Menu Header */}
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {lang === 'sr' ? 'Menj' : 'Menu'}
+              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                  {lang === 'sr' ? 'Meni' : 'Menu'}
                 </h2>
                 <button
                   onClick={closeMobileMenu}
                   className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-md transition-colors duration-200"
                   aria-label="Close menu"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
 
               {/* Mobile Navigation Links */}
-              <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                {navItems.map((item, index) => (
+              <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+                {navItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={closeMobileMenu}
-                    className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white rounded-lg transition-all duration-200 font-medium text-sm"
+                    className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white rounded-lg transition-all duration-200 font-medium"
                   >
                     {item.label}
                   </Link>
@@ -120,8 +120,8 @@ export function Header({ lang }: HeaderProps) {
               </nav>
 
               {/* Mobile Menu Footer */}
-              <div className="p-6 border-t border-gray-200 dark:border-slate-700">
-                <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+              <div className="p-4 border-t border-gray-200 dark:border-slate-700">
+                <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
                   {lang === 'sr' ? 'Sindikat NCR Atleos' : 'NCR Atleos Union'}
                 </p>
               </div>

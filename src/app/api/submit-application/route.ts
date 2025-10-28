@@ -43,58 +43,8 @@ export async function POST(req: NextRequest) {
       organization,
       agreeJoin,
       agreeGDPR,
-      isAnonymous,
-      recaptchaToken 
+      isAnonymous
     } = body;
-
-    // Verify reCAPTCHA v2
-    try {
-      const recaptchaToken = (body as any)?.recaptchaToken;
-      if (!recaptchaToken) {
-        console.error('❌ No reCAPTCHA token provided');
-        return NextResponse.json({ error: 'reCAPTCHA token is required' }, { status: 400 });
-      }
-
-      const secret = process.env.RECAPTCHA_SECRET_KEY;
-      if (!secret) {
-        console.error('❌ RECAPTCHA_SECRET_KEY not configured');
-        return NextResponse.json({ error: 'reCAPTCHA not configured' }, { status: 500 });
-      }
-
-      const verifyRes = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          secret,
-          response: recaptchaToken,
-        }),
-      });
-
-      if (!verifyRes.ok) {
-        console.error('❌ reCAPTCHA HTTP error:', verifyRes.status);
-        return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
-      }
-
-      type V2Response = {
-        success: boolean;
-        challenge_ts?: string;
-        hostname?: string;
-        'error-codes'?: string[];
-      };
-
-      const verifyData = (await verifyRes.json()) as V2Response;
-      console.log('📥 reCAPTCHA v2 response:', verifyData);
-
-      if (!verifyData.success) {
-        console.error('❌ reCAPTCHA verification failed:', verifyData);
-        return NextResponse.json({ error: 'reCAPTCHA verification failed' }, { status: 400 });
-      }
-
-      console.log('✅ reCAPTCHA v2 verification passed');
-    } catch (recaptchaErr) {
-      console.error('❌ reCAPTCHA verification error:', recaptchaErr);
-      return NextResponse.json({ error: 'reCAPTCHA verification error' }, { status: 400 });
-    }
 
     // Validacija
     if (!fullName || !email || !quicklookId || !city) {

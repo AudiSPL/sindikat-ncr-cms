@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage, useTranslations } from '@/lib/i18n';
 import toast from 'react-hot-toast';
-import { ArrowLeft, CheckCircle2, Info, CheckCircle, Loader2 } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Info, CheckCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
 declare global {
-  interface Window {
-    grecaptcha: any;
-  }
+  interface Window {}
 }
 
 export default function NovaPristupnica() {
@@ -21,10 +19,7 @@ export default function NovaPristupnica() {
   const { lang, setLang } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const widgetIdRef = useRef<number | null>(null);
   const [quicklookError, setQuicklookError] = useState('');
-  const RECAPTCHA_SITE_KEY = '6Lc7y_grAAAAAGRS2F0wKCXl_QcubnQCC_z1MXg5';
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -36,43 +31,7 @@ export default function NovaPristupnica() {
     isAnonymous: true,
   });
 
-  useEffect(() => {
-    // Load reCAPTCHA v2 (regular) script
-    const id = 'recaptcha-script';
-    if (document.getElementById(id)) return;
-
-    const script = document.createElement('script');
-    script.id = id;
-    script.src = 'https://www.google.com/recaptcha/api.js';
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-    return () => { /* keep script loaded */ };
-  }, []);
-
-  useEffect(() => {
-    const tryRender = () => {
-      if (typeof window === 'undefined' || !(window as any).grecaptcha) {
-        setTimeout(tryRender, 100);
-        return;
-      }
-      const grecaptcha = (window as any).grecaptcha;
-      if (widgetIdRef.current !== null) return;
-
-      widgetIdRef.current = grecaptcha.render('recaptcha-container', {
-        sitekey: RECAPTCHA_SITE_KEY,
-        size: 'invisible',
-        callback: (tok: string) => {
-          setRecaptchaToken(tok);
-        },
-        'error-callback': () => {
-          setLoading(false);
-          toast.error(lang === 'sr' ? 'reCAPTCHA neuspesno' : 'reCAPTCHA failed');
-        },
-      });
-    };
-    tryRender();
-  }, []);
+  // No reCAPTCHA/Turnstile
 
   const validateQuicklookId = (value: string) => {
     const regex = /^[A-Z]{2}\d{6}$/;
@@ -84,7 +43,7 @@ export default function NovaPristupnica() {
     return true;
   };
 
-  const handleSubmitWithRecaptcha = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateQuicklookId(formData.quicklookId.toUpperCase())) {
@@ -93,67 +52,40 @@ export default function NovaPristupnica() {
     }
     
     setLoading(true);
-    const loadingToast = toast.loading(lang === 'sr' ? 'Verifikacija...' : 'Verifying...');
     
     try {
-      const grecaptcha = (window as any).grecaptcha;
-      if (!grecaptcha || widgetIdRef.current === null) {
-        throw new Error('reCAPTCHA not ready');
+      const res = await fetch('/api/submit-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          ...formData, 
+          quicklookId: formData.quicklookId.toUpperCase()
+        }),
+      });
+
+      console.log('📥 Response status:', res.status);
+      const responseText = await res.text();
+      console.log('📥 Response body:', responseText);
+
+      if (res.ok) {
+        toast.success(lang === 'sr' ? 'Prijava uspesno poslata!' : 'Application submitted successfully!');
+        setSubmitted(true);
+      } else if (res.status === 429) {
+        toast.error(lang === 'sr' ? 'Previše zahteva. Pokušajte ponovo za minut.' : 'Too many requests. Please try again in a minute.');
+      } else if (res.status === 409) {
+        const j = JSON.parse(responseText);
+        toast.error(lang === 'sr' ? 'Korisnik je vec u bazi, kontaktirajte nas preko office@sindikatncr.com' : 'User already registered. Contact us.');
+      } else {
+        throw new Error(`Server returned ${res.status}: ${responseText}`);
       }
-      
-      // Execute v2 invisible challenge
-      grecaptcha.execute(widgetIdRef.current);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('❌ Error:', error);
       toast.error(lang === 'sr' ? 'Doslo je do greske' : 'An error occurred');
-      toast.dismiss(loadingToast);
+    } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const send = async () => {
-      if (!recaptchaToken) return;
-
-      try {
-        const res = await fetch('/api/submit-application', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            ...formData, 
-            quicklookId: formData.quicklookId.toUpperCase(), 
-            recaptchaToken 
-          }),
-        });
-
-        if (res.ok) {
-          toast.success(lang === 'sr' ? 'Prijava uspesno poslata!' : 'Application submitted successfully!');
-          setSubmitted(true);
-        } else if (res.status === 409) {
-          const j = await res.json();
-          const msg = lang === 'sr'
-            ? 'Korisnik je vec u bazi, kontaktirajte nas preko office@sindikatncr.com'
-            : 'Unfortunately a user with these credentials is already registered. Please reach out to us on office@sindikatncr.com.';
-          toast.error(msg);
-        } else {
-          throw new Error(`Server returned ${res.status}`);
-        }
-
-        // Reset widget for next attempt
-        const grecaptcha = (window as any).grecaptcha;
-        if (grecaptcha && widgetIdRef.current !== null) {
-          grecaptcha.reset(widgetIdRef.current);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        toast.error(lang === 'sr' ? 'Doslo je do greske' : 'An error occurred');
-      } finally {
-        setLoading(false);
-        setRecaptchaToken(null);
-      }
-    };
-    send();
-  }, [recaptchaToken]);
+  // No token watcher
 
   if (submitted) {
     return (
@@ -229,7 +161,7 @@ export default function NovaPristupnica() {
             <CardTitle className="text-2xl text-white">{t('membership.application')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmitWithRecaptcha} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <Label htmlFor="fullName" className="text-white text-base">{t('form.fullName')}</Label>
                 <Input
@@ -325,7 +257,15 @@ export default function NovaPristupnica() {
                   <div className="flex-1">
                     <Label htmlFor="privacy" className="cursor-pointer text-white text-base font-medium leading-relaxed">
                       <span>
-                        {t('consents.privacy.prefix')} <a href="/politika-privatnosti" className="underline text-[#E67E22] hover:opacity-80" target="_blank" rel="noopener noreferrer">{t('consents.privacy.link')}</a>.
+                        {t('consents.privacy.prefix')}{' '}
+                        <a 
+                          href="/documents/Privacy%20Policy.pdf" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-[#005B99] hover:underline"
+                        >
+                          {t('consents.privacy.link')}
+                        </a>.
                       </span>
                     </Label>
                   </div>
@@ -362,18 +302,8 @@ export default function NovaPristupnica() {
                 </div>
               </div>
 
-              {/* reCAPTCHA v2 invisible container */}
-              <div id="recaptcha-container" />
-
               <Button type="submit" disabled={loading} className="w-full bg-[#E67E22] hover:bg-[#E67E22]/90 text-white disabled:opacity-50 text-base py-6">
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    {t('form.sending')}
-                  </>
-                ) : (
-                  t('form.submit')
-                )}
+                {loading ? 'Slanje...' : 'Pošalji'}
               </Button>
             </form>
           </CardContent>

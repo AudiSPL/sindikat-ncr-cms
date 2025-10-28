@@ -326,7 +326,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <Card onClick={() => goToList('approved')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Ukupno Članova</CardTitle>
+              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Ukupno Članova</CardTitle>
               <Users className="h-4 w-4 text-brand-blue" />
             </CardHeader>
             <CardContent>
@@ -336,7 +336,7 @@ export default function AdminDashboard() {
 
           <Card onClick={() => goToList('pending')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Na čekanju</CardTitle>
+              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Na čekanju</CardTitle>
               <Clock className="h-4 w-4 text-yellow-600" />
             </CardHeader>
             <CardContent>
@@ -346,7 +346,7 @@ export default function AdminDashboard() {
 
           <Card onClick={() => goToList('approved')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Odobreno</CardTitle>
+              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Odobreno</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
@@ -356,7 +356,7 @@ export default function AdminDashboard() {
 
           <Card onClick={() => goToList('approved')} className="cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Odbijeno</CardTitle>
+              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Odbijeno</CardTitle>
               <XCircle className="h-4 w-4 text-red-600" />
             </CardHeader>
             <CardContent>
