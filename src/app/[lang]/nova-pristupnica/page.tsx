@@ -21,6 +21,8 @@ export default function NovaPristupnica() {
   const { lang, setLang } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const widgetIdRef = useRef<number | null>(null);
   const [quicklookError, setQuicklookError] = useState('');
   const RECAPTCHA_SITE_KEY = '6Lc7y_grAAAAAGRS2F0wKCXl_QcubnQCC_z1MXg5';
   const [formData, setFormData] = useState({
@@ -35,16 +37,41 @@ export default function NovaPristupnica() {
   });
 
   useEffect(() => {
-    // Load reCAPTCHA Enterprise v3 script
+    // Load reCAPTCHA v2 (regular) script
+    const id = 'recaptcha-script';
+    if (document.getElementById(id)) return;
+
     const script = document.createElement('script');
-    script.src = `https://www.google.com/recaptcha/enterprise.js?render=${RECAPTCHA_SITE_KEY}`;
+    script.id = id;
+    script.src = 'https://www.google.com/recaptcha/api.js';
     script.async = true;
     script.defer = true;
     document.head.appendChild(script);
+    return () => { /* keep script loaded */ };
+  }, []);
 
-    return () => {
-      document.head.removeChild(script);
+  useEffect(() => {
+    const tryRender = () => {
+      if (typeof window === 'undefined' || !(window as any).grecaptcha) {
+        setTimeout(tryRender, 100);
+        return;
+      }
+      const grecaptcha = (window as any).grecaptcha;
+      if (widgetIdRef.current !== null) return;
+
+      widgetIdRef.current = grecaptcha.render('recaptcha-container', {
+        sitekey: RECAPTCHA_SITE_KEY,
+        size: 'invisible',
+        callback: (tok: string) => {
+          setRecaptchaToken(tok);
+        },
+        'error-callback': () => {
+          setLoading(false);
+          toast.error(lang === 'sr' ? 'reCAPTCHA neuspesno' : 'reCAPTCHA failed');
+        },
+      });
     };
+    tryRender();
   }, []);
 
   const validateQuicklookId = (value: string) => {
@@ -64,51 +91,69 @@ export default function NovaPristupnica() {
       toast.error(lang === 'sr' ? 'Quicklook ID nije validan' : 'Quicklook ID is invalid');
       return;
     }
-
+    
     setLoading(true);
     const loadingToast = toast.loading(lang === 'sr' ? 'Verifikacija...' : 'Verifying...');
-
+    
     try {
-      // Execute reCAPTCHA Enterprise v3
-      if (!window.grecaptcha) {
-        throw new Error('reCAPTCHA not loaded');
+      const grecaptcha = (window as any).grecaptcha;
+      if (!grecaptcha || widgetIdRef.current === null) {
+        throw new Error('reCAPTCHA not ready');
       }
-
-      const recaptchaToken = await window.grecaptcha.enterprise.execute(RECAPTCHA_SITE_KEY, { 
-        action: 'submit' 
-      });
-
-      // Send token to backend
-      const res = await fetch('/api/submit-application', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          ...formData, 
-          quicklookId: formData.quicklookId.toUpperCase(), 
-          recaptchaToken 
-        }),
-      });
-
-      if (res.ok) {
-        toast.success(lang === 'sr' ? 'Prijava uspesno poslata!' : 'Application submitted successfully!');
-        setSubmitted(true);
-      } else if (res.status === 409) {
-        const j = await res.json();
-        const msg = lang === 'sr'
-          ? 'Korisnik je vec u bazi, kontaktirajte nas preko office@sindikatncr.com'
-          : 'Unfortunately a user with these credentials is already registered. Please reach out to us on office@sindikatncr.com.';
-        toast.error(msg);
-      } else {
-        throw new Error(`Server returned ${res.status}`);
-      }
+      
+      // Execute v2 invisible challenge
+      grecaptcha.execute(widgetIdRef.current);
     } catch (error) {
       console.error('Error:', error);
       toast.error(lang === 'sr' ? 'Doslo je do greske' : 'An error occurred');
-    } finally {
       toast.dismiss(loadingToast);
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const send = async () => {
+      if (!recaptchaToken) return;
+
+      try {
+        const res = await fetch('/api/submit-application', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            ...formData, 
+            quicklookId: formData.quicklookId.toUpperCase(), 
+            recaptchaToken 
+          }),
+        });
+
+        if (res.ok) {
+          toast.success(lang === 'sr' ? 'Prijava uspesno poslata!' : 'Application submitted successfully!');
+          setSubmitted(true);
+        } else if (res.status === 409) {
+          const j = await res.json();
+          const msg = lang === 'sr'
+            ? 'Korisnik je vec u bazi, kontaktirajte nas preko office@sindikatncr.com'
+            : 'Unfortunately a user with these credentials is already registered. Please reach out to us on office@sindikatncr.com.';
+          toast.error(msg);
+        } else {
+          throw new Error(`Server returned ${res.status}`);
+        }
+
+        // Reset widget for next attempt
+        const grecaptcha = (window as any).grecaptcha;
+        if (grecaptcha && widgetIdRef.current !== null) {
+          grecaptcha.reset(widgetIdRef.current);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error(lang === 'sr' ? 'Doslo je do greske' : 'An error occurred');
+      } finally {
+        setLoading(false);
+        setRecaptchaToken(null);
+      }
+    };
+    send();
+  }, [recaptchaToken]);
 
   if (submitted) {
     return (
@@ -317,8 +362,9 @@ export default function NovaPristupnica() {
                 </div>
               </div>
 
-              {/* reCAPTCHA Enterprise v3 - invisible verification on submit */}
-              
+              {/* reCAPTCHA v2 invisible container */}
+              <div id="recaptcha-container" />
+
               <Button type="submit" disabled={loading} className="w-full bg-[#E67E22] hover:bg-[#E67E22]/90 text-white disabled:opacity-50 text-base py-6">
                 {loading ? (
                   <>
