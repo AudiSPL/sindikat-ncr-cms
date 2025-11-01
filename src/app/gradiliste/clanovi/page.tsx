@@ -272,7 +272,7 @@ export default function ClanoviPage() {
             <div className="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-lg border border-red-200">
               <p className="text-blue-900 font-semibold text-sm">Odbijeno</p>
               <p className="text-3xl font-bold text-blue-900">
-                {members.filter(m => m.verification_status === 'flagged').length}
+                {members.filter(m => (m as any).verification_status === 'flagged').length}
               </p>
             </div>
           </div>
