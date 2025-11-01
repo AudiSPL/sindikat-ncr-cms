@@ -36,6 +36,7 @@ export async function POST(request: Request) {
     // Load fontkit using dynamic import
     let fontkit;
     try {
+      // @ts-ignore
       const fontkitModule = await import('fontkit');
       fontkit = fontkitModule.default || fontkitModule;
       console.log('✅ fontkit loaded');
