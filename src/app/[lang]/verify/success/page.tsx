@@ -2,6 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
+import { Suspense } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
@@ -20,6 +21,14 @@ const content = {
 };
 
 export default function VerifySuccessPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifySuccessContent />
+    </Suspense>
+  );
+}
+
+function VerifySuccessContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const lang = (params.lang as string) || 'sr';
