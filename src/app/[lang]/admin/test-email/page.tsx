@@ -35,7 +35,7 @@ export default function TestEmailPage() {
     return null;
   }
 
-  if (session?.user?.role !== 'super_admin') {
+  if ((session?.user as any)?.role !== 'super_admin') {
     return (
       <div className="p-8">
         <h1 className="text-2xl font-bold text-red-600">
