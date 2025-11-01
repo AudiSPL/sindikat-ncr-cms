@@ -1,0 +1,19 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/purge-artifacts",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/check-verification-emails",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/send-verification-reminders",
+      "schedule": "0 * * * *"
+    }
+  ]
+}
+
+
+

@@ -298,20 +298,20 @@ export const content: Record<Language, Content> = {
       title: "Naš plan",
       steps: [
         {
-          title: "Zajednica",
-          description: "Okupljamo zaposlene koji dele iste vrednosti i želju za boljim radnim okruženjem."
+          title: "Kolektiv (cilj: ~15%)",
+          description: "Skupimo oko 15% zaposlenih da postanemo reprezentativni i pregovaramo kao jedan."
+        },
+        {
+          title: "Reprezentativnost",
+          description: "Sa statusom reprezentativnosti poslodavac je dužan da nas uključi pre svake izmene pravilnika i pravila rada."
         },
         {
           title: "Pregovori",
-          description: "Kroz kolektivno pregovaranje postižemo dogovore koji štite sve zaposlene."
+          description: "Na osnovu glasova članova pregovaramo o platama, uslovima rada, karijeri i zaštiti — pre objave bilo kakvih promena."
         },
         {
-          title: "Dogovori",
-          description: "Sklapamo kolektivne ugovore koji definišu prava i obaveze svih strana."
-        },
-        {
-          title: "Pobede",
-          description: "Celebrišemo zajedničke uspehe i gradimo na njima za budućnost."
+          title: "Sporazumi i primena",
+          description: "Potpisujemo dogovore, definišemo rokove, pratimo ispunjenje i izveštavamo članove."
         }
       ]
     },
@@ -653,20 +653,20 @@ export const content: Record<Language, Content> = {
       title: "Our Plan",
       steps: [
         {
-          title: "Community",
-          description: "We gather employees who share the same values and desire for a better work environment."
+          title: "Collective (target: ~15%)",
+          description: "\"Let's reach about 15% of employees to become representative and negotiate as one.\""
+        },
+        {
+          title: "Representativeness",
+          description: "\"With representativeness, the employer is legally required to involve us before changing rulebooks or workplace policies.\""
         },
         {
           title: "Negotiations",
-          description: "Through collective bargaining we achieve agreements that protect all employees."
+          description: "\"Based on member input we negotiate pay, working conditions, career paths, protection — before anything goes live.\""
         },
         {
-          title: "Agreements",
-          description: "We conclude collective agreements that define rights and obligations of all parties."
-        },
-        {
-          title: "Victories",
-          description: "We celebrate shared successes and build on them for the future."
+          title: "Agreements & delivery",
+          description: "\"We sign agreements, set timelines, track delivery, and report to members.\""
         }
       ]
     },

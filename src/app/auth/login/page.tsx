@@ -35,7 +35,7 @@ export default function LoginPage() {
         toast.error('Pogrešan email ili password', { position: 'top-center' });
       } else {
         toast.success('Uspešna prijava', { position: 'top-center' });
-        router.push('/admin');
+        router.push('/gradiliste');
       }
     } catch (err) {
       setError('Došlo je do greške');

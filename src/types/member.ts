@@ -31,6 +31,8 @@ export interface Member {
   member_id?: string;
   card_number?: string;
   card_sent: boolean;
+  verification_method?: 'email' | 'teams' | 'badge';
+  badge_object_path?: string;
   joined_at?: string;
   approved_at?: string;
   approved_by?: string;

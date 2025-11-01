@@ -30,3 +30,5 @@ export function LanguagePersistence({ currentLang }: LanguagePersistenceProps) {
   return null;
 }
 
+
+

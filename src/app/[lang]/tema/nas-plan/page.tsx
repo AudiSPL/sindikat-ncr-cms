@@ -73,12 +73,12 @@ export default async function NasPlanPage({ params }: NasPlanPageProps) {
           <CardContent className="pt-6">
             <div className="text-center space-y-2">
               <h3 className="font-semibold">
-                {lang === 'sr' ? 'Timeline' : 'Timeline'}
+                {lang === 'sr' ? 'Reprezentativan sindikat' : 'Representative union'}
               </h3>
               <p className="text-sm text-muted-foreground">
                 {lang === 'sr' 
-                  ? 'Proces se odvija postupno, sa fokusom na poverljivost i sigurnost svih učesnika.'
-                  : 'The process unfolds gradually, with focus on confidentiality and safety of all participants.'
+                  ? 'Reprezentativan sindikat = obavezne konsultacije/pregovori pre svake promene koja utiče na zaposlene.'
+                  : 'Representative union = mandatory consultation/negotiation before any rule changes affecting staff.'
                 }
               </p>
             </div>

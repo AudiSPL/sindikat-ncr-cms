@@ -85,7 +85,7 @@ export async function PUT(req: NextRequest) {
           const shouldSetJoin = !effective.joined_at;
           const shouldSetMemberId = !effective.member_id;
           if (shouldSetJoin || shouldSetMemberId) {
-            const membershipNumber = shouldSetMemberId ? `MBR-${String(effective.id).padStart(6, '0')}` : effective.member_id;
+            const membershipNumber = shouldSetMemberId ? `SIN-AT${String(effective.id).padStart(4, '0')}` : effective.member_id;
             const { data: ensured } = await getSupabaseAdmin()
               .from('members')
               .update({

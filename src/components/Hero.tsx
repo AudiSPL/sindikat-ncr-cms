@@ -38,7 +38,7 @@ export function Hero({ lang }: HeroProps) {
 
             {/* Secondary Button - Light mode: white, Dark mode: white */}
             <Button asChild className="bg-white text-[#2C5282] border-2 border-white px-6 py-3 rounded-lg hover:bg-white/90 transition-all duration-200 ease-out font-semibold w-full md:w-auto dark:bg-white dark:text-brand-navy dark:border-white dark:hover:bg-white/90">
-              <Link href={`/${lang}#ko-smo-mi`}>
+              <Link href={`/${lang}/tema/ko-smo-mi`}>
                 {content.hero.ctaSecondary}
               </Link>
             </Button>

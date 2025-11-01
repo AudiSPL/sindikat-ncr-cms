@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
-const protectedRoutes = ['/admin'];
+const protectedRoutes = ['/gradiliste'];
 const publicRoutes = ['/auth/login'];
 
 export async function middleware(request: NextRequest) {
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isPublicRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL('/admin', request.url));
+    return NextResponse.redirect(new URL('/gradiliste', request.url));
   }
 
   const response = NextResponse.next();
