@@ -7,10 +7,6 @@
     {
       "path": "/api/cron/check-verification-emails",
       "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/send-verification-reminders",
-      "schedule": "0 18 * * *"
     }
   ]
 }
