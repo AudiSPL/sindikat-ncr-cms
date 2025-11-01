@@ -84,6 +84,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
                   required
                   className="pr-10"
                   aria-invalid={error ? "true" : "false"}

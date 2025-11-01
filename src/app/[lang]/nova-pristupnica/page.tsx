@@ -311,9 +311,9 @@ export default function NovaPristupnicaPage() {
               />
               <Label htmlFor="agreeJoin" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
                 Potvrđujem da sam pročitao/la{' '}
-                <a href="http://localhost:3001/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline">Statut</a>
+                <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Statut</a>
                 {' '}i{' '}
-                <a href="http://localhost:3001/documents/Pravilnik%20Sindikata%20(sr).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline">Pravila</a>
+                <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Pravila</a>
                 {' '}sindikata *
               </Label>
             </div>
