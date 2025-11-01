@@ -33,13 +33,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // Load fontkit using require
+    // Load fontkit using dynamic import
     let fontkit;
     try {
-      fontkit = require('fontkit');
+      const fontkitModule = await import('fontkit');
+      fontkit = fontkitModule.default || fontkitModule;
       console.log('✅ fontkit loaded');
     } catch (e) {
-      console.error('fontkit require error:', e);
+      console.error('fontkit import error:', e);
       throw new Error('Failed to load fontkit: ' + (e instanceof Error ? e.message : 'Unknown'));
     }
 

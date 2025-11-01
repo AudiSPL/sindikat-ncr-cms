@@ -380,8 +380,8 @@ export default function TestEmailPage() {
               <h3 className="text-sm font-semibold text-slate-300 mb-2">📋 PDF Preview Info:</h3>
               <ul className="text-xs text-slate-400 space-y-1">
                 <li>✅ Serbian Latin fonts (DejaVu) - supports Č, Š, Ž, Đ, ć</li>
-                <li>✅ Logo on left, title "POTVRDA O ČLANSTVU" inline</li>
-                <li>✅ Footer "S poštovanjem," on right side</li>
+                <li>✅ Logo on left, title &quot;POTVRDA O ČLANSTVU&quot; inline</li>
+                <li>✅ Footer &quot;S poštovanjem,&quot; on right side</li>
                 <li>✅ Professional layout with all member details</li>
               </ul>
             </div>
