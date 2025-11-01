@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
 
     console.log('✅ [generate-card] PDF generated successfully');
 
-    return new NextResponse(pdfBuffer.buffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="membership-cards-${Date.now()}.pdf"`,
