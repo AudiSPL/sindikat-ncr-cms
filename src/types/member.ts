@@ -32,6 +32,7 @@ export interface Member {
   card_number?: string;
   card_sent: boolean;
   verification_method?: 'email' | 'teams' | 'badge';
+  verification_status?: 'code_verified' | 'flagged' | string;
   badge_object_path?: string;
   joined_at?: string;
   approved_at?: string;
