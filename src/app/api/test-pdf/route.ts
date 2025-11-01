@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     
     console.log('✅ [test-pdf] PDF generated successfully, size:', pdfBuffer.length);
 
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'inline; filename="test.pdf"',
