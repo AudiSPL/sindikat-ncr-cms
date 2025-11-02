@@ -84,6 +84,8 @@ export async function POST(
         }),
       });
 
+      console.log('✅ Confirmation response status:', confirmResponse.status);
+
       if (confirmResponse.ok) {
         const confirmData = await confirmResponse.json();
         confirmationPdfUrl = confirmData.pdfUrl;
@@ -97,6 +99,7 @@ export async function POST(
 
     // 4. Prepare attachments (empty - PDFs would need to be generated via API and passed as buffers)
     const attachments: Array<{ filename: string; content: string }> = [];
+    console.log('📎 Attachments array:', attachments.length, attachments);
 
     // 5. Send approval email using Resend
     console.log('Sending approval email to:', (member as any).email);
@@ -141,6 +144,7 @@ export async function POST(
       </div>
     `;
 
+    console.log('📧 Email being sent with attachments:', attachments);
     const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'office@sindikatncr.com',
       to: (member as any).email,
