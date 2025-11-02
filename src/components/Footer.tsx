@@ -16,9 +16,9 @@ export function Footer({ lang }: FooterProps) {
   return (
     <footer className="border-t bg-brand-navy dark:bg-brand-navy">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Logo and Name */}
-          <div className="space-y-4">
+          <div className="space-y-2">
             <div className="flex items-center space-x-3">
               <Logo className="h-8 w-8" />
               <span className="font-bold text-lg text-white">Sindikat Radnika NCR Atleos – Beograd</span>
@@ -32,9 +32,9 @@ export function Footer({ lang }: FooterProps) {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
+          <div className="space-y-2">
             <h3 className="font-semibold text-white">{content.footer.quickLinks}</h3>
-            <nav className="space-y-2">
+            <nav className="space-y-1">
               <Link href={`/${lang}`} className="block text-sm text-white/90 hover:text-white transition-colors">
                 {content.nav.home}
               </Link>
@@ -51,7 +51,7 @@ export function Footer({ lang }: FooterProps) {
           </div>
 
           {/* Contact and Logo */}
-          <div className="space-y-4">
+          <div className="space-y-2">
             <h3 className="font-semibold text-white">{content.footer.contact}</h3>
             <div className="space-y-2">
               <a 
@@ -68,7 +68,7 @@ export function Footer({ lang }: FooterProps) {
         </div>
 
         {/* Copyright footer */}
-        <div className="mt-8 pt-8 border-t border-white/20">
+        <div className="mt-4 pt-4 border-t border-white/20">
           <div className="text-center max-w-4xl mx-auto">
             <p className="text-sm text-white/80 leading-relaxed">
               {lang === 'sr' ? (
