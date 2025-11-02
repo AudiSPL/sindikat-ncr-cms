@@ -1,4 +1,4 @@
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, rgb } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -10,8 +10,24 @@ export async function generateMembershipCard(
   logoPath?: string
 ): Promise<Buffer> {
   try {
+    // Load fontkit using dynamic import
+    let fontkit;
+    try {
+      // @ts-expect-error fontkit has no type definitions
+      const fontkitModule = await import('fontkit');
+      fontkit = fontkitModule.default || fontkitModule;
+      console.log('✅ fontkit loaded for card generation');
+    } catch (e) {
+      console.error('fontkit import error:', e);
+      throw new Error('Failed to load fontkit: ' + (e instanceof Error ? e.message : 'Unknown'));
+    }
+
     // Create PDF document
     const pdfDoc = await PDFDocument.create();
+    
+    // Register fontkit
+    pdfDoc.registerFontkit(fontkit);
+    console.log('✅ fontkit registered for card');
 
     // Card dimensions in mm
     const cardWidthMM = 85.6;
@@ -31,9 +47,22 @@ export async function generateMembershipCard(
     // Add a letter-size page
     const page = pdfDoc.addPage([pageWidth, pageHeight]);
 
-    // Embed fonts once
-    const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    // Load fonts for Serbian support
+    let fontBold, fontRegular;
+    try {
+      const fontPathBold = path.join(process.cwd(), 'public', 'fonts', 'DejaVuSans-Bold.ttf');
+      const fontPathReg = path.join(process.cwd(), 'public', 'fonts', 'DejaVuSans.ttf');
+      
+      const fontBytesBold = await fs.readFile(fontPathBold);
+      const fontBytesReg = await fs.readFile(fontPathReg);
+      
+      fontBold = await pdfDoc.embedFont(fontBytesBold);
+      fontRegular = await pdfDoc.embedFont(fontBytesReg);
+      console.log('✅ DejaVuSans fonts embedded for Serbian characters');
+    } catch (e) {
+      console.error('Font error:', e);
+      throw new Error(`Fonts failed: ${e instanceof Error ? e.message : 'Unknown'}`);
+    }
 
     // Colors
     const white = rgb(1, 1, 1);
@@ -56,7 +85,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 10 * mmToPoints,
       size: 10,
-      font: helveticaBold,
+      font: fontBold,
       color: darkBlue,
     });
 
@@ -65,7 +94,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 15 * mmToPoints,
       size: 10,
-      font: helvetica,
+      font: fontRegular,
       color: darkBlue,
     });
 
@@ -74,7 +103,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 20 * mmToPoints,
       size: 9,
-      font: helvetica,
+      font: fontRegular,
       color: darkBlue,
     });
 
@@ -83,7 +112,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 28 * mmToPoints,
       size: 9,
-      font: helveticaBold,
+      font: fontBold,
       color: darkBlue,
     });
 
@@ -92,7 +121,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 34 * mmToPoints,
       size: 9,
-      font: helvetica,
+      font: fontRegular,
       color: darkBlue,
     });
 
@@ -102,7 +131,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 42 * mmToPoints,
       size: 9,
-      font: helveticaBold,
+      font: fontBold,
       color: darkBlue,
     });
 
@@ -111,7 +140,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 48 * mmToPoints,
       size: 8,
-      font: helvetica,
+      font: fontRegular,
       color: darkBlue,
     });
 
@@ -122,7 +151,7 @@ export async function generateMembershipCard(
       x: x + 10 * mmToPoints,
       y: y + cardHeight - 55 * mmToPoints,
       size: 8,
-      font: helvetica,
+      font: fontRegular,
       color: darkBlue,
     });
 
