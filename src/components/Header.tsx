@@ -89,7 +89,7 @@ export function Header({ lang }: HeaderProps) {
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-16 right-0 bottom-0 w-64 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 shadow-2xl z-50 lg:hidden overflow-y-auto">
+          <div className="fixed top-16 right-0 bottom-0 w-64 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 shadow-2xl z-[60] lg:hidden overflow-y-auto">
             <div className="flex flex-col h-full">
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">

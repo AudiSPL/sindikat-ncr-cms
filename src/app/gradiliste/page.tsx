@@ -107,6 +107,20 @@ export default function GradilisteDashboard() {
     }
   }, [status]);
 
+  // Refresh session every 4 minutes to prevent expiry
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (status === 'authenticated') {
+        // Trigger session refresh by calling getSession
+        fetch('/api/auth/session', { method: 'GET', cache: 'no-store' })
+          .then(() => console.log('🔄 Session refreshed'))
+          .catch(err => console.error('Session refresh error:', err));
+      }
+    }, 4 * 60 * 1000);
+    
+    return () => clearInterval(interval);
+  }, [status]);
+
   const fetchMembers = async () => {
     try {
       const res = await fetch('/api/members');
