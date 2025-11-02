@@ -75,7 +75,7 @@ export const authOptions: NextAuthOptions = {
         console.log('[LOGIN DEBUG] ✅ Step 2 passed: Admin found in table');
         console.log('[LOGIN DEBUG] 🔍 Step 3: Updating last_login...');
 
-        const { error: updateError } = await supabase
+        const { error: updateError } = await adminClient
           .from('admins')
           .update({ last_login: new Date().toISOString() })
           .eq('id', admin.id);
