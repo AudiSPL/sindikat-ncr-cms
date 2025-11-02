@@ -67,11 +67,33 @@ export function Footer({ lang }: FooterProps) {
           </div>
         </div>
 
-        {/* Simplified footer */}
+        {/* Copyright footer */}
         <div className="mt-8 pt-8 border-t border-white/20">
-          <div className="text-center">
-            <p className="text-sm text-white/80">
-              © 2025 Sindikat NCR Atleos – Beograd
+          <div className="text-center max-w-4xl mx-auto">
+            <p className="text-sm text-white/80 leading-relaxed">
+              {lang === 'sr' ? (
+                <>
+                  © {new Date().getFullYear()} Sindikat Zaposlenih NCR Atleos – Beograd. Nezavisna organizacija zaposlenih; nismo povezani sa NCR Atleos korporacijom, NCR ATM d.o.o. Beograd, niti NCR Voyix, niti predstavljamo njihove stavove. Sadržaj je informativne prirode i ne predstavlja pravni savet. Rukovalac podacima (GDPR): Pravo na pristup/ispravku/brisanje: obratite se na{' '}
+                  <a 
+                    href="mailto:office@sindikatncr.com" 
+                    className="text-white hover:text-brand-orange transition-colors underline"
+                  >
+                    navedenu adresu e-pošte
+                  </a>
+                  .
+                </>
+              ) : (
+                <>
+                  © {new Date().getFullYear()} Sindikat Zaposlenih NCR Atleos - Beograd. Independent workers' organization; not affiliated with NCR Atleos Corporation, NCR ATM d.o.o. Belgrade, or NCR Voyix, and does not represent employer views. Content is for information only and does not constitute legal advice. Data Controller (GDPR): To exercise access/rectification/erasure rights, contact{' '}
+                  <a 
+                    href="mailto:office@sindikatncr.com" 
+                    className="text-white hover:text-brand-orange transition-colors underline"
+                  >
+                    the email above
+                  </a>
+                  .
+                </>
+              )}
             </p>
           </div>
         </div>
