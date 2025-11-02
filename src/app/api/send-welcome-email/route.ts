@@ -109,23 +109,34 @@ export async function POST(req: Request) {
     if (body.bccUnion) bcc.push('office@sindikatncr.com');
     if (body.bcc) bcc.push(...(Array.isArray(body.bcc) ? body.bcc : [body.bcc]));
 
-    // Note: Resend doesn't support attachments in the same way as Nodemailer
-    // For now, we'll send without attachments. In production, you might want to:
-    // 1. Upload files to Supabase Storage and include download links
-    // 2. Use a different email service that supports attachments
-    // 3. Generate attachments on-demand via separate API calls
+    // Build attachments if requested and type is activation
+    let attachments: Array<{ filename: string; content: Buffer }> = [];
+    if (body.attachFiles && type === 'activation' && m.id) {
+      try {
+        attachments = await buildAttachments(m.id);
+        console.log(`✅ Prepared ${attachments.length} attachments for email`);
+      } catch (attachErr) {
+        console.warn('⚠️ Failed to build attachments:', attachErr);
+        // Continue without attachments - don't fail the email
+      }
+    }
 
     const resp = await sendMail({
       to,
       subject,
       html: renderHtml(type, m),
       bcc: bcc.length > 0 ? bcc : undefined,
+      attachments: attachments.length > 0 ? attachments.map(a => ({
+        filename: a.filename,
+        content: a.content,
+        contentType: 'application/pdf',
+      })) : undefined,
     });
 
     return NextResponse.json({
       success: true,
       messageId: (resp as any)?.id || '',
-      attachments: [], // No attachments with Resend for now
+      attachments: attachments.map(a => a.filename),
     });
   } catch (e: any) {
     console.error('Email error:', e);

@@ -20,19 +20,19 @@ const supabase = createClient(
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Generate unique member ID: SIN-AT0001
+// Generate unique member ID: SIN-AT001
 function generateMemberId(memberId: number, quicklookId: string): string {
   // Special mapping for specific QLIDs
   const qlidMappings: Record<string, string> = {
-    'MS250616': 'SIN-AT0001'
+    'MS250616': 'SIN-AT001'
   };
   
   if (qlidMappings[quicklookId]) {
     return qlidMappings[quicklookId];
   }
   
-  // Default: use database ID
-  return `SIN-AT${String(memberId).padStart(4, '0')}`;
+  // Default: use database ID (3 digits: SIN-AT001, SIN-AT002, etc.)
+  return `SIN-AT${String(memberId).padStart(3, '0')}`;
 }
 
 export async function POST(
