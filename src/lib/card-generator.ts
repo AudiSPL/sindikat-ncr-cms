@@ -1,7 +1,5 @@
-// Based on the Python ReportLab design
-import jsPDF from 'jspdf';
-import QRCode from 'qrcode';
-import fs from 'fs';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import fs from 'fs/promises';
 import path from 'path';
 
 export async function generateMembershipCard(
@@ -12,120 +10,169 @@ export async function generateMembershipCard(
   logoPath?: string
 ): Promise<Buffer> {
   try {
-    // Default logo path if not provided
-    const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union.png');
-    const finalLogoPath = logoPath || defaultLogoPath;
+    // Create PDF document
+    const pdfDoc = await PDFDocument.create();
 
-    // Card dimensions (credit card size in mm)
-    const cardWidth = 85.6;
-    const cardHeight = 53.98;
+    // Card dimensions in mm
+    const cardWidthMM = 85.6;
+    const cardHeightMM = 53.98;
+    
+    // Convert mm to points (1mm = 2.83465 points at 72 DPI)
+    const mmToPoints = 2.83465;
+    const cardWidth = cardWidthMM * mmToPoints;
+    const cardHeight = cardHeightMM * mmToPoints;
+    const pageWidth = 612; // Letter width in points
+    const pageHeight = 792; // Letter height in points
 
-    // Create PDF with card dimensions
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: [cardWidth + 20, cardHeight + 20],
-    });
+    // Center card on letter-size page
+    const x = (pageWidth - cardWidth) / 2;
+    const y = (pageHeight - cardHeight) / 2;
+
+    // Add a letter-size page
+    const page = pdfDoc.addPage([pageWidth, pageHeight]);
+
+    // Embed fonts once
+    const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
     // Colors
-    const textColor = [26, 77, 110]; // #1a4d6e dark blue
-    const shadowColor = [208, 208, 208]; // #d0d0d0 light gray
-
-    // Position card on page
-    const x = 10;
-    const y = 10;
-
-    // Draw shadow (subtle)
-    pdf.setFillColor(shadowColor[0], shadowColor[1], shadowColor[2]);
-    pdf.roundedRect(x + 0.5, y - 0.5, cardWidth, cardHeight, 4, 4, 'F');
+    const white = rgb(1, 1, 1);
+    const darkBlue = rgb(0.102, 0.302, 0.431); // #1a4d6e
+    const lightGray = rgb(0.878, 0.878, 0.878); // #E0E0E0
 
     // Draw white card background
-    pdf.setFillColor(255, 255, 255);
-    pdf.roundedRect(x, y, cardWidth, cardHeight, 4, 4, 'F');
+    page.drawRectangle({
+      x,
+      y,
+      width: cardWidth,
+      height: cardHeight,
+      borderColor: lightGray,
+      borderWidth: 1,
+      color: white,
+    });
 
-    // Draw card border
-    pdf.setDrawColor(224, 224, 224);
-    pdf.setLineWidth(0.5);
-    pdf.roundedRect(x, y, cardWidth, cardHeight, 4, 4, 'S');
-
-    // Set text color to dark blue
-    pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
-
-    // TOP SECTION: Organization name
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(11);
-    pdf.text('SINDIKAT RADNIKA', x + 7, y + cardHeight - 9);
+    // LEFT COLUMN: Title
+    page.drawText('SINDIKAT RADNIKA', {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 10 * mmToPoints,
+      size: 10,
+      font: helveticaBold,
+      color: darkBlue,
+    });
 
     // Subtitle
-    pdf.setFontSize(7);
-    pdf.text('NCR ATLEOS - BEOGRAD', x + 7, y + cardHeight - 13.5);
-
-    // MEMBER INFO SECTION (left side, bottom)
-    const infoStartY = y + 24;
-
-    // Name label
-    pdf.setFontSize(7);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text('IME I PREZIME:', x + 8, infoStartY);
-
-    // Name value
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(11);
-    const fullName = `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
-    pdf.text(fullName, x + 8, infoStartY - 5);
+    page.drawText('NCR ATLEOS - BEOGRAD', {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 15 * mmToPoints,
+      size: 10,
+      font: helvetica,
+      color: darkBlue,
+    });
 
     // Member ID label
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(7);
-    pdf.text('BROJ ČLANSKE KARTE:', x + 8, infoStartY - 11);
+    page.drawText('BROJ ČLANSKE KARTE:', {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 20 * mmToPoints,
+      size: 9,
+      font: helvetica,
+      color: darkBlue,
+    });
 
     // Member ID value
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(10);
-    pdf.text(memberId, x + 8, infoStartY - 16);
+    page.drawText(memberId, {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 28 * mmToPoints,
+      size: 9,
+      font: helveticaBold,
+      color: darkBlue,
+    });
 
-    // Join date
+    // Full name label
+    page.drawText('IME I PREZIME:', {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 34 * mmToPoints,
+      size: 9,
+      font: helvetica,
+      color: darkBlue,
+    });
+
+    // Full name value
+    const fullName = `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+    page.drawText(fullName, {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 42 * mmToPoints,
+      size: 9,
+      font: helveticaBold,
+      color: darkBlue,
+    });
+
+    // Join date label
+    page.drawText('UČLANJEN:', {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 48 * mmToPoints,
+      size: 8,
+      font: helvetica,
+      color: darkBlue,
+    });
+
+    // Join date value
     const joinDateObj = new Date(joinDate);
     const joinStr = `${String(joinDateObj.getMonth() + 1).padStart(2, '0')}/${joinDateObj.getFullYear()}`;
+    page.drawText(joinStr, {
+      x: x + 10 * mmToPoints,
+      y: y + cardHeight - 55 * mmToPoints,
+      size: 8,
+      font: helvetica,
+      color: darkBlue,
+    });
 
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(7);
-    pdf.text('UČLANJEN:', x + 8, infoStartY - 21.5);
+    // RIGHT SIDE: Logo
+    try {
+      const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat.png');
+      const finalLogoPath = logoPath || defaultLogoPath;
+      const logoData = await fs.readFile(finalLogoPath);
+      const logoImage = await pdfDoc.embedPng(logoData);
+      
+      const logoSize = 25 * mmToPoints;
+      const logoX = x + cardWidth - logoSize - 10 * mmToPoints;
+      const logoY = y + cardHeight - logoSize - 10 * mmToPoints;
+      
+      page.drawImage(logoImage, {
+        x: logoX,
+        y: logoY,
+        width: logoSize,
+        height: logoSize,
+      });
+    } catch (logoErr) {
+      console.warn('⚠️ Logo load error:', logoErr);
+    }
 
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(joinStr, x + 22, infoStartY - 21.5);
-
-    // RIGHT SIDE: QR Code (bottom right)
+    // RIGHT SIDE: QR Code
     try {
       const qrData = `MEMBER_ID:${memberId}|NAME:${firstName}|LASTNAME:${lastName}`;
-      const qrDataUrl = await QRCode.toDataURL(qrData, { width: 200 });
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
       
-      // QR code positioned at bottom right
-      const qrSize = 17; // mm
-      const qrX = x + cardWidth - qrSize - 1.5;
-      const qrY = y + 3;
+      const qrResponse = await fetch(qrUrl);
+      const qrBuffer = Buffer.from(await qrResponse.arrayBuffer());
+      const qrImage = await pdfDoc.embedPng(qrBuffer);
       
-      pdf.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
+      const qrSize = 17 * mmToPoints;
+      const qrX = x + cardWidth - qrSize - 10 * mmToPoints;
+      const qrY = y + 10 * mmToPoints;
+      
+      page.drawImage(qrImage, {
+        x: qrX,
+        y: qrY,
+        width: qrSize,
+        height: qrSize,
+      });
     } catch (qrErr) {
-      console.error('⚠️ QR code generation error:', qrErr);
+      console.warn('⚠️ QR code generation error:', qrErr);
     }
 
-    // RIGHT SIDE: Logo (top right)
-    try {
-      if (fs.existsSync(finalLogoPath)) {
-        const logoSize = 25; // mm
-        const logoX = x + cardWidth - logoSize - 1.5;
-        const logoY = y + cardHeight - logoSize + 0.5;
-        
-        const logoData = fs.readFileSync(finalLogoPath);
-        pdf.addImage(logoData, 'PNG', logoX, logoY, logoSize, logoSize);
-      }
-    } catch (logoErr) {
-      console.error('⚠️ Logo load error:', logoErr);
-    }
-
-    // Generate PDF buffer (no filesystem write)
-    const pdfBuffer = Buffer.from(pdf.output('arraybuffer'));
+    // Generate PDF bytes
+    const pdfBytes = await pdfDoc.save();
+    const pdfBuffer = Buffer.from(pdfBytes);
     console.log('✅ Card generated successfully, size:', pdfBuffer.length, 'bytes');
     
     return pdfBuffer;
@@ -134,4 +181,3 @@ export async function generateMembershipCard(
     throw error;
   }
 }
-
