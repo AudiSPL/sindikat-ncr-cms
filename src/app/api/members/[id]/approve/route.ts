@@ -63,11 +63,11 @@ export async function POST(
 
     // 3. Prepare attachments array
     const attachments: Array<{ filename: string; content: Buffer | string; contentType?: string }> = [];
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://app.sindikatncr.com';
 
     // 4. Generate confirmation PDF (pristupnica) and add to attachments
     console.log('Generating confirmation PDF...');
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://app.sindikatncr.com';
       const confirmResponse = await fetch(`${baseUrl}/api/generate-confirmation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
