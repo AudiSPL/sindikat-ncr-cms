@@ -661,3 +661,34 @@ body:not(.admin-container) [data-slot="card-title"][class*="text-white"] {
 .admin-container .recharts-legend-item-text {
   color: #111827 !important;
 }
+
+/* ========================================================================== */
+/* FORCE DARK THEME ON MOBILE */
+/* ========================================================================== */
+
+/* Force dark theme on mobile screens only */
+@media (max-width: 767px) {
+  html,
+  html body {
+    color-scheme: dark !important;
+  }
+  
+  html {
+    --background: 220 20% 6% !important; /* #0F1419 */
+    --foreground: 0 0% 100% !important; /* #FFFFFF */
+    --card: 220 15% 14% !important; /* #1A1D23 */
+    --card-foreground: 0 0% 100% !important;
+  }
+  
+  html body {
+    background-color: hsl(220 20% 6%) !important;
+    color: hsl(0 0% 100%) !important;
+  }
+  
+  /* Remove any light theme classes on mobile */
+  html.light,
+  body.light {
+    background-color: hsl(220 20% 6%) !important;
+    color: hsl(0 0% 100%) !important;
+  }
+}
