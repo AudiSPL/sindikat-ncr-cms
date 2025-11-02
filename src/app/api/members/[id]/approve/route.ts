@@ -3,6 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import fs from 'fs';
+import path from 'path';
+
+const execAsync = promisify(exec);
 
 console.log('=== members/[id]/approve/route.ts LOADED ===');
 
@@ -106,80 +112,61 @@ export async function POST(
       console.warn('Error generating confirmation:', e);
     }
 
-    // 5. Generate card PDF and add to attachments
-    console.log('Generating card PDF...');
+    // 5. Generate card PDF using Python script and add to attachments
+    console.log('Generating card PDF via Python...');
     try {
-      const cardResponse = await fetch(`${baseUrl}/api/generate-card`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          memberId: memberId,
-          memberData: {
-            fullName: (member as any).full_name,
-            email: (member as any).email,
-            city: (member as any).city,
-            organization: (member as any).division || (member as any).organization,
-            division: (member as any).division,
-            membershipNumber: memberNumber,
-            status: 'active',
-            joinDate: (member as any).created_at,
-          },
-        }),
-      });
-
-      if (!cardResponse.ok) {
-        console.error('Card generation failed');
-      } else {
-        const cardBuffer = await cardResponse.arrayBuffer();
-        
-        attachments.push({
-          filename: `card-${memberNumber}.pdf`,
-          content: Buffer.from(cardBuffer),
-          contentType: 'application/pdf',
-        });
-        
-        console.log('✅ Added card PDF to attachments');
+      // Parse full name into first and last name
+      const nameParts = ((member as any).full_name || '').split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+      
+      // Format join date as YYYY-MM-DD
+      const joinDate = new Date((member as any).created_at || new Date()).toISOString().split('T')[0];
+      
+      // Logo path
+      const logoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union.png');
+      
+      // Temporary output path
+      const cardPath = path.join(process.cwd(), 'tmp', `card_${memberId}_${Date.now()}.pdf`);
+      
+      // Ensure tmp directory exists
+      const tmpDir = path.dirname(cardPath);
+      if (!fs.existsSync(tmpDir)) {
+        fs.mkdirSync(tmpDir, { recursive: true });
       }
+      
+      // Python script path
+      const pythonScript = path.join(process.cwd(), 'public', 'scripts', 'card_generator.py');
+      
+      // Call Python script with positional arguments (firstName, lastName, memberNumber, joinDate, outputPath, logoPath)
+      const command = `python3 "${pythonScript}" "${firstName}" "${lastName}" "${memberNumber}" "${joinDate}" "${cardPath}" "${logoPath}"`;
+      
+      await execAsync(command);
+      
+      // Read the generated PDF
+      const cardBuffer = fs.readFileSync(cardPath);
+      
+      attachments.push({
+        filename: `card-${memberNumber}.pdf`,
+        content: cardBuffer,
+        contentType: 'application/pdf',
+      });
+      
+      // Clean up temporary file
+      try {
+        fs.unlinkSync(cardPath);
+      } catch (cleanupErr) {
+        console.warn('Failed to cleanup temp card file:', cleanupErr);
+      }
+      
+      console.log('✅ Added card PDF to attachments');
     } catch (e) {
       console.warn('Error generating card:', e);
     }
 
-    // 6. Generate policy PDF (optional) and add to attachments
-    console.log('Generating policy PDF...');
-    try {
-      const policyResponse = await fetch(`${baseUrl}/api/generate-policy`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          memberId: memberId,
-          memberData: {
-            fullName: (member as any).full_name,
-            email: (member as any).email,
-            membershipNumber: memberNumber,
-          },
-        }),
-      });
-
-      if (policyResponse.ok) {
-        const policyBuffer = await policyResponse.arrayBuffer();
-        
-        attachments.push({
-          filename: `policy-${memberNumber}.pdf`,
-          content: Buffer.from(policyBuffer),
-          contentType: 'application/pdf',
-        });
-        
-        console.log('✅ Added policy PDF to attachments');
-      } else {
-        console.log('Policy PDF not available or generation failed');
-      }
-    } catch (e) {
-      console.warn('Error generating policy (optional):', e);
-    }
-
     console.log('📎 Attachments array:', attachments.length, attachments);
 
-    // 7. Send approval email using Resend
+    // 6. Send approval email using Resend
     console.log('Sending approval email to:', (member as any).email);
     console.log('📎 Total attachments:', attachments.length);
     
@@ -243,7 +230,7 @@ export async function POST(
                            `${pdfsSent} attachments`;
     console.log(`✅ Approval email sent with ${attachmentText}. Message ID:`, emailData?.id);
 
-    // 8. Update member in database
+    // 7. Update member in database
     const adminId = (session?.user as any)?.id; // Get admin UUID from session
     
     const { error: updateError } = await supabase
