@@ -3,12 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import fs from 'fs';
-import path from 'path';
-
-const execAsync = promisify(exec);
+import { generateMembershipCard } from '@/lib/card-generator';
 
 console.log('=== members/[id]/approve/route.ts LOADED ===');
 
@@ -112,8 +107,8 @@ export async function POST(
       console.warn('Error generating confirmation:', e);
     }
 
-    // 5. Generate card PDF using Python script and add to attachments
-    console.log('Generating card PDF via Python...');
+    // 5. Generate card PDF using generateMembershipCard() and add to attachments
+    console.log('Generating card PDF via generateMembershipCard()...');
     try {
       // Parse full name into first and last name
       const nameParts = ((member as any).full_name || '').split(' ');
@@ -123,41 +118,19 @@ export async function POST(
       // Format join date as YYYY-MM-DD
       const joinDate = new Date((member as any).created_at || new Date()).toISOString().split('T')[0];
       
-      // Logo path
-      const logoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union.png');
-      
-      // Temporary output path
-      const cardPath = path.join(process.cwd(), 'tmp', `card_${memberId}_${Date.now()}.pdf`);
-      
-      // Ensure tmp directory exists
-      const tmpDir = path.dirname(cardPath);
-      if (!fs.existsSync(tmpDir)) {
-        fs.mkdirSync(tmpDir, { recursive: true });
-      }
-      
-      // Python script path
-      const pythonScript = path.join(process.cwd(), 'public', 'scripts', 'card_generator.py');
-      
-      // Call Python script with positional arguments (firstName, lastName, memberNumber, joinDate, outputPath, logoPath)
-      const command = `python3 "${pythonScript}" "${firstName}" "${lastName}" "${memberNumber}" "${joinDate}" "${cardPath}" "${logoPath}"`;
-      
-      await execAsync(command);
-      
-      // Read the generated PDF
-      const cardBuffer = fs.readFileSync(cardPath);
+      // Generate card PDF buffer
+      const cardPdfBytes = await generateMembershipCard(
+        firstName,
+        lastName,
+        memberNumber,
+        joinDate
+      );
       
       attachments.push({
         filename: `card-${memberNumber}.pdf`,
-        content: cardBuffer,
+        content: cardPdfBytes,
         contentType: 'application/pdf',
       });
-      
-      // Clean up temporary file
-      try {
-        fs.unlinkSync(cardPath);
-      } catch (cleanupErr) {
-        console.warn('Failed to cleanup temp card file:', cleanupErr);
-      }
       
       console.log('✅ Added card PDF to attachments');
     } catch (e) {

@@ -9,15 +9,12 @@ export async function generateMembershipCard(
   lastName: string,
   memberId: string,
   joinDate: string,  // Format: YYYY-MM-DD
-  logoPath: string,
-  outputPath: string
-): Promise<void> {
+  logoPath?: string
+): Promise<Buffer> {
   try {
-    // Create directories if they don't exist
-    const dir = path.dirname(outputPath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
+    // Default logo path if not provided
+    const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union.png');
+    const finalLogoPath = logoPath || defaultLogoPath;
 
     // Card dimensions (credit card size in mm)
     const cardWidth = 85.6;
@@ -115,28 +112,23 @@ export async function generateMembershipCard(
 
     // RIGHT SIDE: Logo (top right)
     try {
-      if (fs.existsSync(logoPath)) {
+      if (fs.existsSync(finalLogoPath)) {
         const logoSize = 25; // mm
         const logoX = x + cardWidth - logoSize - 1.5;
         const logoY = y + cardHeight - logoSize + 0.5;
         
-        const logoData = fs.readFileSync(logoPath);
+        const logoData = fs.readFileSync(finalLogoPath);
         pdf.addImage(logoData, 'PNG', logoX, logoY, logoSize, logoSize);
       }
     } catch (logoErr) {
       console.error('⚠️ Logo load error:', logoErr);
     }
 
-    // Actually write the PDF to disk
+    // Generate PDF buffer (no filesystem write)
     const pdfBuffer = Buffer.from(pdf.output('arraybuffer'));
-    await fs.promises.writeFile(outputPath, pdfBuffer);
-    console.log('✅ Card saved to disk:', outputPath);
-
-    // Verify file exists
-    const exists = fs.existsSync(outputPath);
-    if (!exists) {
-      throw new Error(`Failed to save card PDF at ${outputPath}`);
-    }
+    console.log('✅ Card generated successfully, size:', pdfBuffer.length, 'bytes');
+    
+    return pdfBuffer;
   } catch (error) {
     console.error('❌ Card generation error:', error);
     throw error;
