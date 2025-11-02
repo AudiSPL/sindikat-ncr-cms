@@ -3,23 +3,11 @@ export const dynamic = 'force-dynamic';
 export const preferredRegion = 'fra1';
 
 import { NextResponse } from "next/server";
-import path from "path";
-import { promises as fsp } from "fs";
-
-async function ensureDir(d: string) {
-  try {
-    await fsp.mkdir(d, { recursive: true });
-  } catch {}
-}
 
 export async function POST(req: Request) {
   try {
     const { memberId } = (await req.json().catch(() => ({}))) as { memberId?: string | number };
     if (!memberId) return NextResponse.json({ error: "Missing memberId" }, { status: 400 });
-
-    const dir = path.join(process.cwd(), "public", "members", String(memberId));
-    await ensureDir(dir);
-    const filePath = path.join(dir, "policy.pdf");
 
     const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
     const pdf = await PDFDocument.create();
@@ -48,20 +36,21 @@ export async function POST(req: Request) {
       y -= 18;
     });
 
-    let bytes: Uint8Array;
-    try {
-      bytes = await pdf.save();
-    } catch (e: any) {
-      console.error('generate-policy save() error:', e?.message || e);
-      throw e;
-    }
-    try {
-      await fsp.writeFile(filePath, bytes);
-    } catch (e: any) {
-      console.error('generate-policy writeFile error:', e?.message || e);
-      throw e;
-    }
-    return NextResponse.json({ url: `/members/${memberId}/policy.pdf` });
+    // Generate PDF bytes
+    const pdfBytes = await pdf.save();
+    const pdfBuffer = Buffer.from(pdfBytes);
+
+    console.log('✅ Policy PDF generated successfully, size:', pdfBuffer.length, 'bytes');
+
+    // Return PDF as response (no filesystem save)
+    return new NextResponse(pdfBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="policy.pdf"`,
+        'Content-Length': pdfBuffer.length.toString(),
+      },
+    });
   } catch (e: any) {
     console.error('generate-policy fatal error:', e?.message || e);
     return NextResponse.json({ error: e?.message || "policy pdf error" }, { status: 500 });
