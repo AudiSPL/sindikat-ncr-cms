@@ -276,24 +276,22 @@ export async function POST(request: Request) {
       color: goldColor,
     });
 
-    console.log('Card PDF content drawn, saving...');
+    console.log('Card PDF content drawn, generating...');
 
-    // Sačuvaj PDF
+    // Generate PDF bytes
     const pdfBytes = await pdfDoc.save();
     const pdfBuffer = Buffer.from(pdfBytes);
 
-    // Kreiraj folder za člana
-    const memberDir = path.join(process.cwd(), 'public', 'members', String(memberId));
-    await fs.mkdir(memberDir, { recursive: true });
+    console.log('✅ Card PDF generated successfully, size:', pdfBuffer.length, 'bytes');
 
-    // Sačuvaj PDF fajl
-    const pdfPath = path.join(memberDir, 'card.pdf');
-    await fs.writeFile(pdfPath, pdfBuffer);
-
-    return NextResponse.json({
-      success: true,
-      pdfUrl: `/members/${memberId}/card.pdf`,
-      message: 'PDF card generated successfully'
+    // Return PDF as response (no filesystem save)
+    return new NextResponse(pdfBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="card-${memberData.membershipNumber || memberId}.pdf"`,
+        'Content-Length': pdfBuffer.length.toString(),
+      },
     });
 
   } catch (error) {
