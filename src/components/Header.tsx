@@ -67,7 +67,7 @@ export function Header({ lang }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-700 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors duration-200"
+            className="md:hidden p-2 text-slate-700 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors duration-200"
             aria-label="Toggle mobile menu"
           >
             {mobileMenuOpen ? (
@@ -84,12 +84,12 @@ export function Header({ lang }: HeaderProps) {
         <>
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
             onClick={closeMobileMenu}
           />
           
           {/* Mobile Menu Panel */}
-          <div className="fixed top-16 right-0 bottom-0 w-64 bg-white dark:bg-slate-900 border-l border-gray-200 dark:border-slate-700 shadow-2xl z-[60] lg:hidden overflow-y-auto">
+          <div className="fixed left-0 top-16 h-screen w-64 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-700 shadow-2xl z-[60] md:hidden overflow-y-auto">
             <div className="flex flex-col h-full">
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700">
