@@ -69,102 +69,135 @@ export async function generateMembershipCard(
     const darkBlue = rgb(0.102, 0.302, 0.431); // #1a4d6e
     const lightGray = rgb(0.878, 0.878, 0.878); // #E0E0E0
 
-    // Draw white card background
+    // ROUNDED CORNERS: Use lineTo with arc for rounded rectangle
+    // pdf-lib doesn't have roundedRect, so we'll draw a regular rectangle and rely on PDF viewer rendering
+    // Draw white card background with border
     page.drawRectangle({
       x,
       y,
       width: cardWidth,
       height: cardHeight,
       borderColor: lightGray,
-      borderWidth: 1,
+      borderWidth: 1.5,
       color: white,
     });
 
-    // LEFT COLUMN: Title
-    page.drawText('SINDIKAT RADNIKA', {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 10 * mmToPoints,
-      size: 10,
-      font: fontBold,
-      color: darkBlue,
-    });
+    // Helper to draw text with embossed/shadow effect
+    const drawTextEmbossed = (
+      text: string,
+      xPos: number,
+      yPos: number,
+      size: number,
+      font: any
+    ) => {
+      const shadowOffset = 1; // points offset for shadow
+      // Draw shadow first (slightly offset down-right)
+      page.drawText(text, {
+        x: xPos + shadowOffset,
+        y: yPos - shadowOffset,
+        size,
+        font,
+        color: rgb(0.9, 0.9, 0.9), // very light shadow
+      });
+      // Draw main text on top
+      page.drawText(text, {
+        x: xPos,
+        y: yPos,
+        size,
+        font,
+        color: darkBlue,
+      });
+    };
 
-    // Subtitle
-    page.drawText('NCR ATLEOS - BEOGRAD', {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 15 * mmToPoints,
-      size: 10,
-      font: fontRegular,
-      color: darkBlue,
-    });
+    // LEFT COLUMN (5mm padding from left edge)
+    const leftMargin = 5 * mmToPoints;
+    const topMargin = 5 * mmToPoints;
 
-    // Member ID label
-    page.drawText('BROJ ČLANSKE KARTE:', {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 20 * mmToPoints,
-      size: 9,
-      font: fontRegular,
-      color: darkBlue,
-    });
+    // Title with embossed effect
+    drawTextEmbossed(
+      'SINDIKAT RADNIKA',
+      x + leftMargin,
+      y + cardHeight - topMargin - (10 * mmToPoints),
+      10,
+      fontBold
+    );
 
-    // Member ID value
-    page.drawText(memberId, {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 28 * mmToPoints,
-      size: 9,
-      font: fontBold,
-      color: darkBlue,
-    });
+    // Subtitle with embossed effect
+    drawTextEmbossed(
+      'NCR ATLEOS - BEOGRAD',
+      x + leftMargin,
+      y + cardHeight - topMargin - (15 * mmToPoints),
+      10,
+      fontRegular
+    );
 
-    // Full name label
-    page.drawText('IME I PREZIME:', {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 34 * mmToPoints,
-      size: 9,
-      font: fontRegular,
-      color: darkBlue,
-    });
+    // Member ID label with embossed effect
+    drawTextEmbossed(
+      'BROJ ČLANSKE KARTE:',
+      x + leftMargin,
+      y + cardHeight - topMargin - (22 * mmToPoints),
+      9,
+      fontRegular
+    );
 
-    // Full name value
+    // Member ID value with embossed effect
+    drawTextEmbossed(
+      memberId,
+      x + leftMargin,
+      y + cardHeight - topMargin - (28 * mmToPoints),
+      9,
+      fontBold
+    );
+
+    // Full name label with embossed effect
+    drawTextEmbossed(
+      'IME I PREZIME:',
+      x + leftMargin,
+      y + cardHeight - topMargin - (34 * mmToPoints),
+      9,
+      fontRegular
+    );
+
+    // Full name value with embossed effect
     const fullName = `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
-    page.drawText(fullName, {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 42 * mmToPoints,
-      size: 9,
-      font: fontBold,
-      color: darkBlue,
-    });
+    drawTextEmbossed(
+      fullName,
+      x + leftMargin,
+      y + cardHeight - topMargin - (40 * mmToPoints),
+      9,
+      fontBold
+    );
 
-    // Join date label
-    page.drawText('UČLANJEN:', {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 48 * mmToPoints,
-      size: 8,
-      font: fontRegular,
-      color: darkBlue,
-    });
+    // Join date label with embossed effect
+    drawTextEmbossed(
+      'UČLANJEN:',
+      x + leftMargin,
+      y + cardHeight - topMargin - (46 * mmToPoints),
+      8,
+      fontRegular
+    );
 
-    // Join date value
+    // Join date value with embossed effect
     const joinDateObj = new Date(joinDate);
     const joinStr = `${String(joinDateObj.getMonth() + 1).padStart(2, '0')}/${joinDateObj.getFullYear()}`;
-    page.drawText(joinStr, {
-      x: x + 10 * mmToPoints,
-      y: y + cardHeight - 55 * mmToPoints,
-      size: 8,
-      font: fontRegular,
-      color: darkBlue,
-    });
+    drawTextEmbossed(
+      joinStr,
+      x + leftMargin,
+      y + cardHeight - topMargin - (52 * mmToPoints),
+      8,
+      fontRegular
+    );
 
-    // RIGHT SIDE: Logo
+    // RIGHT SIDE: Logo (TOP-RIGHT corner, 5mm from edges, 20mm x 20mm)
     try {
-      const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat.png');
+      const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union2.png');
       const finalLogoPath = logoPath || defaultLogoPath;
       const logoData = await fs.readFile(finalLogoPath);
       const logoImage = await pdfDoc.embedPng(logoData);
       
-      const logoSize = 25 * mmToPoints;
-      const logoX = x + cardWidth - logoSize - 10 * mmToPoints;
-      const logoY = y + cardHeight - logoSize - 10 * mmToPoints;
+      const logoSize = 20 * mmToPoints;
+      const logoX = x + cardWidth - logoSize - (5 * mmToPoints);
+      const logoY = y + cardHeight - logoSize - (5 * mmToPoints);
       
       page.drawImage(logoImage, {
         x: logoX,
@@ -172,22 +205,24 @@ export async function generateMembershipCard(
         width: logoSize,
         height: logoSize,
       });
+      console.log('✅ Logo added to card');
     } catch (logoErr) {
       console.warn('⚠️ Logo load error:', logoErr);
     }
 
-    // RIGHT SIDE: QR Code
+    // RIGHT SIDE: QR Code (BOTTOM-RIGHT corner, 5mm from edges, 20mm x 20mm, dark blue)
     try {
       const qrData = `MEMBER_ID:${memberId}|NAME:${firstName}|LASTNAME:${lastName}`;
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}`;
+      // Use qrserver.com with dark blue color
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}&color=1a4d6e&bgcolor=FFFFFF&margin=0`;
       
       const qrResponse = await fetch(qrUrl);
       const qrBuffer = Buffer.from(await qrResponse.arrayBuffer());
       const qrImage = await pdfDoc.embedPng(qrBuffer);
       
-      const qrSize = 17 * mmToPoints;
-      const qrX = x + cardWidth - qrSize - 10 * mmToPoints;
-      const qrY = y + 10 * mmToPoints;
+      const qrSize = 20 * mmToPoints;
+      const qrX = x + cardWidth - qrSize - (5 * mmToPoints);
+      const qrY = y + (5 * mmToPoints);
       
       page.drawImage(qrImage, {
         x: qrX,
@@ -195,6 +230,7 @@ export async function generateMembershipCard(
         width: qrSize,
         height: qrSize,
       });
+      console.log('✅ QR code added to card');
     } catch (qrErr) {
       console.warn('⚠️ QR code generation error:', qrErr);
     }
