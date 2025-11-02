@@ -18,7 +18,7 @@ export async function GET() {
     );
     
     // Return PDF as response
-    return new NextResponse(cardBuffer, {
+    return new NextResponse(new Uint8Array(cardBuffer), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
