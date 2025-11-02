@@ -1,15 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
-import path from 'path';
-import fs from 'fs';
-import fsPromises from 'fs/promises';
-import { promisify } from 'util';
-import { exec } from 'child_process';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-
-const execAsync = promisify(exec);
 
 console.log('=== members/[id]/approve/route.ts LOADED ===');
 
@@ -68,64 +61,7 @@ export async function POST(
     const memberNumber = (member as any).member_id || generateMemberId((member as any).id, quicklookId);
     console.log('Member number:', memberNumber);
 
-    // 3. Generate membership card PDF using Python script
-    console.log('Generating membership card via Python...');
-    const cardOutputPath = path.join(process.cwd(), 'public', 'members', String(memberId), 'card.pdf');
-    
-    // Ensure directory exists
-    const cardDir = path.dirname(cardOutputPath);
-    if (!fs.existsSync(cardDir)) {
-      fs.mkdirSync(cardDir, { recursive: true });
-    }
-    
-    let cardAttachment: { filename: string; content: Buffer } | null = null;
-    
-    try {
-      // Extract first and last name
-      const nameParts = ((member as any).full_name || '').split(' ');
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-      
-      // Format join date as YYYY-MM-DD
-      const joinDate = new Date((member as any).created_at || new Date()).toISOString().split('T')[0];
-      
-      // Logo path
-      const logoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union.png');
-      
-      // Call Python script
-      const pythonScript = path.join(process.cwd(), 'public', 'scripts', 'card_generator.py');
-      const command = `python "${pythonScript}" "${firstName}" "${lastName}" "${memberNumber}" "${joinDate}" "${cardOutputPath}" "${logoPath}"`;
-      
-      try {
-        await execAsync(command);
-        console.log('✅ Card generated via Python:', cardOutputPath);
-      } catch (execErr: any) {
-        // Python command may fail due to encoding warnings, but file might still be created
-        console.warn('⚠️ Python command warning:', execErr.message);
-      }
-      
-      // Check if file exists (even if Python command reported an error)
-      if (!fs.existsSync(cardOutputPath)) {
-        // File wasn't created, it's a real error
-        console.error('❌ Card PDF not created');
-        cardAttachment = null;
-      } else {
-        // File exists despite the error message, continue
-        console.log('✅ Card PDF created (encoding warning ignored)');
-        const cardBuffer = await fsPromises.readFile(cardOutputPath);
-        cardAttachment = {
-          filename: `membership-card-${memberNumber}.pdf`,
-          content: cardBuffer,
-        };
-        console.log('✅ Card attachment prepared');
-      }
-    } catch (pythonErr: any) {
-      console.error('❌ Card generation error:', pythonErr);
-      // Continue anyway - don't fail the approval if card fails
-      cardAttachment = null;
-    }
-
-    // 4. Generate confirmation PDF (pristupnica)
+    // 3. Generate confirmation PDF (pristupnica)
     console.log('Generating confirmation PDF...');
     let confirmationPdfUrl: string | null = null;
     try {
@@ -158,48 +94,11 @@ export async function POST(
       console.warn('Error generating confirmation:', e);
     }
 
-    // 5. Prepare attachments for Resend (base64 encoded)
+    // 4. Prepare attachments (empty - PDFs would need to be generated via API and passed as buffers)
     const attachments: Array<{ filename: string; content: string }> = [];
 
-    // Prepare confirmation attachment
-    let confirmationAttachment = null;
-    if (confirmationPdfUrl) {
-      try {
-        const confirmPath = path.join(process.cwd(), 'public', confirmationPdfUrl);
-        const confirmBuffer = await fsPromises.readFile(confirmPath);
-        confirmationAttachment = {
-          filename: `confirmation-${memberNumber}.pdf`,
-          content: confirmBuffer.toString('base64'),
-        };
-        console.log('✅ Confirmation attachment prepared');
-      } catch (e) {
-        console.warn('Error reading confirmation PDF:', e);
-      }
-    }
-
-    // Prepare card attachment (convert to base64)
-    let cardAttachmentForResend = null;
-    if (cardAttachment) {
-      cardAttachmentForResend = {
-        filename: cardAttachment.filename,
-        content: cardAttachment.content.toString('base64'),
-      };
-      console.log('✅ Card attachment converted to base64');
-    }
-
-    // Add attachments to array
-    if (confirmationAttachment) {
-      attachments.push(confirmationAttachment);
-    }
-
-    if (cardAttachmentForResend) {
-      attachments.push(cardAttachmentForResend);
-    }
-
-    // 6. Send approval email using Resend
+    // 5. Send approval email using Resend
     console.log('Sending approval email to:', (member as any).email);
-    console.log('📎 Confirmation ready?', confirmationAttachment ? 'YES' : 'NO');
-    console.log('📎 Card ready?', cardAttachmentForResend ? 'YES' : 'NO');
     console.log('📎 Total attachments:', attachments.length);
     
     const emailHtml = `
@@ -261,7 +160,7 @@ export async function POST(
                            `${pdfsSent} attachments`;
     console.log(`✅ Approval email sent with ${attachmentText}. Message ID:`, emailData?.id);
 
-    // 7. Update member in database
+    // 6. Update member in database
     const adminId = (session?.user as any)?.id; // Get admin UUID from session
     
     const { error: updateError } = await supabase
