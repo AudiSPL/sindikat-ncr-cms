@@ -22,8 +22,7 @@ export async function GET() {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `inline; filename="card-preview.pdf"`,
-        'Content-Length': cardBuffer.length.toString(),
+        'Content-Disposition': 'inline; filename="test-card.pdf"',
       },
     });
   } catch (error) {
