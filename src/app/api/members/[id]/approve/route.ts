@@ -65,7 +65,8 @@ export async function POST(
     console.log('Generating confirmation PDF...');
     let confirmationPdfUrl: string | null = null;
     try {
-      const confirmResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/generate-confirmation`, {
+      const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://app.sindikatncr.com';
+      const confirmResponse = await fetch(`${baseUrl}/api/generate-confirmation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
