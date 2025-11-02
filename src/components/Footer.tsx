@@ -84,7 +84,7 @@ export function Footer({ lang }: FooterProps) {
                 </>
               ) : (
                 <>
-                  © {new Date().getFullYear()} Sindikat Zaposlenih NCR Atleos - Beograd. Independent workers' organization; not affiliated with NCR Atleos Corporation, NCR ATM d.o.o. Belgrade, or NCR Voyix, and does not represent employer views. Content is for information only and does not constitute legal advice. Data Controller (GDPR): To exercise access/rectification/erasure rights, contact{' '}
+                  © {new Date().getFullYear()} Sindikat Zaposlenih NCR Atleos - Beograd. Independent workers&apos; organization; not affiliated with NCR Atleos Corporation, NCR ATM d.o.o. Belgrade, or NCR Voyix, and does not represent employer views. Content is for information only and does not constitute legal advice. Data Controller (GDPR): To exercise access/rectification/erasure rights, contact{' '}
                   <a 
                     href="mailto:office@sindikatncr.com" 
                     className="text-white hover:text-brand-orange transition-colors underline"
