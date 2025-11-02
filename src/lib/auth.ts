@@ -2,9 +2,16 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { createClient } from '@supabase/supabase-js';
 
+// Supabase client for auth (can use anon key)
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_KEY!
+);
+
+// Use service role key for admin lookup (bypasses RLS)
+const adminClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_KEY || '', // Use SERVICE KEY not ANON
 );
 
 export const authOptions: NextAuthOptions = {
@@ -46,10 +53,10 @@ export const authOptions: NextAuthOptions = {
         console.log('[LOGIN DEBUG] ✅ Step 1 passed: Supabase Auth successful');
         console.log('[LOGIN DEBUG] 🔍 Step 2: Checking admins table...');
 
-        const { data: admin, error } = await supabase
+        const { data: admin, error: adminError } = await adminClient
           .from('admins')
           .select('*')
-          .eq('email', credentials.email)
+          .eq('email', authData.user.email)
           .single();
 
         console.log('[LOGIN DEBUG] 🔍 Admin lookup:', {
@@ -57,11 +64,11 @@ export const authOptions: NextAuthOptions = {
           adminId: admin?.id,
           adminName: admin?.full_name,
           adminRole: admin?.role,
-          error: error?.message
+          error: adminError?.message
         });
 
-        if (error || !admin) {
-          console.log('[LOGIN DEBUG] ❌ Admin not found in table:', error?.message);
+        if (adminError || !admin) {
+          console.log('[LOGIN DEBUG] ❌ Admin not found in table:', adminError?.message);
           return null; // Return null instead of throwing error
         }
 
