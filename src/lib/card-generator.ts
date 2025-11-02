@@ -29,7 +29,7 @@ export async function generateMembershipCard(
     pdfDoc.registerFontkit(fontkit);
     console.log('✅ fontkit registered for card');
 
-    // Card dimensions in mm
+    // Card dimensions in mm (CREDIT CARD SIZE)
     const cardWidthMM = 85.6;
     const cardHeightMM = 53.98;
     
@@ -37,15 +37,13 @@ export async function generateMembershipCard(
     const mmToPoints = 2.83465;
     const cardWidth = cardWidthMM * mmToPoints;
     const cardHeight = cardHeightMM * mmToPoints;
-    const pageWidth = 612; // Letter width in points
-    const pageHeight = 792; // Letter height in points
 
-    // Center card on letter-size page
-    const x = (pageWidth - cardWidth) / 2;
-    const y = (pageHeight - cardHeight) / 2;
-
-    // Add a letter-size page
-    const page = pdfDoc.addPage([pageWidth, pageHeight]);
+    // Add a card-sized page (NOT Letter/A4)
+    const page = pdfDoc.addPage([cardWidth, cardHeight]);
+    
+    // Card starts at origin (0,0) since page is card-sized
+    const cardX = 0;
+    const cardY = 0;
 
     // Load fonts for Serbian support
     let fontBold, fontRegular;
@@ -67,18 +65,18 @@ export async function generateMembershipCard(
     // Colors
     const white = rgb(1, 1, 1);
     const darkBlue = rgb(0.102, 0.302, 0.431); // #1a4d6e
+    const red = rgb(0.768, 0.118, 0.227); // #C41E3A
     const lightGray = rgb(0.878, 0.878, 0.878); // #E0E0E0
 
-    // ROUNDED CORNERS: Use lineTo with arc for rounded rectangle
-    // pdf-lib doesn't have roundedRect, so we'll draw a regular rectangle and rely on PDF viewer rendering
-    // Draw white card background with border
+    // Draw white card background with rounded corners
+    // pdf-lib doesn't support roundedRect natively, but we'll use border color
     page.drawRectangle({
-      x,
-      y,
+      x: cardX,
+      y: cardY,
       width: cardWidth,
       height: cardHeight,
       borderColor: lightGray,
-      borderWidth: 1.5,
+      borderWidth: 1,
       color: white,
     });
 
@@ -88,7 +86,8 @@ export async function generateMembershipCard(
       xPos: number,
       yPos: number,
       size: number,
-      font: any
+      font: any,
+      color: any
     ) => {
       const shadowOffset = 1; // points offset for shadow
       // Draw shadow first (slightly offset down-right)
@@ -105,99 +104,30 @@ export async function generateMembershipCard(
         y: yPos,
         size,
         font,
-        color: darkBlue,
+        color,
       });
     };
 
-    // LEFT COLUMN (5mm padding from left edge)
-    const leftMargin = 5 * mmToPoints;
-    const topMargin = 5 * mmToPoints;
+    // RIGHT SIDE FIRST: Calculate logo and QR positions for alignment
+    const rightMargin = 8 * mmToPoints;
+    const topMargin = 8 * mmToPoints;
+    const bottomMargin = 8 * mmToPoints;
+    
+    // Logo size: 41.31mm (45.9mm reduced by 10%)
+    const logoSize = 41.31 * mmToPoints;
+    const qrSize = 13.5 * mmToPoints;
+    
+    // Logo position: TOP-RIGHT CORNER (extends beyond card edges)
+    const logoX = cardX + cardWidth - logoSize + (8 * mmToPoints); // 8mm outside (moved 1mm left)
+    const logoY = cardY + cardHeight - logoSize + (9 * mmToPoints); // 9mm outside (moved 1mm down)
+    const qrY = cardY + bottomMargin; // From bottom
 
-    // Title with embossed effect
-    drawTextEmbossed(
-      'SINDIKAT RADNIKA',
-      x + leftMargin,
-      y + cardHeight - topMargin - (10 * mmToPoints),
-      10,
-      fontBold
-    );
-
-    // Subtitle with embossed effect
-    drawTextEmbossed(
-      'NCR ATLEOS - BEOGRAD',
-      x + leftMargin,
-      y + cardHeight - topMargin - (15 * mmToPoints),
-      10,
-      fontRegular
-    );
-
-    // Member ID label with embossed effect
-    drawTextEmbossed(
-      'BROJ ČLANSKE KARTE:',
-      x + leftMargin,
-      y + cardHeight - topMargin - (22 * mmToPoints),
-      9,
-      fontRegular
-    );
-
-    // Member ID value with embossed effect
-    drawTextEmbossed(
-      memberId,
-      x + leftMargin,
-      y + cardHeight - topMargin - (28 * mmToPoints),
-      9,
-      fontBold
-    );
-
-    // Full name label with embossed effect
-    drawTextEmbossed(
-      'IME I PREZIME:',
-      x + leftMargin,
-      y + cardHeight - topMargin - (34 * mmToPoints),
-      9,
-      fontRegular
-    );
-
-    // Full name value with embossed effect
-    const fullName = `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
-    drawTextEmbossed(
-      fullName,
-      x + leftMargin,
-      y + cardHeight - topMargin - (40 * mmToPoints),
-      9,
-      fontBold
-    );
-
-    // Join date label with embossed effect
-    drawTextEmbossed(
-      'UČLANJEN:',
-      x + leftMargin,
-      y + cardHeight - topMargin - (46 * mmToPoints),
-      8,
-      fontRegular
-    );
-
-    // Join date value with embossed effect
-    const joinDateObj = new Date(joinDate);
-    const joinStr = `${String(joinDateObj.getMonth() + 1).padStart(2, '0')}/${joinDateObj.getFullYear()}`;
-    drawTextEmbossed(
-      joinStr,
-      x + leftMargin,
-      y + cardHeight - topMargin - (52 * mmToPoints),
-      8,
-      fontRegular
-    );
-
-    // RIGHT SIDE: Logo (TOP-RIGHT corner, 5mm from edges, 20mm x 20mm)
+    // DRAW LOGO FIRST (behind text)
     try {
-      const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union2.png');
+      const defaultLogoPath = path.join(process.cwd(), 'public', 'brand', 'logo-sindikat-union.png');
       const finalLogoPath = logoPath || defaultLogoPath;
       const logoData = await fs.readFile(finalLogoPath);
       const logoImage = await pdfDoc.embedPng(logoData);
-      
-      const logoSize = 20 * mmToPoints;
-      const logoX = x + cardWidth - logoSize - (5 * mmToPoints);
-      const logoY = y + cardHeight - logoSize - (5 * mmToPoints);
       
       page.drawImage(logoImage, {
         x: logoX,
@@ -205,12 +135,106 @@ export async function generateMembershipCard(
         width: logoSize,
         height: logoSize,
       });
-      console.log('✅ Logo added to card');
+      console.log('✅ Logo added to card (behind text, top-right)');
     } catch (logoErr) {
       console.warn('⚠️ Logo load error:', logoErr);
     }
 
-    // RIGHT SIDE: QR Code (BOTTOM-RIGHT corner, 5mm from edges, 20mm x 20mm, dark blue)
+    // LEFT COLUMN TEXT: Increased spacing by 1mm (6mm instead of 5mm)
+    const leftMargin = 6 * mmToPoints;
+    let currentY = cardY + cardHeight - topMargin;
+
+    // Title with embossed effect - RED color (aligns with logo top)
+    drawTextEmbossed(
+      'SINDIKAT RADNIKA',
+      cardX + leftMargin,
+      currentY,
+      11,
+      fontBold,
+      red
+    );
+
+    // Subtitle with embossed effect - BOLD (increased spacing)
+    currentY -= 5 * mmToPoints;
+    drawTextEmbossed(
+      'NCR ATLEOS - BEOGRAD',
+      cardX + leftMargin,
+      currentY,
+      10,
+      fontBold, // BOLD
+      darkBlue
+    );
+
+    // Member ID label (LARGE GAP after subtitle: 8-10mm)
+    currentY -= 9 * mmToPoints;
+    drawTextEmbossed(
+      'BROJ ČLANSKE KARTE:',
+      cardX + leftMargin,
+      currentY,
+      9,
+      fontRegular,
+      darkBlue
+    );
+
+    // Member ID value
+    currentY -= 4 * mmToPoints;
+    drawTextEmbossed(
+      memberId,
+      cardX + leftMargin,
+      currentY,
+      9,
+      fontBold,
+      darkBlue
+    );
+
+    // Full name label (increased spacing)
+    currentY -= 6 * mmToPoints;
+    drawTextEmbossed(
+      'IME I PREZIME:',
+      cardX + leftMargin,
+      currentY,
+      9,
+      fontRegular,
+      darkBlue
+    );
+
+    // Full name value
+    const fullName = `${firstName.toUpperCase()} ${lastName.toUpperCase()}`;
+    currentY -= 4 * mmToPoints;
+    drawTextEmbossed(
+      fullName,
+      cardX + leftMargin,
+      currentY,
+      9,
+      fontBold,
+      darkBlue
+    );
+
+    // Join date label (increased spacing)
+    currentY -= 6 * mmToPoints;
+    drawTextEmbossed(
+      'UČLANJEN:',
+      cardX + leftMargin,
+      currentY,
+      8,
+      fontRegular,
+      darkBlue
+    );
+
+    // Join date value (aligns with QR code bottom)
+    const joinDateObj = new Date(joinDate);
+    const joinStr = `${String(joinDateObj.getMonth() + 1).padStart(2, '0')}/${joinDateObj.getFullYear()}`;
+    currentY -= 4 * mmToPoints;
+    drawTextEmbossed(
+      joinStr,
+      cardX + leftMargin,
+      currentY,
+      8,
+      fontRegular,
+      darkBlue
+    );
+
+    // RIGHT SIDE: QR Code (BOTTOM-RIGHT, 13.5mm, dark blue)
     try {
       const qrData = `MEMBER_ID:${memberId}|NAME:${firstName}|LASTNAME:${lastName}`;
       // Use qrserver.com with dark blue color
@@ -220,9 +244,7 @@ export async function generateMembershipCard(
       const qrBuffer = Buffer.from(await qrResponse.arrayBuffer());
       const qrImage = await pdfDoc.embedPng(qrBuffer);
       
-      const qrSize = 20 * mmToPoints;
-      const qrX = x + cardWidth - qrSize - (5 * mmToPoints);
-      const qrY = y + (5 * mmToPoints);
+      const qrX = cardX + cardWidth - qrSize - rightMargin + (2 * mmToPoints); // Moved 2mm right
       
       page.drawImage(qrImage, {
         x: qrX,
