@@ -106,9 +106,80 @@ export async function POST(
       console.warn('Error generating confirmation:', e);
     }
 
+    // 5. Generate card PDF and add to attachments
+    console.log('Generating card PDF...');
+    try {
+      const cardResponse = await fetch(`${baseUrl}/api/generate-card`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          memberId: memberId,
+          memberData: {
+            fullName: (member as any).full_name,
+            email: (member as any).email,
+            city: (member as any).city,
+            organization: (member as any).division || (member as any).organization,
+            division: (member as any).division,
+            membershipNumber: memberNumber,
+            status: 'active',
+            joinDate: (member as any).created_at,
+          },
+        }),
+      });
+
+      if (!cardResponse.ok) {
+        console.error('Card generation failed');
+      } else {
+        const cardBuffer = await cardResponse.arrayBuffer();
+        
+        attachments.push({
+          filename: `card-${memberNumber}.pdf`,
+          content: Buffer.from(cardBuffer),
+          contentType: 'application/pdf',
+        });
+        
+        console.log('✅ Added card PDF to attachments');
+      }
+    } catch (e) {
+      console.warn('Error generating card:', e);
+    }
+
+    // 6. Generate policy PDF (optional) and add to attachments
+    console.log('Generating policy PDF...');
+    try {
+      const policyResponse = await fetch(`${baseUrl}/api/generate-policy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          memberId: memberId,
+          memberData: {
+            fullName: (member as any).full_name,
+            email: (member as any).email,
+            membershipNumber: memberNumber,
+          },
+        }),
+      });
+
+      if (policyResponse.ok) {
+        const policyBuffer = await policyResponse.arrayBuffer();
+        
+        attachments.push({
+          filename: `policy-${memberNumber}.pdf`,
+          content: Buffer.from(policyBuffer),
+          contentType: 'application/pdf',
+        });
+        
+        console.log('✅ Added policy PDF to attachments');
+      } else {
+        console.log('Policy PDF not available or generation failed');
+      }
+    } catch (e) {
+      console.warn('Error generating policy (optional):', e);
+    }
+
     console.log('📎 Attachments array:', attachments.length, attachments);
 
-    // 5. Send approval email using Resend
+    // 7. Send approval email using Resend
     console.log('Sending approval email to:', (member as any).email);
     console.log('📎 Total attachments:', attachments.length);
     
@@ -172,7 +243,7 @@ export async function POST(
                            `${pdfsSent} attachments`;
     console.log(`✅ Approval email sent with ${attachmentText}. Message ID:`, emailData?.id);
 
-    // 6. Update member in database
+    // 8. Update member in database
     const adminId = (session?.user as any)?.id; // Get admin UUID from session
     
     const { error: updateError } = await supabase
