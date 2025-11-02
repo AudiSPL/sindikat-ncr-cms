@@ -61,9 +61,11 @@ export async function POST(
     const memberNumber = (member as any).member_id || generateMemberId((member as any).id, quicklookId);
     console.log('Member number:', memberNumber);
 
-    // 3. Generate confirmation PDF (pristupnica)
+    // 3. Prepare attachments array
+    const attachments: Array<{ filename: string; content: Buffer | string; contentType?: string }> = [];
+
+    // 4. Generate confirmation PDF (pristupnica) and add to attachments
     console.log('Generating confirmation PDF...');
-    let confirmationPdfUrl: string | null = null;
     try {
       const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://app.sindikatncr.com';
       const confirmResponse = await fetch(`${baseUrl}/api/generate-confirmation`, {
@@ -86,19 +88,24 @@ export async function POST(
 
       console.log('✅ Confirmation response status:', confirmResponse.status);
 
-      if (confirmResponse.ok) {
-        const confirmData = await confirmResponse.json();
-        confirmationPdfUrl = confirmData.pdfUrl;
-        console.log('✅ Confirmation PDF generated:', confirmationPdfUrl);
+      if (!confirmResponse.ok) {
+        console.error('Confirmation generation failed');
       } else {
-        console.warn('Confirmation generation failed');
+        // Get PDF as buffer (not JSON)
+        const pdfBuffer = await confirmResponse.arrayBuffer();
+        
+        attachments.push({
+          filename: `confirmation-${memberNumber}.pdf`,
+          content: Buffer.from(pdfBuffer),
+          contentType: 'application/pdf',
+        });
+        
+        console.log('✅ Added confirmation PDF to attachments');
       }
     } catch (e) {
       console.warn('Error generating confirmation:', e);
     }
 
-    // 4. Prepare attachments (empty - PDFs would need to be generated via API and passed as buffers)
-    const attachments: Array<{ filename: string; content: string }> = [];
     console.log('📎 Attachments array:', attachments.length, attachments);
 
     // 5. Send approval email using Resend
