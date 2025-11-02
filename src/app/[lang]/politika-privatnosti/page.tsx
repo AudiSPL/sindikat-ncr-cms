@@ -42,8 +42,8 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
     >
       <div className="space-y-8">
         <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold">{content.privacy.title}</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-white md:text-[#0B2C49] md:dark:text-white">{content.privacy.title}</h1>
+          <p className="text-lg text-[#9CA3AF] md:text-muted-foreground md:dark:text-muted-foreground max-w-2xl mx-auto">
             {lang === 'sr' 
               ? 'Kako prikupljamo, koristimo i štitimo vaše podatke'
               : 'How we collect, use and protect your data'
