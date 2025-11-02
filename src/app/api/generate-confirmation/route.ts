@@ -188,23 +188,20 @@ export async function POST(request: Request) {
       color: rgb(0, 0, 0),
     });
 
-    // Save PDF
+    // Generate PDF bytes
     const pdfBytes = await pdfDoc.save();
     const pdfBuffer = Buffer.from(pdfBytes);
 
-    // Create directory and save
-    const memberDir = path.join(process.cwd(), 'public', 'members', String(memberId));
-    await fs.mkdir(memberDir, { recursive: true });
+    console.log('✅ PDF generated successfully, size:', pdfBuffer.length, 'bytes');
 
-    const pdfPath = path.join(memberDir, 'confirmation.pdf');
-    await fs.writeFile(pdfPath, pdfBuffer);
-
-    console.log('✅ PDF saved successfully at:', pdfPath);
-
-    return NextResponse.json({
-      success: true,
-      pdfUrl: `/members/${memberId}/confirmation.pdf`,
-      message: 'PDF confirmation generated successfully'
+    // Return PDF as response (no filesystem save)
+    return new NextResponse(pdfBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `inline; filename="confirmation-${memberData.membershipNumber || memberId}.pdf"`,
+        'Content-Length': pdfBuffer.length.toString(),
+      },
     });
 
   } catch (error) {
