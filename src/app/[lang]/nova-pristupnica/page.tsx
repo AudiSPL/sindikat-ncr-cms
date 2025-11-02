@@ -329,18 +329,26 @@ export default function NovaPristupnicaPage() {
               <Controller
                 name="agreeGDPR"
                 control={control}
+                rules={{ required: true }}
                 render={({ field }) => (
                   <Checkbox
                     id="agreeGDPR"
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    className={errors.agreeGDPR ? 'border-brand-red' : ''}
                   />
                 )}
               />
               <Label htmlFor="agreeGDPR" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
-                {t.consents.privacyPrefix} <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">{t.consents.privacyLink}</a>
+                {t.consents.privacyPrefix} <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">{t.consents.privacyLink}</a> *
               </Label>
             </div>
+            {errors.agreeGDPR && (
+              <p className="text-sm text-brand-red flex items-center gap-1 ml-7">
+                <AlertCircle className="h-3 w-3" />
+                This field is required
+              </p>
+            )}
 
             {/* Is Anonymous */}
           </div>

@@ -78,9 +78,9 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
     },
     {
       id: 'b3',
-      title: 'Punomočje',
+      title: 'Punomoćje',
       icon: PenTool,
-      description: 'Obrazac punomočja za predstavljanje ispred sindikata.',
+      description: 'Obrazac punomoćja za predstavljanje ispred sindikata.',
       pdf: '/documents/B3_Punomocje_SR.pdf'
     },
     {
