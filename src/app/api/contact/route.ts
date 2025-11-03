@@ -1,29 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendMail } from '@/lib/mailer';
+import { getRateLimitIdentifier, rateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, honeypot } = body || {};
 
-    // Validation
-    if (!name || !email || !subject || !message) {
+    // 🛡️ Rate limiting: 5 requests per IP per hour
+    const ip = getRateLimitIdentifier(request);
+    const rl = rateLimit(`contact:${ip}`, 5, 60 * 60 * 1000);
+    if (!rl.success) {
+      console.warn('⏳ Rate limit exceeded for IP:', ip);
       return NextResponse.json(
-        { error: 'All fields are required' },
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    // Validation: email is OPTIONAL
+    if (!name || !subject || !message) {
+      return NextResponse.json(
+        { error: 'Name, subject, and message are required' },
         { status: 400 }
       );
     }
 
-    // Email validation
+    // 1) MESSAGE LENGTH LIMIT
+    if (typeof message === 'string' && message.length > 5000) {
+      return NextResponse.json(
+        { error: 'Message too long (max 5000 characters)' },
+        { status: 400 }
+      );
+    }
+
+    // Email validation (only if provided)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (email && !emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Invalid email address' },
         { status: 400 }
       );
     }
 
-    console.log('📧 Contact form submission:', { name, email, subject });
+    // 3) HONEYPOT (hidden spam trap)
+    if (honeypot) {
+      console.log('🤖 Honeypot triggered, faking success');
+      return NextResponse.json({ success: true });
+    }
+
+    console.log('📧 Contact form submission:', { name, email, subject, ip });
 
     // Send email to admin
     const emailHtml = `

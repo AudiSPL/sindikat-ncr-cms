@@ -89,13 +89,14 @@ export function ContactForm({ lang }: ContactFormProps) {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">{content.contact.form.name}</Label>
+              <Label htmlFor="name">{lang === 'sr' ? 'Vaše Ime' : 'Your Name'}</Label>
               <Input
                 id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 placeholder={lang === 'sr' ? 'Vaše ime' : 'Your name'}
+                required
               />
             </div>
             
