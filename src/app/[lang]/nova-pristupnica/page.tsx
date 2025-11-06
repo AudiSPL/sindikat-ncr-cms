@@ -241,14 +241,23 @@ export default function NovaPristupnicaPage() {
             </Label>
             <Input
               id="quicklook_id"
-              placeholder="pp12345"
-              {...register('quicklook_id', { required: true })}
+              placeholder="AB123123"
+              required
+              pattern="^[A-Z]{2}[0-9]{6}$"
+              title="Format must be: 2 capital letters + 6 digits (e.g., AB123123)"
+              {...register('quicklook_id', { 
+                required: true,
+                pattern: {
+                  value: /^[A-Z]{2}[0-9]{6}$/,
+                  message: 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123123)'
+                }
+              })}
               className={errors.quicklook_id ? 'border-brand-red' : ''}
             />
             {errors.quicklook_id && (
               <p className="text-sm text-brand-red flex items-center gap-1">
                 <AlertCircle className="h-3 w-3" />
-                This field is required
+                {errors.quicklook_id.message || 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123123)'}
               </p>
             )}
           </div>

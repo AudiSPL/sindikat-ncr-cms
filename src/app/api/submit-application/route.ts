@@ -20,6 +20,15 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validate QLID format: 2 capital letters + 6 digits (e.g., AB123123)
+    const qlIdPattern = /^[A-Z]{2}[0-9]{6}$/;
+    if (!qlIdPattern.test(quicklook_id)) {
+      return NextResponse.json(
+        { error: 'QLID must be 2 capital letters + 6 digits (e.g., AB123123)' },
+        { status: 400 }
+      );
+    }
+
     // Check for duplicate qlid
     const { data: existingMember } = await supabase
       .from('members')
