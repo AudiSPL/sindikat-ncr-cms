@@ -1,13 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /gradiliste
+Disallow: /api
+Disallow: /_next
+Disallow: /*.json
+Disallow: /private
+Crawl-delay: 1
 
-# Sitemap
-Sitemap: https://app.sindikatncr.com/sitemap.xml
-
-# Disallow admin and API routes
-Disallow: /admin/
-Disallow: /api/
-Disallow: /auth/
-Disallow: /nova-pristupnica
-Disallow: /_next/
-Disallow: /.*
+Sitemap: https://www.sindikatncr.com/sitemap.xml

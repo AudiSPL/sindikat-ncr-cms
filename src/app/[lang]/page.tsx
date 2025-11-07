@@ -14,20 +14,43 @@ interface HomePageProps {
 export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const { lang } = await params;
   const content = getContent(lang as Language);
+  const isSerbian = lang === 'sr';
+  const meta = isSerbian
+    ? {
+        title: 'Sindikat Radnika NCR Atleos – Zaposleni na istoj strani',
+        description:
+          'Pridruži se nezavisnom sindikatu NCR Atleos. Kolektivno pregovaranje, pravna podrška i zaštita radničkih prava. Poverljivo, sigurno, zajedno i digitalno.',
+      }
+    : {
+        title: 'NCR Atleos Union – Employees United',
+        description:
+          'Join the independent NCR Atleos Union. Collective bargaining, legal support, and worker rights protection. Confidential, secure, united.',
+      };
+
+  const shareImage = 'https://www.sindikatncr.com/brand/logo-sindikat.png';
 
   return {
-    title: content.hero.title,
-    description: content.hero.lead,
+    title: meta.title,
+    description: meta.description,
     openGraph: {
-      title: content.hero.title,
-      description: content.hero.lead,
+      title: meta.title,
+      description: meta.description,
       type: 'website',
       locale: lang === 'sr' ? 'sr_RS' : 'en_US',
+      images: [
+        {
+          url: shareImage,
+          width: 1200,
+          height: 630,
+          alt: meta.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: content.hero.title,
-      description: content.hero.lead,
+      title: meta.title,
+      description: meta.description,
+      images: [shareImage],
     },
   };
 }

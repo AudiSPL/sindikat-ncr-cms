@@ -83,6 +83,45 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Sindikat NCR Atleos",
+              "alternateName": [
+                "NCR Atleos Union",
+                "Atleos Union",
+                "Atlios Union",
+                "Sindikat ATM DOO",
+                "Worker's Union NCR Atleos"
+              ],
+              "url": "https://www.sindikatncr.com",
+              "logo": "https://www.sindikatncr.com/logo-white.svg",
+              "description": "Independent labor union representing NCR Atleos employees in Serbia, providing legal support and worker protection.",
+              "foundingDate": "2025",
+              "areaServed": {
+                "@type": "Country",
+                "name": "Serbia"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "info@sindikatncr.com",
+                "availableLanguage": ["Serbian", "English"],
+                "areaServed": "RS"
+              },
+              "knowsAbout": [
+                "Labor Law",
+                "Worker Rights",
+                "Employment Law",
+                "Collective Bargaining"
+              ]
+            })
+          }}
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased transition-colors duration-300`}>
         <ThemeProvider 
           attribute="class" 
