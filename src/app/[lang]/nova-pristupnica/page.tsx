@@ -108,12 +108,30 @@ export default function NovaPristupnicaPage() {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     defaultValues: {
       agreeJoin: false,
       agreeGDPR: false,
       isAnonymous: false,
+    },
+  });
+
+  const qlidRegister = register('quicklook_id', {
+    required: 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123456)',
+    pattern: {
+      value: /^[A-Z]{2}[0-9]{6}$/,
+      message: 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123456)',
+    },
+    onChange: (event) => {
+      const input = event.target as HTMLInputElement;
+      const uppercaseValue = input.value.toUpperCase();
+      input.value = uppercaseValue;
+      setValue('quicklook_id', uppercaseValue, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     },
   });
 
@@ -241,23 +259,19 @@ export default function NovaPristupnicaPage() {
             </Label>
             <Input
               id="quicklook_id"
-              placeholder="AB123123"
+              type="text"
+              placeholder="AB123456"
               required
               pattern="^[A-Z]{2}[0-9]{6}$"
-              title="Format must be: 2 capital letters + 6 digits (e.g., AB123123)"
-              {...register('quicklook_id', { 
-                required: true,
-                pattern: {
-                  value: /^[A-Z]{2}[0-9]{6}$/,
-                  message: 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123123)'
-                }
-              })}
+              title="Format must be: 2 capital letters + 6 digits (e.g., AB123456)"
+              maxLength={8}
+              {...qlidRegister}
               className={errors.quicklook_id ? 'border-brand-red' : ''}
             />
             {errors.quicklook_id && (
               <p className="text-sm text-brand-red flex items-center gap-1">
                 <AlertCircle className="h-3 w-3" />
-                {errors.quicklook_id.message || 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123123)'}
+                {errors.quicklook_id.message || 'QLID must be exactly: 2 capital letters + 6 digits (e.g., AB123456)'}
               </p>
             )}
           </div>
