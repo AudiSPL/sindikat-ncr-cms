@@ -90,10 +90,15 @@ export default function RootLayout({
               html {
                 background-color: #1a1a2e !important;
                 color: #ffffff !important;
+                color-scheme: dark !important;
               }
               body {
                 background-color: #1a1a2e !important;
                 color: #ffffff !important;
+                color-scheme: dark !important;
+              }
+              * {
+                color-scheme: dark !important;
               }
             `,
           }}
