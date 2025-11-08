@@ -31,14 +31,14 @@ export function Header({ lang }: HeaderProps) {
 
   return (
     <header 
-      className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300"
+      className="sticky top-0 z-50 w-full bg-brand-navy md:bg-white/80 dark:bg-brand-navy md:dark:bg-brand-navy backdrop-blur-md border-b border-border shadow-sm transition-all duration-300"
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6 py-3 md:py-4">
         {/* Logo */}
         <Link href={`/${lang}`} className="flex items-center gap-2 md:gap-3 hover:opacity-90 transition-opacity duration-200" onClick={closeMobileMenu}>
           <Logo className="h-6 w-6 md:h-8 md:w-8" />
-          <span className="font-bold text-sm md:text-lg text-slate-900 dark:text-white hidden sm:block">Sindikat Radnika NCR Atleos – Beograd</span>
-          <span className="font-bold text-sm md:text-lg text-slate-900 dark:text-white sm:hidden">Sindikat NCR</span>
+          <span className="font-bold text-sm md:text-lg text-white md:text-slate-900 dark:text-white hidden sm:block">Sindikat Radnika NCR Atleos – Beograd</span>
+          <span className="font-bold text-sm md:text-lg text-white md:text-slate-900 dark:text-white sm:hidden">Sindikat NCR</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -67,7 +67,7 @@ export function Header({ lang }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-slate-700 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors duration-200"
+            className="md:hidden p-2 text-white md:text-slate-700 dark:text-slate-100 hover:bg-brand-blue/20 md:hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors duration-200"
             aria-label="Toggle mobile menu"
           >
             {mobileMenuOpen ? (
