@@ -19,12 +19,12 @@ export function Hero({ lang }: HeroProps) {
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-16 md:py-20 lg:py-24">
-        <div className="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
+        <div className="max-w-5xl mx-auto text-center space-y-6 md:space-y-8">
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
             {content.hero.title}
           </h1>
 
-          <p className="text-lg md:text-xl lg:text-2xl text-white/90 dark:text-gray-200 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl lg:text-2xl text-white/90 dark:text-gray-200 max-w-4xl mx-auto">
             {content.hero.lead}
           </p>
 
