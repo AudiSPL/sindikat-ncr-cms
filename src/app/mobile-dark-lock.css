@@ -1,17 +1,13 @@
 @media (max-width: 768px) {
   html,
-  body,
-  * {
+  body {
     background-color: #1a1a2e !important;
-    color: #ffffff !important;
     color-scheme: dark !important;
   }
-  
+
   body {
     background: #1a1a2e !important;
+    color: #ffffff;
   }
-  
-  /* Override any light colors */
-  .light { display: none !important; }
 }
 
