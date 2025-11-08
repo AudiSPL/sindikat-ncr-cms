@@ -15,14 +15,19 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   // Force dark theme always
   useEffect(() => {
+    // Clear all theme-related localStorage keys
+    localStorage.removeItem('theme-locked');
+    localStorage.removeItem('theme');
+    localStorage.removeItem('theme-disabled');
+
     const htmlElement = document.documentElement;
-    
+
     // Always ensure dark class is present
     const ensureDark = () => {
       htmlElement.classList.remove('light');
       htmlElement.classList.add('dark');
     };
-    
+
     ensureDark();
     
     // Re-apply every 100ms to fight any changes
