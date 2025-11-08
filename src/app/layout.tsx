@@ -84,6 +84,20 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html {
+                background-color: #1a1a2e !important;
+                color: #ffffff !important;
+              }
+              body {
+                background-color: #1a1a2e !important;
+                color: #ffffff !important;
+              }
+            `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
