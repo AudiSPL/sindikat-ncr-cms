@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
 @import "tailwindcss";
-@import './mobile-dark-lock.css';
 
 :root {
   --radius: 0.5rem;
@@ -654,14 +653,17 @@ body:not(.admin-container) [data-slot="card-title"][class*="text-white"] {
 }
 
 /* Mobile light theme override */
+@import './mobile-dark-lock.css';
+
+/* FORCE DARK ON MOBILE - ABSOLUTE FINAL RULE */
 @media (prefers-color-scheme: light) and (max-width: 768px) {
-  html,
-  body {
+  html {
     background-color: #1a1a2e !important;
     color-scheme: dark !important;
   }
 
   body {
-    color: #ffffff;
+    background-color: #1a1a2e !important;
+    color: #ffffff !important;
   }
 }
