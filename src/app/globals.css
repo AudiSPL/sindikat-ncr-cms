@@ -666,4 +666,14 @@ body:not(.admin-container) [data-slot="card-title"][class*="text-white"] {
     background-color: #1a1a2e !important;
     color: #ffffff !important;
   }
+
+  header {
+    background-color: #1a1a2e !important;
+    background: #1a1a2e !important;
+    color: #ffffff !important;
+  }
+
+  header * {
+    color-scheme: dark !important;
+  }
 }
