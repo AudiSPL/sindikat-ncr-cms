@@ -11,7 +11,7 @@ export function TeaserGrid({ lang }: TeaserGridProps) {
   const content = getContent(lang);
 
   return (
-    <section className="py-12 md:py-16 lg:py-20 bg-[#F7FAFC] dark:bg-[#0F1419]">
+    <section className="py-12 md:py-16 lg:py-20 bg-[#0F1419]">
       <div className="container mx-auto px-5 md:px-10 lg:px-15 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {content.teasers.map((teaser, index) => {
