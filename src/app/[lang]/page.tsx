@@ -65,8 +65,9 @@ export default async function HomePage({ params }: HomePageProps) {
       <TeaserGrid lang={lang as Language} />
       <IconSection lang={lang as Language} />
       <DidYouKnowCarousel lang={lang as Language} />
-      <Donations lang={lang as Language} />
       <VoiceSection />
+      <Donations lang={lang as Language} />
+      {console.log("VoiceSection should render here")}
       
       {/* Skip link for accessibility */}
       <a 

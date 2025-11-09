@@ -517,7 +517,7 @@ export const content: Record<Language, Content> = {
       {
         title: "Why join",
         excerpt: "Safer in a group, stronger in negotiations, legal backup when needed.",
-        href: "/en/tema/why-now"
+        href: "/en/tema/zasto-sada"
       },
       {
         title: "How to join",

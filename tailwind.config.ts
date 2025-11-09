@@ -53,6 +53,11 @@ const config: Config = {
       },
     },
   },
+  safelist: [
+    {
+      pattern: /^dark:/,
+    },
+  ],
   plugins: [],
 };
 

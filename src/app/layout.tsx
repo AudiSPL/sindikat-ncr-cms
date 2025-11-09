@@ -84,47 +84,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-              html {
-                background-color: #1a1a2e !important;
-                color: #ffffff !important;
-                color-scheme: dark !important;
-              }
-              body {
-                background-color: #1a1a2e !important;
-                color: #ffffff !important;
-                color-scheme: dark !important;
-              }
-              * {
-                color-scheme: dark !important;
-              }
-            `,
-          }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Force dark immediately on page load
-              if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                document.documentElement.style.backgroundColor = '#1a1a2e';
-                document.documentElement.style.colorScheme = 'dark';
-                document.body.style.backgroundColor = '#1a1a2e';
-                document.body.style.color = '#ffffff';
-              }
-
-              // Watch for changes and reapply
-              window.matchMedia('(prefers-color-scheme: light)').addListener(e => {
-                if (e.matches) {
-                  document.documentElement.style.backgroundColor = '#1a1a2e';
-                  document.documentElement.style.colorScheme = 'dark';
-                  document.body.style.backgroundColor = '#1a1a2e';
-                }
-              });
-            `,
-          }}
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

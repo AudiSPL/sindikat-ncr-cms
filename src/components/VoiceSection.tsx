@@ -7,7 +7,7 @@ export default function VoiceSection() {
   const { lang } = useLanguage();
   
   return (
-    <section className="w-full bg-[#E67E22] py-7 md:py-10 lg:py-13">
+    <section className="w-full !bg-[#E67E22] py-7 md:py-10 lg:py-13">
       {/* Content Container */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Centered Content */}

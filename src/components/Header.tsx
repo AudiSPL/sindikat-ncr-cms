@@ -47,7 +47,7 @@ export function Header({ lang }: HeaderProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-100 hover:text-brand-blue hover:bg-brand-blue/10 rounded-md transition-all duration-200"
+              className="px-3 py-2 text-sm font-semibold text-slate-700 dark:text-slate-100 hover:text-brand-blue hover:bg-brand-blue/10 rounded-md transition-all duration-200"
             >
               {item.label}
             </Link>
@@ -112,7 +112,7 @@ export function Header({ lang }: HeaderProps) {
                     key={item.href}
                     href={item.href}
                     onClick={closeMobileMenu}
-                    className="block px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white rounded-lg transition-all duration-200 font-medium"
+                    className="block px-3 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white rounded-lg transition-all duration-200"
                   >
                     {item.label}
                   </Link>
