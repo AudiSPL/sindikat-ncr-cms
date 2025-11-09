@@ -10,7 +10,7 @@ export function Hero({ lang }: HeroProps) {
   const content = getContent(lang);
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative min-h-[95vh] overflow-hidden">
       {/* Background - Light mode: dark teal, Dark mode: brand navy */}
       <div className="absolute inset-0 bg-[#2C5282] dark:bg-[#2C5282]"></div>
       
@@ -18,8 +18,8 @@ export function Hero({ lang }: HeroProps) {
       <div className="absolute inset-0 bg-black/30 dark:bg-black/40"></div>
       
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 py-16 md:py-20 lg:py-24">
-        <div className="max-w-full mx-auto text-center space-y-6 md:space-y-8">
+      <div className="relative z-10 flex min-h-[95vh] items-center">
+        <div className="container mx-auto flex flex-col items-center justify-center px-4 py-14 text-center space-y-6 md:space-y-8">
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
             {content.hero.title}
           </h1>

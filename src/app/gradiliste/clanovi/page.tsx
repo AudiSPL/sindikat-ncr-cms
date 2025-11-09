@@ -206,25 +206,30 @@ export default function ClanoviPage() {
     );
   }, [members, q]);
 
+  const glassCard = "bg-[rgba(30,30,40,0.6)] border border-white/10 backdrop-blur-md shadow-[0_30px_80px_rgba(0,0,0,0.3)] text-white";
+  const primaryButton = "bg-[#E67E22] hover:shadow-[0_0_20px_rgba(230,126,34,0.5)] text-white border border-transparent";
+  const secondaryButton = "border border-white/20 text-white hover:bg-white/10";
+  const inputClasses = "border-white/10 bg-white/5 text-white placeholder:text-white/50 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-[#E67E22]/70 focus-visible:ring-offset-0";
+
   return (
-    <div className="max-w-7xl mx-auto space-y-4">
-      {/* Search and Actions Bar - above Card */}
-      <div className="bg-blue-700 text-white p-4 rounded-t-lg">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <h2 className="text-xl font-bold">Članovi</h2>
-          <div className="flex items-center gap-2">
+    <div className="relative z-10 mx-auto max-w-7xl space-y-6 text-white">
+      {/* Search and Actions Bar */}
+      <div className="rounded-3xl border border-white/10 bg-[rgba(30,30,40,0.65)] p-6 backdrop-blur-md shadow-[0_30px_80px_rgba(0,0,0,0.3)]">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-2xl font-semibold tracking-tight">Članovi</h2>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <Input 
-              placeholder="Pretraga..." 
-              value={q} 
-              onChange={(e) => setQ(e.target.value)} 
-              className="w-40 bg-white text-black" 
+              placeholder="Pretraga..."
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              className={`w-full sm:w-48 ${inputClasses}`}
             />
-            <Button className="bg-white text-blue-700 hover:bg-gray-100" onClick={exportCSV}>
+            <Button className={secondaryButton} onClick={exportCSV}>
               CSV
             </Button>
             {selectedIds.size > 0 && (
               <Button 
-                className="bg-red-600 hover:bg-red-700 text-white" 
+                className="border border-red-400 bg-red-600/80 text-white hover:bg-red-500/80"
                 onClick={handleBulkDelete}
               >
                 Obriši ({selectedIds.size})
@@ -234,44 +239,44 @@ export default function ClanoviPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <Button variant="outline" className="gap-2 w-fit" onClick={() => router.back()}>
+      <Card className={glassCard}>
+        <CardHeader className="flex items-center justify-between text-white">
+          <Button className={`${secondaryButton} gap-2`} onClick={() => router.back()}>
             <ArrowLeft className="h-4 w-4" />
             Nazad
           </Button>
         </CardHeader>
         <CardContent>
           {/* Stat Boxes */}
-          <div className="grid grid-cols-5 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
-              <p className="text-blue-900 font-semibold text-sm">Trenutno</p>
-              <p className="text-3xl font-bold text-blue-900">{filtered.length}</p>
-              <p className="text-blue-700 text-xs mt-1">/ Cilj: 334</p>
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <p className="text-sm font-semibold text-white/70">Trenutno</p>
+              <p className="text-3xl font-bold text-white">{filtered.length}</p>
+              <p className="mt-1 text-xs text-white/60">/ Cilj: 334</p>
             </div>
             
-            <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">
-              <p className="text-blue-900 font-semibold text-sm">Ukupno Članova</p>
-              <p className="text-3xl font-bold text-blue-900">{members.length}</p>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <p className="text-sm font-semibold text-white/70">Ukupno Članova</p>
+              <p className="text-3xl font-bold text-white">{members.length}</p>
             </div>
             
-            <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-lg border border-yellow-200">
-              <p className="text-blue-900 font-semibold text-sm">Na čekanju</p>
-              <p className="text-3xl font-bold text-blue-900">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <p className="text-sm font-semibold text-white/70">Na čekanju</p>
+              <p className="text-3xl font-bold text-white">
                 {members.filter(m => m.status === 'pending').length}
               </p>
             </div>
             
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
-              <p className="text-blue-900 font-semibold text-sm">Odobreno</p>
-              <p className="text-3xl font-bold text-blue-900">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <p className="text-sm font-semibold text-white/70">Odobreno</p>
+              <p className="text-3xl font-bold text-white">
                 {members.filter(m => m.status === 'active').length}
               </p>
             </div>
             
-            <div className="bg-gradient-to-br from-red-50 to-red-100 p-4 rounded-lg border border-red-200">
-              <p className="text-blue-900 font-semibold text-sm">Odbijeno</p>
-              <p className="text-3xl font-bold text-blue-900">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-white shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <p className="text-sm font-semibold text-white/70">Odbijeno</p>
+              <p className="text-3xl font-bold text-white">
                 {members.filter(m => m.verification_status === 'flagged').length}
               </p>
             </div>
@@ -279,13 +284,20 @@ export default function ClanoviPage() {
           
           {/* Table */}
           {loading ? (
-            <div className="space-y-2">{[1,2,3,4,5].map(i => <div key={i} className="h-10 bg-gray-100 animate-pulse rounded" />)}</div>
+            <div className="space-y-2">{[1,2,3,4,5].map(i => <div key={i} className="h-10 animate-pulse rounded bg-white/10" />)}</div>
           ) : (
             <div className="overflow-x-auto overflow-y-visible">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm text-white">
                 <thead>
-                  <tr className="text-left text-[#0B2C49] border-b">
-                    <th className="py-2 pr-4"><input type="checkbox" onChange={toggleAll} checked={selectedIds.size === filtered.length && filtered.length>0} /></th>
+                  <tr className="border-b border-white/10 text-left text-white/70">
+                    <th className="py-2 pr-4">
+                      <input
+                        type="checkbox"
+                        onChange={toggleAll}
+                        checked={selectedIds.size === filtered.length && filtered.length>0}
+                        className="h-4 w-4 accent-[#E67E22]"
+                      />
+                    </th>
                     <th className="py-2 pr-4">Ime</th>
                     <th className="py-2 pr-4">Email</th>
                     <th className="py-2 pr-4">Quicklook ID</th>
@@ -300,20 +312,57 @@ export default function ClanoviPage() {
                 </thead>
                 <tbody>
                   {filtered.map(m => (
-                    <tr key={m.id} className="border-b hover:bg-gray-50">
-                      <td className="py-2 pr-4 whitespace-nowrap"><input type="checkbox" checked={selectedIds.has(m.id)} onChange={()=>toggleSelected(m.id)} /></td>
-                      <td className="py-2 pr-4 whitespace-nowrap">{editingId===m.id ? (<input className="border rounded px-2 py-1" value={typeof editDraft.full_name === 'string' ? editDraft.full_name : (m.full_name || '')} onChange={(e)=>setEditDraft({...editDraft, full_name:e.target.value})} />) : m.full_name}</td>
-                      <td className="py-2 pr-4 whitespace-nowrap">{editingId===m.id ? (<input className="border rounded px-2 py-1" value={typeof editDraft.email === 'string' ? editDraft.email : (m.email || '')} onChange={(e)=>setEditDraft({...editDraft, email:e.target.value})} />) : m.email}</td>
-                      <td className="py-2 pr-4 whitespace-nowrap">{editingId===m.id ? (<input className="border rounded px-2 py-1" value={typeof editDraft.quicklook_id === 'string' ? editDraft.quicklook_id : (m.quicklook_id || '')} onChange={(e)=>setEditDraft({...editDraft, quicklook_id:e.target.value})} />) : (m.quicklook_id || '-')}</td>
-                      <td className="py-2 pr-4 whitespace-nowrap font-semibold text-[#005B99]">{m.member_id || '-'}</td>
+                    <tr key={m.id} className="border-b border-white/10 transition hover:bg-slate-700/50">
+                      <td className="whitespace-nowrap py-2 pr-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(m.id)}
+                          onChange={()=>toggleSelected(m.id)}
+                          className="h-4 w-4 accent-[#E67E22]"
+                        />
+                      </td>
+                      <td className="whitespace-nowrap py-2 pr-4">
+                        {editingId===m.id ? (
+                          <input
+                            className={`rounded border px-2 py-1 text-sm ${inputClasses}`}
+                            value={typeof editDraft.full_name === 'string' ? editDraft.full_name : (m.full_name || '')}
+                            onChange={(e)=>setEditDraft({...editDraft, full_name:e.target.value})}
+                          />
+                        ) : (
+                          m.full_name
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap py-2 pr-4">
+                        {editingId===m.id ? (
+                          <input
+                            className={`rounded border px-2 py-1 text-sm ${inputClasses}`}
+                            value={typeof editDraft.email === 'string' ? editDraft.email : (m.email || '')}
+                            onChange={(e)=>setEditDraft({...editDraft, email:e.target.value})}
+                          />
+                        ) : (
+                          m.email
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap py-2 pr-4">
+                        {editingId===m.id ? (
+                          <input
+                            className={`rounded border px-2 py-1 text-sm ${inputClasses}`}
+                            value={typeof editDraft.quicklook_id === 'string' ? editDraft.quicklook_id : (m.quicklook_id || '')}
+                            onChange={(e)=>setEditDraft({...editDraft, quicklook_id:e.target.value})}
+                          />
+                        ) : (
+                          m.quicklook_id || '-'
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap py-2 pr-4 font-semibold text-[#E67E22]">{m.member_id || '-'}</td>
 
                       {/* Special Status - Editable */}
-                      <td className="py-2 pr-4 whitespace-nowrap">
+                      <td className="whitespace-nowrap py-2 pr-4">
                         <Select
                           value={m.special_status || 'clan'}
                           onValueChange={(value) => handleSpecialStatusChange(Number(m.id), value)}
                         >
-                          <SelectTrigger className="w-40">
+                          <SelectTrigger className={`w-40 ${inputClasses}`}>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="z-50 text-slate-900 bg-white/95 backdrop-blur-sm shadow-lg">
@@ -330,12 +379,12 @@ export default function ClanoviPage() {
                       </td>
 
                       {/* Status Badge */}
-                      <td className="py-2 pr-4 whitespace-nowrap">
+                      <td className="whitespace-nowrap py-2 pr-4">
                         <Badge 
                           className={
-                            m.status === 'active' ? 'bg-green-600' :
-                            m.status === 'pending' ? 'bg-yellow-600' : 
-                            'bg-red-600'
+                            m.status === 'active' ? 'bg-green-500/80 text-white' :
+                            m.status === 'pending' ? 'bg-yellow-500/80 text-black' : 
+                            'bg-red-600/80 text-white'
                           }
                         >
                           {m.status === 'active' ? 'Odobren' :
@@ -345,13 +394,13 @@ export default function ClanoviPage() {
                       </td>
 
                       {/* Verification Method */}
-                      <td className="py-2 pr-4 whitespace-nowrap">
+                      <td className="whitespace-nowrap py-2 pr-4">
                         <div className="flex items-center gap-2">
                           <Badge className={
-                            m.verification_method === 'email' ? 'bg-blue-600' :
-                            m.verification_method === 'teams' ? 'bg-purple-600' :
-                            m.verification_method === 'badge' ? 'bg-green-600' :
-                            'bg-gray-400'
+                            m.verification_method === 'email' ? 'bg-blue-500/80 text-white' :
+                            m.verification_method === 'teams' ? 'bg-purple-500/80 text-white' :
+                            m.verification_method === 'badge' ? 'bg-green-500/80 text-white' :
+                            'bg-gray-600/80 text-white'
                           }>
                             {m.verification_method === 'email' ? '📧 Email' :
                              m.verification_method === 'teams' ? '💬 Teams' :
@@ -360,7 +409,7 @@ export default function ClanoviPage() {
                           </Badge>
                           
                           {m.verification_method === 'email' && (
-                            <span className={m.verification_status === 'code_verified' ? 'text-green-500' : 'text-red-500'}>
+                            <span className={m.verification_status === 'code_verified' ? 'text-green-400' : 'text-red-400'}>
                               {m.verification_status === 'code_verified' ? '✅' : '❌'}
                             </span>
                           )}
@@ -368,39 +417,39 @@ export default function ClanoviPage() {
                       </td>
 
                       {/* Is Anonymous */}
-                      <td className="py-2 pr-4 whitespace-nowrap">
-                        <Badge className={m.is_anonymous ? 'bg-gray-600' : 'bg-green-600'}>
+                      <td className="whitespace-nowrap py-2 pr-4">
+                        <Badge className={m.is_anonymous ? 'bg-slate-600/80 text-white' : 'bg-green-500/80 text-white'}>
                           {m.is_anonymous ? '🔒 Da' : '👤 Ne'}
                         </Badge>
                       </td>
 
                       {/* Card Sent */}
-                      <td className="py-2 pr-4 whitespace-nowrap">
-                        <Badge className={m.card_sent ? 'bg-blue-600' : 'bg-gray-400'}>
+                      <td className="whitespace-nowrap py-2 pr-4">
+                        <Badge className={m.card_sent ? 'bg-blue-500/80 text-white' : 'bg-gray-600/80 text-white'}>
                           {m.card_sent ? 'Poslana' : 'Nije poslana'}
                         </Badge>
                       </td>
 
-                      <td className="py-2 pr-4 whitespace-nowrap">
+                      <td className="whitespace-nowrap py-2 pr-4">
                         {editingId===m.id ? (
                           <div className="flex gap-2">
-                            <Button className="bg-[#F28C38] hover:bg-[#d97a2e] text-white" size="sm" onClick={saveEdit}>Sačuvaj</Button>
-                            <Button className="bg-[#005B99] hover:bg-[#004a7a] text-white" size="sm" onClick={cancelEdit}>Otkaži</Button>
+                            <Button className={`${primaryButton} px-3 py-1 text-sm`} size="sm" onClick={saveEdit}>Sačuvaj</Button>
+                            <Button className={`${secondaryButton} px-3 py-1 text-sm`} size="sm" onClick={cancelEdit}>Otkaži</Button>
                           </div>
                         ) : (
                           <div className="flex gap-2 flex-wrap">
                             {m.status === 'pending' && (
                               <Button 
-                                className="bg-green-600 hover:bg-green-700 text-white" 
+                                className="border border-green-400 bg-green-600/80 text-white hover:bg-green-500/80" 
                                 size="sm" 
                                 onClick={() => handleApproveMember(Number(m.id))}
                               >
                                 Odobri
                               </Button>
                             )}
-                            <Button variant="outline" size="sm" onClick={()=>startEdit(m)}>Izmeni</Button>
+                            <Button className={`${secondaryButton} px-3 py-1 text-sm`} size="sm" onClick={()=>startEdit(m)}>Izmeni</Button>
                             <Button 
-                              className="bg-[#C63B3B] hover:bg-[#a53030] text-white" 
+                              className="border border-red-400 bg-red-600/80 text-white hover:bg-red-500/80" 
                               size="sm" 
                               onClick={() => handleDeleteMember(Number(m.id), m.full_name)}
                             >
@@ -408,7 +457,7 @@ export default function ClanoviPage() {
                             </Button>
                             {m.badge_object_path && (
                               <Button 
-                                variant="outline" 
+                                className={`${secondaryButton} px-3 py-1 text-sm`}
                                 size="sm"
                                 onClick={() => {
                                   fetch(`/api/admin/signed-badge-url?memberId=${m.id}`)

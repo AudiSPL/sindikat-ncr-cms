@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: PravnaPodrskaPageProps): Prom
   return {
     title: lang === 'sr' ? 'Pravna podrška' : 'Legal support',
     description: lang === 'sr' 
-      ? 'Brz prvi odgovor od kolega, dobra priprema slučaja — i advokat kada zaista treba.'
-      : 'Fast first response from peers, solid case prep — and a lawyer when it truly matters.',
+      ? 'Brz prvi odgovor od kolega, dobra priprema slučaja, i advokat kada zaista treba.'
+      : 'Fast first response from peers, solid case prep, and a lawyer when it truly matters.',
     openGraph: {
       title: lang === 'sr' ? 'Pravna podrška' : 'Legal support',
       description: lang === 'sr' 
-        ? 'Brz prvi odgovor od kolega, dobra priprema slučaja — i advokat kada zaista treba.'
-        : 'Fast first response from peers, solid case prep — and a lawyer when it truly matters.',
+        ? 'Brz prvi odgovor od kolega, dobra priprema slučaja, i advokat kada zaista treba.'
+        : 'Fast first response from peers, solid case prep, and a lawyer when it truly matters.',
       type: 'website',
       locale: lang === 'sr' ? 'sr_RS' : 'en_US',
     },
@@ -110,8 +110,8 @@ export default async function PravnaPodrskaPage({ params }: PravnaPodrskaPagePro
         <div className="text-center mb-10">
           <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
             {lang === 'sr' 
-              ? 'Brz prvi odgovor od kolega, dobra priprema slučaja — i advokat kada zaista treba.'
-              : 'Fast first response from peers, solid case prep — and a lawyer when it truly matters.'
+              ? 'Brz prvi odgovor od kolega, dobra priprema slučaja, i advokat kada zaista treba.'
+              : 'Fast first response from peers, solid case prep, and a lawyer when it truly matters.'
             }
           </p>
         </div>

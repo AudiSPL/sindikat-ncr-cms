@@ -284,11 +284,11 @@ export const content: Record<Language, Content> = {
         },
         {
           title: "Manje troška, više koristi",
-          content: "Promo period bez članarine do 31.3. Bez rizika, bez obaveza — samo prednosti. Kasnije: obična članarina (oko 1% plate)."
+          content: "Promo period bez članarine do 31.3. Bez rizika, bez obaveza, samo prednosti. Kasnije: obična članarina (oko 1% plate)."
         },
         {
           title: "Momentum zajednice",
-          content: "Lakše je kad krene lavina — ti je pokrećeš. Kada dostignemo 15%, automatski ulazimo u kolektivne pregovore."
+          content: "Lakše je kad krene lavina, ti je pokrećeš. Kada dostignemo 15%, automatski ulazimo u kolektivne pregovore."
         }
       ],
       cta: "Pridruži se za 2 min",
@@ -307,7 +307,7 @@ export const content: Record<Language, Content> = {
         },
         {
           title: "Pregovori",
-          description: "Na osnovu glasova članova pregovaramo o platama, uslovima rada, karijeri i zaštiti — pre objave bilo kakvih promena."
+          description: "Na osnovu glasova članova pregovaramo o platama, uslovima rada, karijeri i zaštiti, pre objave bilo kakvih promena."
         },
         {
           title: "Sporazumi i primena",
@@ -526,7 +526,7 @@ export const content: Record<Language, Content> = {
       },
       {
         title: "About us",
-        excerpt: "A group of employees who want rules that apply to everyone — and normal working conditions. We're not just another poster — we're a support network that has your back at work!",
+        excerpt: "A group of employees who want rules that apply to everyone, and normal working conditions. We're not just another poster, we're a support network that has your back at work!",
         href: "/en/tema/ko-smo-mi"
       },
       {
@@ -604,7 +604,7 @@ export const content: Record<Language, Content> = {
     trustStrip: "",
     whoWeAre: {
       title: "About us",
-      intro: "A group of employees who want rules that apply to everyone — and normal working conditions. We're not just another poster — we're a support network that has your back at work!",
+      intro: "A group of employees who want rules that apply to everyone, and normal working conditions. We're not just another poster, we're a support network that has your back at work!",
       sections: [
         {
           title: "At a glance",
@@ -639,11 +639,11 @@ export const content: Record<Language, Content> = {
         },
         {
           title: "Less cost, more value",
-          content: "Promo period with no dues until 31 March. No risk, no obligations — just benefits. Later: standard membership fee (around 1% of salary)."
+          content: "Promo period with no dues until 31 March. No risk, no obligations, just benefits. Later: standard membership fee (around 1% of salary)."
         },
         {
           title: "Community momentum",
-          content: "Change moves faster once it starts — you kick it off. Once we reach 15%, we automatically enter collective negotiations."
+          content: "Change moves faster once it starts, you kick it off. Once we reach 15%, we automatically enter collective negotiations."
         }
       ],
       cta: "Join in 2 minutes",
@@ -662,7 +662,7 @@ export const content: Record<Language, Content> = {
         },
         {
           title: "Negotiations",
-          description: "\"Based on member input we negotiate pay, working conditions, career paths, protection — before anything goes live.\""
+          description: "\"Based on member input we negotiate pay, working conditions, career paths, protection, before anything goes live.\""
         },
         {
           title: "Agreements & delivery",

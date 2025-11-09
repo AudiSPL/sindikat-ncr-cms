@@ -25,9 +25,9 @@ const content = {
     title: 'Pristupnica – Sindikat NCR Atleos',
     subtitle: 'Diskretno članstvo. Lična email adresa. Verifikacija po vašem izboru.',
     infoBanner: {
-      title: 'Brz proces u 2 koraka',
+      title: 'Brz proces u 2 koraka:',
       step1: '1) Popunite formu (30 sek)',
-      step2: '2) Verifikujte zaposlenje (email/Teams/bedž)',
+      step2: '2) Verifikujte zaposlenje (Email/Teams/ID photo)',
       note: 'Nikad ne koristimo poslovnu adresu za sindikalnu komunikaciju.',
     },
     fields: {
@@ -61,9 +61,9 @@ const content = {
     title: 'Membership Form – NCR Atleos Union',
     subtitle: 'Discreet membership. Personal email only. Choose your verification method.',
     infoBanner: {
-      title: 'Fast 2-step process',
+      title: 'Fast 2-step process:',
       step1: '1) Fill the form (30s)',
-      step2: '2) Verify employment (email/Teams/badge)',
+      step2: '2) Verify employment (Email/Teams/ID photo)',
       note: 'We never use company email for union communications.',
     },
     fields: {
@@ -195,7 +195,11 @@ export default function NovaPristupnicaPage() {
                 {t.infoBanner.title}
               </h3>
               <div className="text-sm text-gray-300 space-y-1">
-                <p>{t.infoBanner.step1} · {t.infoBanner.step2}</p>
+                <p className="whitespace-pre-line">
+                  {t.infoBanner.step1}
+                  {'\n'}
+                  {t.infoBanner.step2}
+                </p>
                 <p className="text-brand-blue font-medium mt-2">
                   {t.infoBanner.note}
                 </p>

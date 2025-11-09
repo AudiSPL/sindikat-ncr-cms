@@ -44,6 +44,10 @@ export default function AnalyticsPage() {
   const [members, setMembers] = useState<Member[]>([]);
   const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d' | 'all'>('30d');
 
+  const glassCard = "bg-[rgba(30,30,40,0.6)] border border-white/10 backdrop-blur-md shadow-[0_30px_80px_rgba(0,0,0,0.3)] text-white";
+  const primaryButton = "bg-[#E67E22] hover:shadow-[0_0_20px_rgba(230,126,34,0.5)] text-white border border-transparent";
+  const secondaryButton = "border border-white/20 text-white hover:bg-white/10";
+
   useEffect(() => {
     if (status === 'authenticated') {
       load();
@@ -174,45 +178,45 @@ export default function AnalyticsPage() {
   }, [timelineData]);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="relative z-10 mx-auto max-w-7xl space-y-6 text-white">
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card onClick={() => router.push('/gradiliste')} className="cursor-pointer hover:bg-gray-50 border-l-4 border-[#005B99]">
-          <CardContent className="pt-6">
-            <div className="text-sm text-[#6B7280]">Ukupno Članova</div>
-            <div className="text-3xl font-bold text-[#0B2C49]">{currentCount}</div>
-            <div className="text-xs text-[#6B7280] mt-1">od cilja 334</div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <Card onClick={() => router.push('/gradiliste')} className={`${glassCard} cursor-pointer transition hover:shadow-[0_0_25px_rgba(230,126,34,0.25)]`}>
+          <CardContent className="pt-6 text-white">
+            <div className="text-sm text-white/70">Ukupno Članova</div>
+            <div className="text-3xl font-bold text-white">{currentCount}</div>
+            <div className="mt-1 text-xs text-white/60">od cilja 334</div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-[#F28C38]">
-          <CardContent className="pt-6">
-            <div className="text-sm text-[#6B7280]">Penetracija</div>
-            <div className="text-3xl font-bold text-[#0B2C49]">{penetrationRate}%</div>
-            <div className="text-xs text-[#6B7280] mt-1">od cilja 334</div>
+        <Card className={glassCard}>
+          <CardContent className="pt-6 text-white">
+            <div className="text-sm text-white/70">Penetracija</div>
+            <div className="text-3xl font-bold text-white">{penetrationRate}%</div>
+            <div className="mt-1 text-xs text-white/60">od cilja 334</div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-[#0B2C49]">
-          <CardContent className="pt-6">
-            <div className="text-sm text-[#6B7280]">Prosečno Dnevno</div>
-            <div className="text-3xl font-bold text-[#0B2C49]">{avgDaily}</div>
-            <div className="text-xs text-[#6B7280] mt-1">novih članova</div>
+        <Card className={glassCard}>
+          <CardContent className="pt-6 text-white">
+            <div className="text-sm text-white/70">Prosečno Dnevno</div>
+            <div className="text-3xl font-bold text-white">{avgDaily}</div>
+            <div className="mt-1 text-xs text-white/60">novih članova</div>
           </CardContent>
         </Card>
-        <Card className="border-l-4 border-[#C63B3B]">
-          <CardContent className="pt-6">
-            <div className="text-sm text-[#6B7280]">Preostalo Dana</div>
-            <div className="text-3xl font-bold text-[#0B2C49]">{daysUntilDec31}</div>
-            <div className="text-xs text-[#6B7280] mt-1">do 31.12 • preostalo: {shortGoalRemaining} do 100</div>
+        <Card className={glassCard}>
+          <CardContent className="pt-6 text-white">
+            <div className="text-sm text-white/70">Preostalo Dana</div>
+            <div className="text-3xl font-bold text-white">{daysUntilDec31}</div>
+            <div className="mt-1 text-xs text-white/60">do 31.12 • preostalo: {shortGoalRemaining} do 100</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader><CardTitle className="text-lg text-[#0B2C49]">🎯 Cilj Članstva</CardTitle></CardHeader>
-          <CardContent>
-            {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <Card className={glassCard}>
+          <CardHeader className="text-white"><CardTitle className="text-lg font-semibold text-white">🎯 Cilj Članstva</CardTitle></CardHeader>
+          <CardContent className="text-white">
+            {loading ? (<div className="h-72 animate-pulse rounded bg-white/10" />) : (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie data={goalData} cx="50%" cy="50%" labelLine={false} outerRadius={100} dataKey="value">
@@ -225,10 +229,10 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle className="text-lg text-[#0B2C49]">👥 Penetracija Članstva</CardTitle></CardHeader>
-          <CardContent>
-            {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+        <Card className={glassCard}>
+          <CardHeader className="text-white"><CardTitle className="text-lg font-semibold text-white">👥 Penetracija Članstva</CardTitle></CardHeader>
+          <CardContent className="text-white">
+            {loading ? (<div className="h-72 animate-pulse rounded bg-white/10" />) : (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie data={penetrationData} cx="50%" cy="50%" labelLine={false} outerRadius={100} dataKey="value">
@@ -241,10 +245,10 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle className="text-lg text-[#0B2C49]">🏢 Po Organizacijama</CardTitle></CardHeader>
-          <CardContent>
-            {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+        <Card className={glassCard}>
+          <CardHeader className="text-white"><CardTitle className="text-lg font-semibold text-white">🏢 Po Organizacijama</CardTitle></CardHeader>
+          <CardContent className="text-white">
+            {loading ? (<div className="h-72 animate-pulse rounded bg-white/10" />) : (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie data={orgData} cx="50%" cy="50%" labelLine={false} outerRadius={100} dataKey="value" />
@@ -255,10 +259,10 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle className="text-lg text-[#0B2C49]">📍 Po Gradovima</CardTitle></CardHeader>
-          <CardContent>
-            {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+        <Card className={glassCard}>
+          <CardHeader className="text-white"><CardTitle className="text-lg font-semibold text-white">📍 Po Gradovima</CardTitle></CardHeader>
+          <CardContent className="text-white">
+            {loading ? (<div className="h-72 animate-pulse rounded bg-white/10" />) : (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie data={cityData} cx="50%" cy="50%" labelLine={false} outerRadius={100} dataKey="value">
@@ -273,10 +277,10 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle className="text-lg text-[#0B2C49]">👔 Specijalni Statusi</CardTitle></CardHeader>
-          <CardContent>
-            {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+        <Card className={glassCard}>
+          <CardHeader className="text-white"><CardTitle className="text-lg font-semibold text-white">👔 Specijalni Statusi</CardTitle></CardHeader>
+          <CardContent className="text-white">
+            {loading ? (<div className="h-72 animate-pulse rounded bg-white/10" />) : (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -300,41 +304,48 @@ export default function AnalyticsPage() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle className="text-lg text-[#0B2C49]">📈 Rast Članstva Tokom Vremena</CardTitle>
+      <Card className={glassCard}>
+        <CardHeader className="text-white">
+          <div className="flex items-center justify-between gap-3">
+            <CardTitle className="text-lg font-semibold text-white">📈 Rast Članstva Tokom Vremena</CardTitle>
             <div className="flex gap-2">
               {(['7d','30d','90d','all'] as const).map(r => (
-                <Button key={r} size="sm" variant={timeRange === r ? 'default' : 'outline'} onClick={() => setTimeRange(r)}>{r.toUpperCase()}</Button>
+                <Button
+                  key={r}
+                  size="sm"
+                  className={`${timeRange === r ? primaryButton : secondaryButton} px-3 py-1 text-xs`}
+                  onClick={() => setTimeRange(r)}
+                >
+                  {r.toUpperCase()}
+                </Button>
               ))}
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          {loading ? (<div className="h-96 bg-gray-100 animate-pulse rounded" />) : (
+        <CardContent className="text-white">
+          {loading ? (<div className="h-96 animate-pulse rounded bg-white/10" />) : (
             <ResponsiveContainer width="100%" height={400}>
               <LineChart data={timelineData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="date" stroke="#6B7280" tick={{ fontSize: 12 }} />
-                <YAxis stroke="#6B7280" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis dataKey="date" stroke="#cbd5f5" tick={{ fontSize: 12, fill: '#cbd5f5' }} />
+                <YAxis stroke="#cbd5f5" tick={{ fill: '#cbd5f5' }} />
                 <Tooltip />
-                <Line type="monotone" dataKey="count" stroke="#005B99" strokeWidth={3} dot={{ fill: '#005B99', r: 4 }} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="count" stroke="#E67E22" strokeWidth={3} dot={{ fill: '#E67E22', r: 4 }} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           )}
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader><CardTitle className="text-lg text-[#0B2C49]">🎯 Conversion Funnel</CardTitle></CardHeader>
-        <CardContent>
-          {loading ? (<div className="h-72 bg-gray-100 animate-pulse rounded" />) : (
+      <Card className={glassCard}>
+        <CardHeader className="text-white"><CardTitle className="text-lg font-semibold text-white">🎯 Conversion Funnel</CardTitle></CardHeader>
+        <CardContent className="text-white">
+          {loading ? (<div className="h-72 animate-pulse rounded bg-white/10" />) : (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={funnelData} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis type="number" stroke="#6B7280" />
-                <YAxis dataKey="stage" type="category" stroke="#6B7280" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                <XAxis type="number" stroke="#cbd5f5" tick={{ fill: '#cbd5f5' }} />
+                <YAxis dataKey="stage" type="category" stroke="#cbd5f5" tick={{ fill: '#cbd5f5' }} />
                 <Tooltip />
                 <Bar dataKey="count" radius={[0,8,8,0]}>
                   {funnelData.map((e, i) => (<Cell key={`cell-f-${i}`} fill={(e as any).fill} />))}

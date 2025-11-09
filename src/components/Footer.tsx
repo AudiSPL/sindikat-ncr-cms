@@ -60,7 +60,7 @@ export function Footer({ lang }: FooterProps) {
               >
                 office@sindikatncr.com
               </a>
-              <p className="text-sm text-white/90">Spanskih Boraca 75</p>
+              <p className="text-sm text-white/90">Španskih Boraca 75</p>
               <p className="text-sm text-white/90">{lang === 'sr' ? 'Beograd' : 'Belgrade'}</p>
               <p className="text-sm text-white/90">{lang === 'sr' ? 'Srbija' : 'Serbia'}</p>
             </div>

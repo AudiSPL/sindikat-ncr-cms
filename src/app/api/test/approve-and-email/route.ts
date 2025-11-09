@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, stage: 'read-confirmation', file: confirmationUrl, error: e?.message || String(e) }, { status: 500 });
     }
 
-    // 3) Update member status — skipped Supabase integration in this test endpoint
+    // 3) Update member status, skipped Supabase integration in this test endpoint
     console.log('[APPROVE] Member status updated to \"active\" (test, no DB update)');
 
     // 4) Send mail with attachments

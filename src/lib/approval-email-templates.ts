@@ -1,6 +1,6 @@
 export const approvalEmailTemplates = {
   sr: (memberName: string, memberId: string, approvalDate: string, isAnonymous: boolean) => ({
-    subject: 'Dobrodošli u Sindikat — članstvo odobreno ✅',
+    subject: 'Dobrodošli u Sindikat, članstvo odobreno ✅',
     preheader: 'Vaše članstvo je aktivno. U prilogu je članska karta (PDF).',
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #333;">
@@ -68,14 +68,14 @@ export const approvalEmailTemplates = {
 
         <!-- Footer -->
         <div style="background: #f5f5f5; padding: 15px 20px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #999;">
-          <p style="margin: 0;">© 2025 Sindikat Radnika NCR Atleos — Beograd</p>
+          <p style="margin: 0;">© 2025 Sindikat Radnika NCR Atleos, Beograd</p>
         </div>
       </div>
     `
   }),
 
   en: (memberName: string, memberId: string, approvalDate: string, isAnonymous: boolean) => ({
-    subject: 'Welcome to the Union — Membership approved ✅',
+    subject: 'Welcome to the Union, Membership approved ✅',
     preheader: 'Your membership is active. Membership card (PDF) attached.',
     html: `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #333;">
@@ -143,7 +143,7 @@ export const approvalEmailTemplates = {
 
         <!-- Footer -->
         <div style="background: #f5f5f5; padding: 15px 20px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #999;">
-          <p style="margin: 0;">© 2025 NCR Atleos Workers Union — Belgrade</p>
+          <p style="margin: 0;">© 2025 NCR Atleos Workers Union, Belgrade</p>
         </div>
       </div>
     `

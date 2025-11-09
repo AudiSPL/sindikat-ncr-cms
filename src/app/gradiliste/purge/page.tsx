@@ -12,6 +12,9 @@ export default function PurgePage() {
   const router = useRouter();
   const [purging, setPurging] = useState(false);
 
+  const glassCard = "bg-[rgba(30,30,40,0.6)] border border-white/10 backdrop-blur-md shadow-[0_30px_80px_rgba(0,0,0,0.3)] text-white";
+  const primaryButton = "bg-[#E67E22] hover:shadow-[0_0_20px_rgba(230,126,34,0.5)] text-white border border-transparent";
+
   useEffect(() => {
     if (status === 'authenticated') {
       // Page ready
@@ -35,20 +38,20 @@ export default function PurgePage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl text-[#0B2C49]">Purge Artifacts</CardTitle>
+    <div className="relative z-10 mx-auto max-w-4xl space-y-6 text-white">
+      <Card className={glassCard}>
+        <CardHeader className="text-white">
+          <CardTitle className="text-2xl font-semibold text-white">Purge Artifacts</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="text-white">
           <div className="space-y-4">
-            <p className="text-gray-700">
+            <p className="text-white/70">
               Ova stranica omogućava testiranje purge procesa za istekle artefakte verifikacije.
             </p>
             <Button 
               onClick={handleTestPurge} 
               disabled={purging}
-              className="bg-[#F28C38] hover:bg-[#d97a2e] text-white"
+              className={primaryButton}
             >
               {purging ? 'Purge u toku...' : 'Pokreni Test Purge'}
             </Button>

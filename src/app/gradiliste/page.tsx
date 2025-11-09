@@ -43,6 +43,11 @@ export default function GradilisteDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'pending' | 'inactive'>("all");
 
+  const glassCard = "bg-[rgba(30,30,40,0.6)] border border-white/10 backdrop-blur-md shadow-[0_30px_80px_rgba(0,0,0,0.3)] text-white";
+  const primaryButton = "bg-[#E67E22] hover:shadow-[0_0_20px_rgba(230,126,34,0.5)] text-white border border-transparent";
+  const secondaryButton = "border border-white/20 text-white hover:bg-white/10";
+  const inputClasses = "border-white/10 bg-white/5 text-white placeholder:text-white/50 focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-[#E67E22]/70 focus-visible:ring-offset-0";
+
   const goToList = (tab: 'pending' | 'approved') => {
     router.push('/gradiliste/clanovi');
   };
@@ -291,20 +296,20 @@ export default function GradilisteDashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-[#E67E22]"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+    <div className="relative z-10 mx-auto max-w-7xl space-y-6 text-white">
 
         {/* Penetration chart at bottom center */}
-        <div className="max-w-3xl mx-auto mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center text-brand-navy">👥 Penetracija Članstva</CardTitle>
+        <div className="mt-6 mx-auto max-w-3xl">
+          <Card className={glassCard}>
+            <CardHeader className="text-center text-white">
+              <CardTitle className="text-lg font-semibold text-white">👥 Penetracija Članstva</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -320,74 +325,86 @@ export default function GradilisteDashboard() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="text-center text-sm text-muted-foreground mt-2">
-                Trenutno: <span className="font-semibold text-brand-blue">{currentCount}</span> / Cilj: <span className="font-semibold">{goal}</span>
+              <div className="mt-2 text-center text-sm text-white/70">
+                Trenutno: <span className="font-semibold text-[#E67E22]">{currentCount}</span> / Cilj: <span className="font-semibold text-white">{goal}</span>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Move boxes to top and chart to bottom already done; ensure boxes remain above */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          <Card onClick={() => goToList('approved')} className="cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Ukupno Članova</CardTitle>
-              <Users className="h-4 w-4 text-brand-blue" />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 sm:gap-4">
+          <Card onClick={() => goToList('approved')} className={`${glassCard} cursor-pointer transition hover:shadow-[0_0_25px_rgba(230,126,34,0.25)]`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 text-white">
+              <CardTitle className="text-sm font-semibold text-white">Ukupno Članova</CardTitle>
+              <Users className="h-4 w-4 text-[#E67E22]" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
+              <div className="text-2xl font-bold text-white">{stats.total}</div>
             </CardContent>
           </Card>
 
-          <Card onClick={() => goToList('pending')} className="cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Na čekanju</CardTitle>
-              <Clock className="h-4 w-4 text-yellow-600" />
+          <Card onClick={() => goToList('pending')} className={`${glassCard} cursor-pointer transition hover:shadow-[0_0_25px_rgba(230,126,34,0.25)]`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 text-white">
+              <CardTitle className="text-sm font-semibold text-white">Na čekanju</CardTitle>
+              <Clock className="h-4 w-4 text-yellow-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.pending}</div>
+              <div className="text-2xl font-bold text-white">{stats.pending}</div>
             </CardContent>
           </Card>
 
-          <Card onClick={() => goToList('approved')} className="cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Odobreno</CardTitle>
-              <CheckCircle className="h-4 w-4 text-green-600" />
+          <Card onClick={() => goToList('approved')} className={`${glassCard} cursor-pointer transition hover:shadow-[0_0_25px_rgba(230,126,34,0.25)]`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 text-white">
+              <CardTitle className="text-sm font-semibold text-white">Odobreno</CardTitle>
+              <CheckCircle className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.approved}</div>
+              <div className="text-2xl font-bold text-white">{stats.approved}</div>
             </CardContent>
           </Card>
 
-          <Card onClick={() => goToList('approved')} className="cursor-pointer">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-semibold text-[#0B2C49]">Odbijeno</CardTitle>
-              <XCircle className="h-4 w-4 text-red-600" />
+          <Card onClick={() => goToList('approved')} className={`${glassCard} cursor-pointer transition hover:shadow-[0_0_25px_rgba(230,126,34,0.25)]`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 text-white">
+              <CardTitle className="text-sm font-semibold text-white">Odbijeno</CardTitle>
+              <XCircle className="h-4 w-4 text-red-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.rejected}</div>
+              <div className="text-2xl font-bold text-white">{stats.rejected}</div>
             </CardContent>
           </Card>
         </div>
 
-        <Card ref={listRef}>
-          <CardHeader>
-            <div className="flex items-center justify-between">
+        <Card ref={listRef} className={glassCard}>
+          <CardHeader className="text-white">
+            <div className="flex items-center justify-between gap-3">
               <div className="flex gap-2">
-                <Button variant={activeTab==='pending' ? 'default' : 'secondary'} onClick={() => { setActiveTab('pending'); setSelected(null); }} aria-label="View pending members">Na čekanju</Button>
-                <Button variant={activeTab==='approved' ? 'default' : 'secondary'} onClick={() => { setActiveTab('approved'); setSelected(null); }} aria-label="View approved members">Odobreni</Button>
+                <Button
+                  className={`${activeTab === 'pending' ? primaryButton : secondaryButton}`}
+                  onClick={() => { setActiveTab('pending'); setSelected(null); }}
+                  aria-label="View pending members"
+                >
+                  Na čekanju
+                </Button>
+                <Button
+                  className={`${activeTab === 'approved' ? primaryButton : secondaryButton}`}
+                  onClick={() => { setActiveTab('approved'); setSelected(null); }}
+                  aria-label="View approved members"
+                >
+                  Odobreni
+                </Button>
               </div>
               <div className="flex items-center gap-3">
-                <CardTitle>{activeTab === 'pending' ? 'Prijave' : 'Članovi'}</CardTitle>
-                <div className="hidden md:flex items-center gap-2">
+                <CardTitle className="text-white">{activeTab === 'pending' ? 'Prijave' : 'Članovi'}</CardTitle>
+                <div className="hidden items-center gap-2 md:flex">
                   <Input
                     placeholder="Pretraži po imenu, email-u ili ID-u..."
                     value={searchQuery}
                     onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                    className="w-64"
+                    className={`w-64 ${inputClasses}`}
                   />
                   <select
-                    className="border rounded px-2 py-2 text-sm"
+                    className="rounded border border-white/20 bg-white/5 px-2 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#E67E22]"
                     value={statusFilter}
                     onChange={(e) => { setStatusFilter(e.target.value as any); setCurrentPage(1); }}
                   >
@@ -397,7 +414,9 @@ export default function GradilisteDashboard() {
                     <option value="inactive">Neaktivni</option>
                   </select>
                 </div>
-                <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={exportToCSV} aria-label="Export members data to CSV file">Eksportuj CSV</Button>
+                <Button className={`${primaryButton}`} onClick={exportToCSV} aria-label="Export members data to CSV file">
+                  Eksportuj CSV
+                </Button>
               </div>
             </div>
           </CardHeader>
@@ -407,35 +426,63 @@ export default function GradilisteDashboard() {
                 {loading ? (
                   <div className="space-y-3">
                     {[1,2,3,4,5].map((i) => (
-                      <div key={i} className="h-16 bg-gray-100 animate-pulse rounded" />
+                      <div key={i} className="h-16 animate-pulse rounded bg-white/10" />
                     ))}
                   </div>
                 ) : paginatedMembers.map((member) => (
-                  <div key={member.id} className={`p-3 bg-gray-50 rounded border ${selected?.id===member.id ? 'border-brand-blue' : 'border-transparent'}`}>
+                  <div
+                    key={member.id}
+                    className={`rounded border p-3 transition ${selected?.id === member.id ? 'border-[#E67E22]' : 'border-white/10'} bg-white/5 hover:bg-slate-700/50`}
+                  >
                     <div className="flex items-center justify-between">
                       <div className="cursor-pointer" onClick={() => { setSelected(member); setEditing(false); setEditData(member); }}>
-                        <p className="font-medium">{member.full_name} {member.member_id ? `• ${member.member_id}` : ''}</p>
-                        <p className="text-sm text-gray-500">{member.email}</p>
+                        <p className="font-medium text-white">
+                          {member.full_name} {member.member_id ? `• ${member.member_id}` : ''}
+                        </p>
+                        <p className="text-sm text-white/60">{member.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {activeTab === 'pending' ? (
                           <>
-                            <Button className="bg-[#F28C38] hover:bg-[#d97a2e] text-white" onClick={() => updateMemberStatus(member.id, 'active')} disabled={actionId === member.id}>
+                            <Button
+                              className={primaryButton}
+                              onClick={() => updateMemberStatus(member.id, 'active')}
+                              disabled={actionId === member.id}
+                            >
                               {actionId === member.id ? '...' : 'Odobri'}
                             </Button>
-                            <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => updateMemberStatus(member.id, 'inactive')} disabled={actionId === member.id}>
+                            <Button
+                              className={secondaryButton}
+                              onClick={() => updateMemberStatus(member.id, 'inactive')}
+                              disabled={actionId === member.id}
+                            >
                               {actionId === member.id ? '...' : 'Odbij'}
                             </Button>
                           </>
                         ) : (
                           <>
                             {!member.member_id && (
-                              <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => assignMembershipNumber(member)} disabled={actionId === member.id}>
+                              <Button
+                                className={secondaryButton}
+                                onClick={() => assignMembershipNumber(member)}
+                                disabled={actionId === member.id}
+                              >
                                 {actionId === member.id ? '...' : 'Dodeli broj'}
                               </Button>
                             )}
-                            <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => { setSelected(member); setEditing(true); setEditData(member); }}>Izmeni</Button>
-                            <Button className="bg-brand-red hover:opacity-90 text-white" onClick={() => deleteMember(member.id)} disabled={actionId === member.id}>Obriši</Button>
+                            <Button
+                              className={secondaryButton}
+                              onClick={() => { setSelected(member); setEditing(true); setEditData(member); }}
+                            >
+                              Izmeni
+                            </Button>
+                            <Button
+                              className="border border-red-400 bg-red-600/80 text-white hover:bg-red-500/80"
+                              onClick={() => deleteMember(member.id)}
+                              disabled={actionId === member.id}
+                            >
+                              Obriši
+                            </Button>
                           </>
                         )}
                       </div>
@@ -444,62 +491,74 @@ export default function GradilisteDashboard() {
                 ))}
 
                 {!loading && totalPages > 1 && (
-                  <div className="flex items-center justify-between pt-2">
-                    <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1}>Prethodna</Button>
-                    <div className="text-sm">Strana {currentPage} od {totalPages}</div>
-                    <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages}>Sledeća</Button>
+                  <div className="flex items-center justify-between pt-2 text-white">
+                    <Button
+                      className={secondaryButton}
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      Prethodna
+                    </Button>
+                    <div className="text-sm text-white/70">Strana {currentPage} od {totalPages}</div>
+                    <Button
+                      className={secondaryButton}
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Sledeća
+                    </Button>
                   </div>
                 )}
               </div>
               <div className="space-y-3">
                 {selected ? (
-                  <div className="p-4 border rounded bg-white">
-                    <h3 className="text-lg font-semibold mb-2">Detalji</h3>
+                  <div className="rounded border border-white/10 bg-white/5 p-4 text-white backdrop-blur-md">
+                    <h3 className="mb-2 text-lg font-semibold text-white">Detalji</h3>
                     {!editing ? (
-                      <div className="space-y-1">
-                        <div><b>Ime i prezime:</b> {selected.full_name}</div>
-                        <div><b>Email:</b> {selected.email}</div>
-                        <div><b>Organizacija:</b> {selected.organization || '-'}</div>
-                        <div><b>Grad:</b> {selected.city || '-'}</div>
-                        <div><b>Članski broj:</b> {selected.member_id || '-'}</div>
+                      <div className="space-y-1 text-white/80">
+                        <div><b className="text-white">Ime i prezime:</b> {selected.full_name}</div>
+                        <div><b className="text-white">Email:</b> {selected.email}</div>
+                        <div><b className="text-white">Organizacija:</b> {selected.organization || '-'}</div>
+                        <div><b className="text-white">Grad:</b> {selected.city || '-'}</div>
+                        <div><b className="text-white">Članski broj:</b> {selected.member_id || '-'}</div>
                         <div className="mt-3">
-                          <b>Dokumenti:</b>
-                          <div className="flex gap-3 mt-1 text-sm">
-                            <a className="text-brand-blue underline" href={`/members/${selected.id}/confirmation.pdf`} target="_blank" rel="noopener noreferrer">Potvrda</a>
-                            <a className="text-brand-blue underline" href={`/members/${selected.id}/card.pdf`} target="_blank" rel="noopener noreferrer">Kartica</a>
+                          <b className="text-white">Dokumenti:</b>
+                          <div className="mt-1 flex gap-3 text-sm">
+                            <a className="text-[#E67E22] underline hover:text-[#E67E22]/80" href={`/members/${selected.id}/confirmation.pdf`} target="_blank" rel="noopener noreferrer">Potvrda</a>
+                            <a className="text-[#E67E22] underline hover:text-[#E67E22]/80" href={`/members/${selected.id}/card.pdf`} target="_blank" rel="noopener noreferrer">Kartica</a>
                             {/* Policy link temporarily removed */}
                           </div>
                         </div>
                         <div className="mt-3 flex gap-2">
-                          <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => setEditing(true)}>Uredi podatke</Button>
-                          <Button className="bg-brand-orange hover:opacity-90 text-white" onClick={resendEmail} disabled={resending}>{resending ? 'Slanje...' : 'Pošalji email ponovo'}</Button>
+                          <Button className={secondaryButton} onClick={() => setEditing(true)}>Uredi podatke</Button>
+                          <Button className={primaryButton} onClick={resendEmail} disabled={resending}>{resending ? 'Slanje...' : 'Pošalji email ponovo'}</Button>
                         </div>
                       </div>
                     ) : (
                       <div className="space-y-2">
                         <div>
-                          <label className="text-sm">Ime i prezime</label>
-                          <input className="w-full border rounded p-2" value={editData.full_name || ''} onChange={e => setEditData({ ...editData, full_name: e.target.value })} />
+                          <label className="text-sm text-white/70">Ime i prezime</label>
+                          <input className={`w-full rounded border p-2 ${inputClasses}`} value={editData.full_name || ''} onChange={e => setEditData({ ...editData, full_name: e.target.value })} />
                         </div>
                         <div>
-                          <label className="text-sm">Email</label>
-                          <input className="w-full border rounded p-2" value={editData.email || ''} onChange={e => setEditData({ ...editData, email: e.target.value })} />
+                          <label className="text-sm text-white/70">Email</label>
+                          <input className={`w-full rounded border p-2 ${inputClasses}`} value={editData.email || ''} onChange={e => setEditData({ ...editData, email: e.target.value })} />
                         </div>
                         <div>
-                          <label className="text-sm">Organizacija</label>
-                          <input className="w-full border rounded p-2" value={editData.organization || ''} onChange={e => setEditData({ ...editData, organization: e.target.value })} />
+                          <label className="text-sm text-white/70">Organizacija</label>
+                          <input className={`w-full rounded border p-2 ${inputClasses}`} value={editData.organization || ''} onChange={e => setEditData({ ...editData, organization: e.target.value })} />
                         </div>
                         <div>
-                          <label className="text-sm">Grad</label>
-                          <input className="w-full border rounded p-2" value={editData.city || ''} onChange={e => setEditData({ ...editData, city: e.target.value })} />
+                          <label className="text-sm text-white/70">Grad</label>
+                          <input className={`w-full rounded border p-2 ${inputClasses}`} value={editData.city || ''} onChange={e => setEditData({ ...editData, city: e.target.value })} />
                         </div>
                         <div>
-                          <label className="text-sm">Članski broj</label>
-                          <input className="w-full border rounded p-2" value={editData.member_id || ''} onChange={e => setEditData({ ...editData, member_id: e.target.value })} />
+                          <label className="text-sm text-white/70">Članski broj</label>
+                          <input className={`w-full rounded border p-2 ${inputClasses}`} value={editData.member_id || ''} onChange={e => setEditData({ ...editData, member_id: e.target.value })} />
                         </div>
                         <div className="flex gap-2">
-                          <Button className="bg-brand-orange hover:opacity-90 text-white" onClick={saveEdits} disabled={actionId === selected.id}>{actionId === selected.id ? '...' : 'Sačuvaj'}</Button>
-                          <Button className="bg-brand-blue hover:opacity-90 text-white" onClick={() => { setEditing(false); setEditData(selected); }}>Otkaži</Button>
+                          <Button className={primaryButton} onClick={saveEdits} disabled={actionId === selected.id}>{actionId === selected.id ? '...' : 'Sačuvaj'}</Button>
+                          <Button className={secondaryButton} onClick={() => { setEditing(false); setEditData(selected); }}>Otkaži</Button>
                         </div>
                       </div>
                     )}
