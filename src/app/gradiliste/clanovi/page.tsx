@@ -12,6 +12,54 @@ import { ArrowLeft } from 'lucide-react';
 import { Member } from '@/types/member';
 import toast from 'react-hot-toast';
 
+function ResendCardButton({
+  memberId,
+  memberName,
+}: {
+  memberId: string;
+  memberName: string;
+}) {
+  const [isResending, setIsResending] = useState(false);
+
+  const handleResend = async () => {
+    if (!confirm(`Poslati karticu ponovo za ${memberName}?`)) {
+      return;
+    }
+
+    setIsResending(true);
+    try {
+      const response = await fetch('/api/resend-member-card', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ memberId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to resend');
+      }
+
+      alert('Kartica uspešno poslata!');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Greška: ' + (error as Error).message);
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleResend}
+      disabled={isResending}
+      className="px-3 py-1.5 text-xs font-medium text-white bg-[#E67E22] hover:bg-[#E67E22]/90 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-[0_0_20px_rgba(230,126,34,0.4)]"
+      title="Pošalji karticu ponovo"
+    >
+      {isResending ? '📧...' : '📧 Pošalji'}
+    </button>
+  );
+}
+
 export default function ClanoviPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -437,7 +485,11 @@ export default function ClanoviPage() {
                             <Button className={`${secondaryButton} px-3 py-1 text-sm`} size="sm" onClick={cancelEdit}>Otkaži</Button>
                           </div>
                         ) : (
-                          <div className="flex gap-2 flex-wrap">
+                          <div className="flex flex-wrap gap-2">
+                            <ResendCardButton
+                              memberId={String(m.id)}
+                              memberName={m.full_name || 'Član'}
+                            />
                             {m.status === 'pending' && (
                               <Button 
                                 className="border border-green-400 bg-green-600/80 text-white hover:bg-green-500/80" 
