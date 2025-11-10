@@ -391,7 +391,7 @@ export default function NovaPristupnicaPage() {
                     id="isAnonymous"
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className="mt-1.5 w-6 h-6 border-2 border-white data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-[#F28C38]"
+                    className="mt-1.5 w-5 h-5 rounded cursor-pointer border-2 border-white checked:accent-[#005B99] dark:checked:accent-[#005B99] data-[state=checked]:bg-white data-[state=checked]:border-white data-[state=checked]:text-[#0F1419]"
                   />
                 )}
               />

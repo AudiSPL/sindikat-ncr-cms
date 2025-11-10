@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+input[type="checkbox"]:checked {
+  accent-color: #005B99;
+}
+
 :root {
   --radius: 0.5rem;
 

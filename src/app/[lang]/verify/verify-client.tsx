@@ -40,6 +40,7 @@ const content = {
           title: '💬 Kako funkcioniše:',
           steps: [
             'Dobićete Teams poruku: "Da li ste upravo aplicirali za Sindikat NCR Atleos?"',
+            'Dobićete Teams poruku: "Da li ste popunili online formular?"',
             'Odgovorite sa "da" da potvrdite',
             'Organizator će odmah verifikovati Vaše članstvo',
           ],
@@ -102,7 +103,7 @@ const content = {
         instructions: {
           title: '💬 How it works:',
           steps: [
-            "You'll receive a Teams message: \"Did you just apply to NCR Atleos Union?\"",
+            "You'll receive a Teams message: \"Did you fill out the online form?\"",
             'Reply "yes" to confirm',
             'Organizer will verify your membership immediately',
           ],
