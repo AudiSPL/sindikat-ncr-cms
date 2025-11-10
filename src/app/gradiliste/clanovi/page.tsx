@@ -13,10 +13,10 @@ import { Member } from '@/types/member';
 import toast from 'react-hot-toast';
 
 function ResendCardButton({
-  memberId,
-  memberName,
-}: {
-  memberId: string;
+  memberId, 
+  memberName
+}: { 
+  memberId: string; 
   memberName: string;
 }) {
   const [isResending, setIsResending] = useState(false);
@@ -34,9 +34,10 @@ function ResendCardButton({
         body: JSON.stringify({ memberId }),
       });
 
+      const result = await response.json();
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to resend');
+        alert(result?.error || 'Greška: kartica nije poslata.');
+        return;
       }
 
       alert('Kartica uspešno poslata!');
@@ -52,7 +53,9 @@ function ResendCardButton({
     <button
       onClick={handleResend}
       disabled={isResending}
-      className="px-3 py-1.5 text-xs font-medium text-white bg-[#E67E22] hover:bg-[#E67E22]/90 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-[0_0_20px_rgba(230,126,34,0.4)]"
+      className="px-3 py-1.5 text-xs font-medium text-white bg-[#E67E22] hover:bg-[#E67E22]/90 
+                 rounded transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+                 shadow-lg hover:shadow-[0_0_20px_rgba(230,126,34,0.4)]"
       title="Pošalji karticu ponovo"
     >
       {isResending ? '📧...' : '📧 Pošalji'}
