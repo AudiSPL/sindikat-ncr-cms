@@ -415,9 +415,9 @@ export default function NovaPristupnicaPage() {
           <div className="p-5 bg-[#1A1D23] border-2 border-brand-blue rounded-xl">
             <p className="text-sm text-gray-300">
               {lang === 'sr' ? (
-                <><strong className="text-brand-blue">ℹ️ Faze članstva:</strong> Pre postizanja reprezentativnosti (oko 335 članova), članstvo ostaje diskretno. Nakon postizanja, članarina se može automatski obrađivati preko plate poslodavca ("administrativna zabrana") i članstvo postaje deo zvaničnih odnosa sa kompanijom uz punu zakonsku zaštitu od odmazde.</>
+                <><strong className="text-brand-blue">ℹ️ Faze članstva:</strong> Pre postizanja reprezentativnosti (oko 335 članova), članstvo ostaje diskretno. Nakon postizanja, članarina se može automatski obrađivati preko plate poslodavca (&quot;administrativna zabrana&quot;) i članstvo postaje deo zvaničnih odnosa sa kompanijom uz punu zakonsku zaštitu od odmazde.</>
               ) : (
-                <><strong className="text-brand-blue">ℹ️ Membership Phases:</strong> Before representativeness (about 335 members), membership remains discreet. After achieving it, dues can be automatically processed through employer payroll ("administrativna zabrana") and membership becomes part of official company relations with full statutory protection against retaliation.</>
+                <><strong className="text-brand-blue">ℹ️ Membership Phases:</strong> Before representativeness (about 335 members), membership remains discreet. After achieving it, dues can be automatically processed through employer payroll (&quot;administrativna zabrana&quot;) and membership becomes part of official company relations with full statutory protection against retaliation.</>
               )}
             </p>
           </div>
