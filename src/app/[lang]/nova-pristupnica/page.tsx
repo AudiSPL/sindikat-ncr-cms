@@ -16,7 +16,7 @@ type FormData = {
   city: string;
   division: string;
   agreeJoin: boolean;
-  agreeGDPR: boolean;
+  agreeDataProcessing: boolean;
   isAnonymous: boolean;
 };
 
@@ -113,7 +113,7 @@ export default function NovaPristupnicaPage() {
   } = useForm<FormData>({
     defaultValues: {
       agreeJoin: false,
-      agreeGDPR: false,
+      agreeDataProcessing: false,
       isAnonymous: false,
     },
   });
@@ -321,7 +321,7 @@ export default function NovaPristupnicaPage() {
           <div className="space-y-4 p-5 bg-[#1A1D23] border border-[#2D3139] rounded-lg">
             <h3 className="text-base font-semibold text-white mb-3">{t.consents.sectionTitle}</h3>
             
-            {/* Agree Join */}
+            {/* Combined Agree Join and GDPR */}
             <div className="flex items-start gap-3">
               <Controller
                 name="agreeJoin"
@@ -337,11 +337,11 @@ export default function NovaPristupnicaPage() {
                 )}
               />
               <Label htmlFor="agreeJoin" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
-                Potvrđujem da sam pročitao/la{' '}
-                <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Statut</a>
-                {' '}i{' '}
-                <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Pravila</a>
-                {' '}sindikata *
+                {lang === 'sr' ? (
+                  <><strong>Potvrđujem da sam pročitao/la</strong> <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Statut</a>, <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Pravilnik</a> i <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">Politiku Privatnosti</a> *</>
+                ) : (
+                  <><strong>I confirm that I have read the</strong> <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Statute</a>, <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Rules</a> and <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">Privacy Policy</a> *</>
+                )}
               </Label>
             </div>
             {errors.agreeJoin && (
@@ -351,33 +351,35 @@ export default function NovaPristupnicaPage() {
               </p>
             )}
 
-            {/* Agree GDPR */}
+            {/* GDPR Data Processing Consent */}
             <div className="flex items-start gap-3">
               <Controller
-                name="agreeGDPR"
+                name="agreeDataProcessing"
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
                   <Checkbox
-                    id="agreeGDPR"
+                    id="agreeDataProcessing"
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className={errors.agreeGDPR ? 'border-brand-red' : ''}
+                    className={errors.agreeDataProcessing ? 'border-brand-red' : ''}
                   />
                 )}
               />
-              <Label htmlFor="agreeGDPR" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
-                {t.consents.privacyPrefix} <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">{t.consents.privacyLink}</a> *
+              <Label htmlFor="agreeDataProcessing" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
+                {lang === 'sr' ? (
+                  <><strong>Saglasnost za obradu podataka (GDPR):</strong> Pristajem da sindikat obrađuje moje lične podatke u svrhu članstva i komunikacije, u skladu sa Politikom privatnosti. Razumem da mogu zatražiti brisanje podataka u bilo kom trenutku putem emaila na office@sindikatncr.com. *</>
+                ) : (
+                  <><strong>Data Processing Consent (GDPR):</strong> I agree that the union may process my personal data for membership and communication purposes, in accordance with the Privacy Policy. I understand I can request deletion of my data at any time via email to office@sindikatncr.com. *</>
+                )}
               </Label>
             </div>
-            {errors.agreeGDPR && (
+            {errors.agreeDataProcessing && (
               <p className="text-sm text-brand-red flex items-center gap-1 ml-7">
                 <AlertCircle className="h-3 w-3" />
                 This field is required
               </p>
             )}
-
-            {/* Is Anonymous */}
           </div>
 
           {/* Anonymous Checkbox - Orange Box */}
@@ -407,6 +409,17 @@ export default function NovaPristupnicaPage() {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Membership Phases Info Box */}
+          <div className="p-5 bg-[#1A1D23] border-2 border-brand-blue rounded-xl">
+            <p className="text-sm text-gray-300">
+              {lang === 'sr' ? (
+                <><strong className="text-brand-blue">ℹ️ Faze članstva:</strong> Pre postizanja reprezentativnosti (oko 335 članova), članstvo ostaje diskretno. Nakon postizanja, članarina se može automatski obrađivati preko plate poslodavca ("administrativna zabrana") i članstvo postaje deo zvaničnih odnosa sa kompanijom uz punu zakonsku zaštitu od odmazde.</>
+              ) : (
+                <><strong className="text-brand-blue">ℹ️ Membership Phases:</strong> Before representativeness (about 335 members), membership remains discreet. After achieving it, dues can be automatically processed through employer payroll ("administrativna zabrana") and membership becomes part of official company relations with full statutory protection against retaliation.</>
+              )}
+            </p>
           </div>
 
           {/* Next Steps Panel */}
