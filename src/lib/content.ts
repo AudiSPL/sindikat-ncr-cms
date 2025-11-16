@@ -211,7 +211,7 @@ export const content: Record<Language, Content> = {
       },
       {
         id: 4,
-        text: "Strani menadžer po zakonu ne sme da bude rukovodilac zaposlenih u Srbiji.",
+        text: "Zakon o radu u Srbiji pruža određen nivo zaštite svim zaposlenima, uključujući pravo na udruživanje i kolektivno pregovaranje.",
         link: "/sr/tema/pravna-podrska",
         linkText: "Saznaj više"
       },
@@ -349,7 +349,7 @@ export const content: Record<Language, Content> = {
       sections: [
         {
           title: "Poverljivost podataka",
-          content: "Tvoji podaci su poverljivi i obrađuju se u skladu sa GDPR i ZZPL. Poslodavac nema legitiman osnov da traži podatke o članstvu, osim ako je to izričito propisano zakonom (npr. postupak utvrđivanja reprezentativnosti)."
+          content: "Članstvo u sindikatu je diskretno sve dok sindikat ne dostigne reprezentativnost (oko 335 članova = 15% zaposlenih). U tom trenutku, Zakon o radu zahteva da sindikat obavesti poslodavca o članstvu u cilju kolektivnog pregovaranja. Pre dostizanja ovog praga, ako izabereš, tvoj identitet ostaje potpuno poverljiv. Nakon reprezentativnosti, članarina se automatski obrađuje preko plate ('administrativna zabrana') i članstvo postaje deo zvaničnih odnosa sa kompanijom uz punu zakonsku zaštitu."
         },
         {
           title: "Anonimna prijava",
@@ -379,6 +379,10 @@ export const content: Record<Language, Content> = {
         {
           title: "Partnerstvo",
           content: "Pravna podrška od Skakić Law Firm - Za naš sindikat obezbedili smo stručnu pravnu podršku od renomirane advokatske kancelarije Skakić Law Firm, specijalizovane za radno pravo i internacionalno korporativno radno pravo. Sa velikim iskustvom i timom stručnih advokata, Skakić Law pruža vrhunsku pravnu zaštitu i savetovanje zaposlenima u složenim korporativnim i radnim pitanjima. Njihova ekspertiza obuhvata zaštitu prava radnika, pravnu pomoć prilikom kolektivnih ugovora, radnih sporova, reorganizacije i svih aspekata radnih odnosa. Partnerstvo sa Skakić Law osigurava da članovi sindikata dobiju pravnu sigurnost i podršku kada im je najpotrebnija."
+        },
+        {
+          title: "Pravno obaveštenje",
+          content: "Pravna podrška ne garantuje ishod bilo kog spora ili postupka. Kvalitet usluge i rezultati zavise od zakona, dostupnih dokaza i odluka nadležnih organa. Prigovori na uslugu advokata mogu se podneti Advokatskoj komori Srbije ili direktno kancelariji Skakić Law Firm."
         }
       ]
     },
@@ -566,7 +570,7 @@ export const content: Record<Language, Content> = {
       },
       {
         id: 4,
-        text: "Foreign managers by law cannot be supervisors of employees in Serbia.",
+        text: "Serbian labor law provides certain protections for all employees, including the right to organize and bargain collectively.",
         link: "/en/tema/pravna-podrska",
         linkText: "Learn more"
       },
@@ -704,7 +708,7 @@ export const content: Record<Language, Content> = {
       sections: [
         {
           title: "Data Confidentiality",
-          content: "Your data is confidential and processed in accordance with GDPR and labor laws. The employer has no legitimate basis to request membership data, except when explicitly required by law (e.g., representativeness determination procedures)."
+          content: "Union membership remains discreet until the union reaches representativeness (about 335 members = 15% of employees). At that point, Labor Law requires the union to notify the employer of membership for collective bargaining purposes. Before reaching this threshold, if you choose, your identity remains completely confidential. After representativeness, dues are automatically processed through employer payroll ('administrativna zabrana') and membership becomes part of official company relations with full statutory protection."
         },
         {
           title: "Anonymous Application",
@@ -738,6 +742,10 @@ export const content: Record<Language, Content> = {
         {
           title: "Partnership",
           content: "We work with Skakić Law Firm which has long-term experience in labor law and employee representation. Key rights: freedom of association, representative protection, collective bargaining, protection in contract/work condition change procedures."
+        },
+        {
+          title: "Legal Disclaimer",
+          content: "Legal support does not guarantee the outcome of any dispute or proceeding. Service quality and results depend on the law, available evidence, and decisions of relevant authorities. Complaints about legal services can be filed with the Serbian Bar Association or directly with Skakić Law Firm."
         }
       ]
     },
