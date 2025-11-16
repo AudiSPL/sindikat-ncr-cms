@@ -168,14 +168,6 @@ export async function POST(
             <li>🎫 Članska kartice</li>
           </ul>
 
-          <div style="background-color: #FFF3CD; border-left: 4px solid #FFC107; padding: 16px; margin: 20px 0; border-radius: 4px;">
-            <p style="margin: 0; color: #856404; font-size: 14px; line-height: 1.6;">
-              <strong>⚠️ Važno obaveštenje o fazama članstva:</strong><br/><br/>
-              Članstvo je poverljivo do dostizanja reprezentativnosti (oko 335 članova). Nakon toga, članarina se može automatski obrađivati preko plate poslodavca i članstvo postaje deo zvaničnih odnosa sa kompanijom.<br/><br/>
-              Zakon o radu pruža zaštitu od odmazde, ali je dokumentovanje bilo kakvih nepravilnosti ključno za pravnu zaštitu. Ako primetiš bilo kakav oblik diskriminacije, odmah kontaktiraj sindikat.
-            </p>
-          </div>
-
           <p style="color: #333; line-height: 1.6;">
             Ako imate bilo kakva pitanja ili trebate dodatne informacije, molimo vas da nam se obratite na email ili telefonom.
           </p>

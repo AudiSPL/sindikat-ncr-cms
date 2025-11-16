@@ -14,11 +14,11 @@ export function DidYouKnowCarousel({ lang }: DidYouKnowCarouselProps) {
   
   const content = {
     sr: {
-      title: "Da li ste znali?",
+      title: "Da Li Ste Znali?",
       statements: [
         "Zakon ti garantuje pravo na sindikalno organizovanje bez odmazde.",
         "Članstvo je trenutno besplatno – a pruža ti zaštitu i glas.",
-        "Globalni trend je proces automatizacije određenih pozicija, što u praksi znači da će se deo poslova menjati ili nestajati.",
+        "U toku je proces automatizacije određenih pozicija, što u praksi znači da će se deo poslova menjati ili nestajati.",
         "Sindikat postoji upravo da bismo zajedno mogli da reagujemo na promene, da tražimo prekvalifikacije, zaštitu radnih mesta i fer tretman.",
         "Na vreme reagovati znači da niko ne ostane bez podrške ili plana.",
         "Znaš li da… reprezentativnost (oko 15%) otvara vrata kolektivnom pregovaranju?",

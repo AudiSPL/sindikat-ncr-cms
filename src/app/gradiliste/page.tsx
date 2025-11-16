@@ -161,6 +161,36 @@ export default function GradilisteDashboard() {
     }
   };
 
+  const handleApproveMember = async (memberId: string) => {
+    if (!confirm('Da li ste sigurni da želite da odobrite ovog člana?')) {
+      return;
+    }
+
+    setActionId(memberId);
+
+    try {
+      const response = await fetch(`/api/members/${memberId}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        alert(`Greška: ${result.error || 'Approval failed'}`);
+        setActionId(null);
+        return;
+      }
+
+      alert('Član uspešno odobren!');
+      fetchMembers(); // Refresh the member list
+      setActionId(null);
+    } catch (error: any) {
+      console.error('Error approving member:', error);
+      alert(`Greška: ${error.message}`);
+      setActionId(null);
+    }
+  };
+
   const assignMembershipNumber = async (m: Member) => {
     try {
       setActionId(m.id);
@@ -446,7 +476,7 @@ export default function GradilisteDashboard() {
                           <>
                             <Button
                               className={primaryButton}
-                              onClick={() => updateMemberStatus(member.id, 'active')}
+                              onClick={() => handleApproveMember(member.id)}
                               disabled={actionId === member.id}
                             >
                               {actionId === member.id ? '...' : 'Odobri'}

@@ -3,7 +3,6 @@ import { Hero } from '@/components/Hero';
 import { TeaserGrid } from '@/components/TeaserGrid';
 import { IconSection } from '@/components/IconSection';
 import { DidYouKnowCarousel } from '@/components/DidYouKnowCarousel';
-import DisclaimerBanner from '@/components/DisclaimerBanner';
 import { Donations } from '@/components/Donations';
 import VoiceSection from '@/components/VoiceSection';
 import { Language, getContent } from '@/lib/content';
@@ -65,7 +64,6 @@ export default async function HomePage({ params }: HomePageProps) {
       <Hero lang={lang as Language} />
       <TeaserGrid lang={lang as Language} />
       <IconSection lang={lang as Language} />
-      <DisclaimerBanner lang={lang as Language} />
       <DidYouKnowCarousel lang={lang as Language} />
       <VoiceSection />
       <Donations lang={lang as Language} />
