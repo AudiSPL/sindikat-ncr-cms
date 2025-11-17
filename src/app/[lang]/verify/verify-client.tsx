@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Mail, MessageSquare, Camera, CheckCircle, Info, AlertTriangle, ArrowRight, Clock, Handshake, X, Lock, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -442,12 +443,55 @@ export default function VerifyClient({
                       {t.methods.inperson.instructions.title}
                     </p>
                     <ol className="space-y-2 text-sm text-gray-700 mb-4">
-                      {t.methods.inperson.instructions.steps.map((step, i) => (
-                        <li key={i} className="flex gap-2">
-                          <span className="font-bold">{i + 1}.</span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
+                      {t.methods.inperson.instructions.steps.map((step, i) => {
+                        // Special handling for step 5 (index 4) - add link to pristupnicu
+                        if (i === 4 && lang === 'sr') {
+                          const parts = step.split('pristupnicu');
+                          return (
+                            <li key={i} className="flex gap-2">
+                              <span className="font-bold">{i + 1}.</span>
+                              <span>
+                                {parts[0]}
+                                <Link 
+                                  href="/documents/B1_Pristupnica_SR.pdf" 
+                                  download
+                                  className="text-[#005B99] dark:text-[#60a5fa] hover:underline font-medium"
+                                >
+                                  pristupnicu
+                                </Link>
+                                {parts[1]}
+                              </span>
+                            </li>
+                          );
+                        }
+                        // For English version, check if it's step 5
+                        if (i === 4 && lang === 'en') {
+                          const parts = step.split('membership form');
+                          return (
+                            <li key={i} className="flex gap-2">
+                              <span className="font-bold">{i + 1}.</span>
+                              <span>
+                                {parts[0]}
+                                <Link 
+                                  href="/documents/B1_Pristupnica_EN.pdf" 
+                                  download
+                                  className="text-[#005B99] dark:text-[#60a5fa] hover:underline font-medium"
+                                >
+                                  membership form
+                                </Link>
+                                {parts[1]}
+                              </span>
+                            </li>
+                          );
+                        }
+                        // Regular step rendering
+                        return (
+                          <li key={i} className="flex gap-2">
+                            <span className="font-bold">{i + 1}.</span>
+                            <span>{step}</span>
+                          </li>
+                        );
+                      })}
                     </ol>
                     
                     <div className="mb-4 space-y-2">
