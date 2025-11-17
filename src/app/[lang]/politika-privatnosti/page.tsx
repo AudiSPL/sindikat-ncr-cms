@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Language, getContent } from '@/lib/content';
 
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: PolitikaPrivatnostiPageProps)
 export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivatnostiPageProps) {
   const { lang } = await params;
   const langTyped = lang as 'sr' | 'en';
+  const content = getContent(lang as Language);
 
   return (
     <main className="min-h-screen bg-white dark:bg-[#0F1419]">
@@ -373,6 +375,27 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
               </div>
             </CardContent>
           </Card>
+
+          {/* Related Topics */}
+          <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700">
+            <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              {langTyped === 'sr' ? 'Povezane teme' : 'Related topics'}
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              <Link 
+                href={`/${lang}/tema/anonimnost`}
+                className="px-4 py-2 bg-white dark:bg-slate-800 border-2 border-[#005B99] text-[#005B99] dark:text-[#60a5fa] rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2"
+              >
+                {content.nav.confidentiality}
+              </Link>
+              <Link 
+                href={`/${lang}/tema/pravna-podrska`}
+                className="px-4 py-2 bg-white dark:bg-slate-800 border-2 border-[#005B99] text-[#005B99] dark:text-[#60a5fa] rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2"
+              >
+                {content.nav.legalSupport}
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </main>
