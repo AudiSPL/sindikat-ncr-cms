@@ -200,6 +200,21 @@ export default async function PravnaPodrskaPage({ params }: PravnaPodrskaPagePro
           </Card>
         </div>
 
+        {/* Legal Disclaimer */}
+        <div className="mb-6">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-4">
+              <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
+                <span className="text-brand-orange font-bold mr-2">*</span>
+                {lang === 'sr' 
+                  ? 'Pravna podrška ne garantuje ishod bilo kog spora ili postupka. Kvalitet usluge i rezultati zavise od zakona, dostupnih dokaza i odluka nadležnih organa. Prigovori na uslugu advokata mogu se podneti direktno kancelariji Skakić Law Firm.'
+                  : 'Legal support does not guarantee the outcome of any dispute or proceeding. Service quality and results depend on the law, available evidence, and decisions of relevant authorities. Complaints about legal services can be filed directly with Skakić Law Firm.'
+                }
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
       </div>
     </main>
   );
