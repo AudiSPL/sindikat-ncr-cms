@@ -10,7 +10,10 @@ const supabase = createClient(
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { full_name, email, quicklook_id, city, division } = body;
+    const { full_name, email, quicklook_id, city, division, agree_join, agree_gdpr, is_anonymous } = body;
+
+    console.log('📥 API received is_anonymous:', is_anonymous);
+    console.log('📥 API received is_anonymous type:', typeof is_anonymous);
 
     // Validation
     if (!full_name || !email || !quicklook_id || !city || !division) {
@@ -19,6 +22,12 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Extract is_anonymous with explicit boolean conversion
+    // Default to false (not anonymous) if not provided
+    const isAnonymous = is_anonymous !== undefined ? Boolean(is_anonymous) : false;
+    
+    console.log('💾 Inserting to DB with is_anonymous:', isAnonymous);
 
     // Validate QLID format: 2 capital letters + 6 digits (e.g., AB123123)
     const qlIdPattern = /^[A-Z]{2}[0-9]{6}$/;
@@ -53,10 +62,15 @@ export async function POST(request: Request) {
         quicklook_id,
         city,
         division,
+        agree_join: agree_join || false,
+        agree_gdpr: agree_gdpr || false,
+        is_anonymous: isAnonymous, // ✅ EXPLICITLY SET THIS
         verification_status: 'pending',
       })
       .select()
       .single();
+
+    console.log('✅ Member inserted with is_anonymous:', newMember?.is_anonymous);
 
     if (insertError) throw insertError;
 

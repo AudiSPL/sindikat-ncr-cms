@@ -144,11 +144,24 @@ export default function NovaPristupnicaPage() {
     setIsSubmitting(true);
     setError(null);
 
+    // Log the isAnonymous value for debugging
+    console.log('🔍 Form submission - isAnonymous value:', data.isAnonymous);
+    console.log('🔍 Form submission - isAnonymous type:', typeof data.isAnonymous);
+
     try {
       const response = await fetch('/api/submit-application', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          full_name: data.full_name,
+          email: data.email,
+          quicklook_id: data.quicklook_id,
+          city: data.city,
+          division: data.division,
+          agree_join: data.agreeJoin,
+          agree_gdpr: data.agreeDataProcessing,
+          is_anonymous: data.isAnonymous !== undefined ? data.isAnonymous : false, // ✅ Explicitly send boolean
+        }),
       });
 
       if (!response.ok) {
