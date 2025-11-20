@@ -8,7 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { ArrowLeft, Info } from 'lucide-react';
 import { Member } from '@/types/member';
 import toast from 'react-hot-toast';
 
@@ -220,17 +222,23 @@ export default function ClanoviPage() {
     const origin = members.find(m => m.id === editingId);
     const updates: Record<string, unknown> = {};
     if (!origin) return;
-    (['full_name','email','quicklook_id','organization'] as const).forEach((k) => {
+    (['full_name','email','quicklook_id','organization','is_anonymous'] as const).forEach((k) => {
       const v = (editDraft as Record<string, unknown>)[k];
       if (typeof v !== 'undefined' && v !== (origin as unknown as Record<string, unknown>)[k]) updates[k] = v;
     });
     if (Object.keys(updates).length === 0) { cancelEdit(); return; }
+    
+    console.log('📤 Submitting edit with is_anonymous:', updates.is_anonymous);
+    
     const res = await fetch('/api/members/update', { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id: editingId, updates }) });
     const j = await res.json();
     if (res.ok && j?.success) {
       setMembers(prev => prev.map(m => m.id === editingId ? { ...m, ...updates } as Member : m));
       fetch('/api/admin/audit-logs', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'UPDATE_MEMBER', details: JSON.stringify(updates), member_id: editingId }) });
+      toast.success('Član uspešno ažuriran!');
       cancelEdit();
+    } else {
+      toast.error('Greška pri ažuriranju člana');
     }
   };
 
@@ -469,9 +477,49 @@ export default function ClanoviPage() {
 
                       {/* Is Anonymous */}
                       <td className="whitespace-nowrap py-2 pr-4">
-                        <Badge className={m.is_anonymous ? 'bg-slate-600/80 text-white' : 'bg-green-500/80 text-white'}>
-                          {m.is_anonymous ? '🔒 Da' : '👤 Ne'}
-                        </Badge>
+                        {editingId === m.id ? (
+                          <div className="space-y-2 min-w-[200px]">
+                            <div className={`p-3 rounded-lg border-2 transition-all ${
+                              (typeof editDraft.is_anonymous !== 'undefined' ? editDraft.is_anonymous : m.is_anonymous)
+                                ? 'border-gray-400 bg-gray-50/10' 
+                                : 'border-green-500 bg-green-50/10'
+                            }`}>
+                              <div className="flex items-center space-x-3">
+                                <Checkbox
+                                  id={`is_anonymous_${m.id}`}
+                                  checked={typeof editDraft.is_anonymous !== 'undefined' ? editDraft.is_anonymous : m.is_anonymous}
+                                  onCheckedChange={(checked) => 
+                                    setEditDraft({ ...editDraft, is_anonymous: !!checked })
+                                  }
+                                  className="w-5 h-5"
+                                />
+                                <div className="flex-1">
+                                  <Label 
+                                    htmlFor={`is_anonymous_${m.id}`} 
+                                    className="cursor-pointer font-medium text-white"
+                                  >
+                                    {(typeof editDraft.is_anonymous !== 'undefined' ? editDraft.is_anonymous : m.is_anonymous) ? '🔒 Anoniman' : '👤 Aktivan'}
+                                  </Label>
+                                  <p className="text-xs text-white/70 mt-1">
+                                    {(typeof editDraft.is_anonymous !== 'undefined' ? editDraft.is_anonymous : m.is_anonymous)
+                                      ? 'Član je sakriven od ostalih članova' 
+                                      : 'Član je vidljiv i može biti u radnim grupama'}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs text-white/80 bg-blue-50/10 p-2 rounded">
+                              <Info className="w-4 h-4" />
+                              <span>
+                                Aktivan član: {(typeof editDraft.is_anonymous !== 'undefined' ? editDraft.is_anonymous : m.is_anonymous) ? '❌ Ne' : '✅ Da'}
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <Badge className={m.is_anonymous ? 'bg-slate-600/80 text-white' : 'bg-green-500/80 text-white'}>
+                            {m.is_anonymous ? '🔒 Da' : '👤 Ne'}
+                          </Badge>
+                        )}
                       </td>
 
                       {/* Card Sent */}
