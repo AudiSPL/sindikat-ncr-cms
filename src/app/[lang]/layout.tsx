@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   }
 
   const content = getContent(lang as Language);
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://sindikat-ncr.vercel.app';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.sindikatncr.com';
   
   return {
     title: lang === 'sr' ? 'Sindikat NCR Atleos' : 'NCR Atleos Union',

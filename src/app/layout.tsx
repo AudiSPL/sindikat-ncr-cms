@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Sindikat Radnika NCR Atleos" }],
   creator: "Sindikat NCR Atleos",
   publisher: "Sindikat NCR Atleos",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://sindikat-ncr.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.sindikatncr.com'),
   alternates: {
     canonical: '/',
     languages: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sindikat NCR Atleos",
     description: "Sindikat NCR Atleos - Zajedno smo jači | Together We Are Stronger",
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://sindikat-ncr.vercel.app',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.sindikatncr.com',
     siteName: "Sindikat NCR Atleos",
     images: [
       {
