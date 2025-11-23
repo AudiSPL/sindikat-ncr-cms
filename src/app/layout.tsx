@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  // Removed maximumScale to allow users to zoom (WCAG 2.0-2.2 Level AA requirement)
   themeColor: '#0B2C49', // brand-navy
 };
 

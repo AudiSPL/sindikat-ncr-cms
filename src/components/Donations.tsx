@@ -25,7 +25,7 @@ export function Donations({ lang }: DonationsProps) {
           
           <div className="flex justify-center">
             <Link href={donations.buttonLink}>
-              <button className="inline-flex items-center gap-2 px-8 py-4 border-2 border-brand-blue text-brand-blue hover:bg-blue-50 font-semibold rounded-lg transition-all duration-300">
+              <button className="inline-flex items-center gap-2 px-8 py-4 border-2 border-brand-blue text-brand-blue hover:bg-[#60A5FA]/10 font-semibold rounded-lg transition-all duration-300">
                 {donations.buttonText}
               </button>
             </Link>

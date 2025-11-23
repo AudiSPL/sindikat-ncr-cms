@@ -10,11 +10,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Brand
+        // Brand (from CSS variables)
         'brand-navy': 'hsl(var(--brand-navy))',
         'brand-blue': 'hsl(var(--brand-blue))',
         'brand-orange': 'hsl(var(--brand-orange))',
         'brand-red': 'hsl(var(--brand-red))',
+
+        // Accessible primary colors (WCAG AA compliant)
+        'accessible-blue': '#60A5FA',
+        'accessible-navy': '#0D47A1',
+        'accessible-red': '#C62828',
+
+        // Form elements
+        'form-border': '#475569',
+
+        // Status colors (already accessible)
+        'success': '#10B981',
+        'warning': '#F59E0B',
+        'error': '#EF4444',
+
+        // Dark mode variants
+        'dark-navy': '#1976D2',
+        'dark-red': '#EF5350',
 
         // Theme tokens from CSS variables
         background: 'hsl(var(--background))',

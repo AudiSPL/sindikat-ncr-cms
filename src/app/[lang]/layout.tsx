@@ -75,7 +75,7 @@ export default async function LangLayout({ children, params }: LangLayoutProps) 
     <div className="min-h-screen flex flex-col">
       <LanguagePersistence currentLang={lang as Language} />
       <Header lang={lang as Language} />
-      <main className="flex-1">
+      <main role="main" className="flex-1">
         {children}
       </main>
       <Footer lang={lang as Language} />

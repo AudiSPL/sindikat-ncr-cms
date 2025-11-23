@@ -410,26 +410,27 @@ export default function VerifyClient({
 
         {/* Verification Methods */}
         <div className="space-y-4">
+          <h2 className="text-2xl font-bold text-white mb-4">{lang === 'sr' ? 'Metode verifikacije' : 'Verification Methods'}</h2>
           
           {/* In-Person Method (Highest Privacy) */}
           <div 
             className={`bg-white border-2 rounded-xl p-6 cursor-pointer transition-all ${
               selectedMethod === 'inperson' 
-                ? 'border-blue-500 shadow-lg' 
-                : 'border-gray-200 hover:border-blue-300'
+                ? 'border-[#60A5FA] shadow-lg' 
+                : 'border-gray-200 hover:border-[#60A5FA]/50'
             }`}
             onClick={() => handleMethodSelect('inperson')}
           >
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Handshake className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-[#60A5FA]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Handshake className="w-6 h-6 text-[#60A5FA]" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-bold text-gray-900">
                     {t.methods.inperson.title}
                   </h3>
-                  <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold">
+                  <span className="text-xs bg-[#60A5FA]/20 text-[#60A5FA] px-3 py-1 rounded-full font-bold">
                     {t.methods.inperson.badge}
                   </span>
                 </div>
@@ -438,7 +439,7 @@ export default function VerifyClient({
                 </p>
                 
                 {selectedMethod === 'inperson' && (
-                  <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="mt-4 p-4 bg-[#60A5FA]/10 border border-[#60A5FA]/30 rounded-lg">
                     <p className="font-medium text-gray-900 mb-3">
                       {t.methods.inperson.instructions.title}
                     </p>
@@ -664,21 +665,21 @@ export default function VerifyClient({
           <div 
             className={`bg-white border-2 rounded-xl p-6 cursor-pointer transition-all ${
               selectedMethod === 'email' 
-                ? 'border-blue-500 shadow-lg' 
-                : 'border-gray-200 hover:border-blue-300'
+                ? 'border-[#60A5FA] shadow-lg' 
+                : 'border-gray-200 hover:border-[#60A5FA]/50'
             }`}
             onClick={() => handleMethodSelect('email')}
           >
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Mail className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-[#60A5FA]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Mail className="w-6 h-6 text-[#60A5FA]" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-bold text-gray-900">
                     {t.methods.email.title}
                   </h3>
-                  <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">
+                  <span className="text-xs bg-[#60A5FA]/20 text-[#60A5FA] px-3 py-1 rounded-full font-medium">
                     {t.methods.email.badge}
                   </span>
                 </div>
@@ -687,7 +688,7 @@ export default function VerifyClient({
                 </p>
                 
                 {selectedMethod === 'email' && (
-                  <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="mt-4 p-4 bg-[#60A5FA]/10 border border-[#60A5FA]/30 rounded-lg">
                     {/* Risk Warning */}
                     <div className="mb-4 p-3 bg-yellow-50 border border-yellow-300 rounded-lg">
                       <div className="flex gap-2">
@@ -734,7 +735,7 @@ export default function VerifyClient({
         {/* Explanation Boxes */}
         <div className="space-y-6 mb-8">
           {/* Why Verification Box */}
-          <div className="bg-blue-50 dark:bg-blue-950 border-l-4 border-[#005B99] rounded-lg p-6">
+          <div className="bg-[#60A5FA]/10 dark:bg-[#60A5FA]/10 border-l-4 border-[#005B99] rounded-lg p-6">
             <div className="flex items-start gap-4">
               <Lock className="w-6 h-6 text-[#005B99] flex-shrink-0 mt-1" />
               <div className="flex-1">
@@ -846,7 +847,7 @@ export default function VerifyClient({
               </Button>
               <Button
                 onClick={handleOpenEmailClient}
-                className="flex-1 bg-[#005B99] hover:bg-[#004080] text-white"
+                className="flex-1 bg-[#60A5FA] hover:bg-[#4A90E2] text-white"
               >
                 {t.emailModal.button}
                 <ArrowRight className="w-4 h-4 ml-2" />

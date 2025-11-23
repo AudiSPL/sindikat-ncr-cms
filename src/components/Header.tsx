@@ -31,6 +31,7 @@ export function Header({ lang }: HeaderProps) {
 
   return (
     <header 
+      role="banner"
       className="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300"
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6 py-3 md:py-4">
@@ -42,7 +43,7 @@ export function Header({ lang }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-1">
+        <nav aria-label="Main navigation" role="navigation" className="hidden lg:flex items-center space-x-1">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -106,7 +107,7 @@ export function Header({ lang }: HeaderProps) {
               </div>
 
               {/* Mobile Navigation Links */}
-              <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+              <nav aria-label="Mobile menu" role="navigation" className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}

@@ -345,15 +345,39 @@ export default function NovaPristupnicaPage() {
                     id="agreeJoin"
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className={errors.agreeJoin ? 'border-brand-red' : ''}
+                    className={`mt-1 flex-shrink-0 ${errors.agreeJoin ? 'border-brand-red' : ''}`}
                   />
                 )}
               />
-              <Label htmlFor="agreeJoin" className="text-sm text-gray-300 leading-relaxed cursor-pointer">
+              <Label htmlFor="agreeJoin" className="flex flex-col gap-1 text-sm text-gray-300 leading-relaxed cursor-pointer">
                 {lang === 'sr' ? (
-                  <><strong>Potvrđujem da sam pročitao/la</strong> <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Statut</a>, <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Pravilnik</a> i <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">Politiku Privatnosti</a> *</>
+                  <>
+                    <span className="block">
+                      <strong>Potvrđujem da sam pročitao/la:</strong>
+                    </span>
+                    <span className="flex flex-wrap gap-x-2 text-[#60A5FA]">
+                      <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#60A5FA]/80">Statut</a>
+                      <span>,</span>
+                      <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#60A5FA]/80">Pravilnik</a>
+                      <span>i</span>
+                      <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#60A5FA]/80">Politiku Privatnosti</a>
+                      <span>*</span>
+                    </span>
+                  </>
                 ) : (
-                  <><strong>I confirm that I have read the</strong> <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Statute</a>, <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="text-brand-orange underline hover:text-brand-orange/80">Rules</a> and <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="text-brand-blue underline hover:text-brand-orange">Privacy Policy</a> *</>
+                  <>
+                    <span className="block">
+                      <strong>I confirm that I have read:</strong>
+                    </span>
+                    <span className="flex flex-wrap gap-x-2 text-[#60A5FA]">
+                      <a href="/documents/СТАТУТ.pdf" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#60A5FA]/80">Statute</a>
+                      <span>,</span>
+                      <a href="/documents/Правилник Синдиката (ср).pdf" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#60A5FA]/80">Rules</a>
+                      <span>and</span>
+                      <a href={`/${lang}/politika-privatnosti`} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#60A5FA]/80">Privacy Policy</a>
+                      <span>*</span>
+                    </span>
+                  </>
                 )}
               </Label>
             </div>

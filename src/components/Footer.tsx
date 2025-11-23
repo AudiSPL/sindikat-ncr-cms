@@ -14,7 +14,7 @@ export function Footer({ lang }: FooterProps) {
   const pathname = usePathname();
 
   return (
-    <footer className="border-t bg-brand-navy dark:bg-brand-navy">
+    <footer role="contentinfo" className="border-t bg-brand-navy dark:bg-brand-navy">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Logo and Name */}
@@ -34,7 +34,7 @@ export function Footer({ lang }: FooterProps) {
           {/* Quick Links */}
           <div className="space-y-2">
             <h3 className="font-semibold text-white">{content.footer.quickLinks}</h3>
-            <nav className="space-y-1">
+            <nav aria-label="Footer links" role="navigation" className="space-y-1">
               <Link href={`/${lang}`} className="block text-sm text-white/90 hover:text-white transition-colors">
                 {content.nav.home}
               </Link>

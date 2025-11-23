@@ -50,7 +50,7 @@ export default function FAQContactForm({ lang }: FAQContactFormProps) {
               value={name}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
               placeholder={label('Vaše ime', 'Your name')}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-[#60A5FA] focus:outline-none focus:ring-2 focus:ring-[#60A5FA]/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
             />
           </div>
 
@@ -64,7 +64,7 @@ export default function FAQContactForm({ lang }: FAQContactFormProps) {
               value={email}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               placeholder="email@example.com"
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-[#60A5FA] focus:outline-none focus:ring-2 focus:ring-[#60A5FA]/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
             />
           </div>
 
@@ -78,7 +78,7 @@ export default function FAQContactForm({ lang }: FAQContactFormProps) {
               value={subject}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setSubject(e.target.value)}
               placeholder={label('Kratak naslov', 'Short subject')}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-[#60A5FA] focus:outline-none focus:ring-2 focus:ring-[#60A5FA]/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
             />
           </div>
 
@@ -92,7 +92,7 @@ export default function FAQContactForm({ lang }: FAQContactFormProps) {
               value={message}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
               placeholder={label('Vaša poruka...', 'Your message...')}
-              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
+              className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-[#60A5FA] focus:outline-none focus:ring-2 focus:ring-[#60A5FA]/20 dark:border-slate-600 dark:bg-slate-800 dark:text-white dark:placeholder-slate-400 dark:focus:border-brand-orange dark:focus:ring-brand-orange/20"
             />
           </div>
 

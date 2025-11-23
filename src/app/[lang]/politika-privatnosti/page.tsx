@@ -43,7 +43,7 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
           </h1>
           <p className="text-base md:text-lg text-white/90 mb-2">
             {langTyped === 'sr' 
-              ? 'Kako prikupljamo, koristimo i štitimo vaše podatke' 
+              ? 'Kako prikupljamo, koristimo i štitimo vaše podatke'
               : 'How we collect, use, and protect your data'}
           </p>
           <p className="text-sm text-white/80">
@@ -130,7 +130,7 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
 
           {/* Section 3: Privacy Warning */}
           <Card className="border-l-4 border-[#C63B3B]">
-            <CardHeader>
+                <CardHeader>
               <CardTitle className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
                 {langTyped === 'sr' ? 'Upozorenje o privatnosti' : 'Privacy Warning'}
               </CardTitle>
@@ -158,7 +158,7 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
                     ? 'Koristite poslovne sisteme isključivo na sopstveni rizik.'
                     : 'Use corporate systems at your own risk only.'}
                 </p>
-              </div>
+                  </div>
             </CardContent>
           </Card>
 
@@ -168,8 +168,8 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
               <CardTitle className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
                 {langTyped === 'sr' ? 'Korišćenje podataka' : 'Data Usage'}
               </CardTitle>
-            </CardHeader>
-            <CardContent>
+                </CardHeader>
+                <CardContent>
               <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
                 {langTyped === 'sr' 
                   ? 'Podatke koristimo isključivo za:' 
@@ -184,9 +184,9 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
                 {langTyped === 'sr'
                   ? 'Ne delimo podatke sa trećim stranama bez vaše izričite saglasnosti.'
                   : 'We do not share data with third parties without your explicit consent.'}
-              </p>
-            </CardContent>
-          </Card>
+                  </p>
+                </CardContent>
+              </Card>
 
           {/* Section 5: Access Logging */}
           <Card>
@@ -249,7 +249,7 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
                 </li>
               </ul>
               
-              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
+              <div className="mt-4 p-4 bg-[#60A5FA]/10 dark:bg-[#60A5FA]/10 rounded">
                 <p className="font-semibold text-slate-900 dark:text-white mb-2">
                   {langTyped === 'sr' ? 'Transfer podataka:' : 'Data Transfer:'}
                 </p>
@@ -266,7 +266,7 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
                     ? 'Svi procesori imaju potpisane ugovore o zaštiti podataka (DPA) i poštuju standarde GDPR-a.'
                     : 'All processors have signed Data Processing Agreements (DPA) and comply with GDPR standards.'}
                 </p>
-              </div>
+        </div>
             </CardContent>
           </Card>
 
@@ -371,10 +371,10 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
                   <a href="tel:+381661380034" className="text-[#005B99] dark:text-[#60a5fa] hover:underline">
                     +381 66 138 034
                   </a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
           {/* Related Topics */}
           <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-700">
@@ -384,19 +384,19 @@ export default async function PolitikaPrivatnostiPage({ params }: PolitikaPrivat
             <div className="flex flex-wrap gap-4">
               <Link 
                 href={`/${lang}/tema/anonimnost`}
-                className="px-4 py-2 bg-white dark:bg-slate-800 border-2 border-[#005B99] text-[#005B99] dark:text-[#60a5fa] rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2"
+                className="px-4 py-2 bg-white dark:bg-slate-800 border-2 border-[#005B99] text-[#005B99] dark:text-[#60a5fa] rounded-lg hover:bg-[#60A5FA]/10 dark:hover:bg-[#60A5FA]/10 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2"
               >
                 {content.nav.confidentiality}
               </Link>
               <Link 
                 href={`/${lang}/tema/pravna-podrska`}
-                className="px-4 py-2 bg-white dark:bg-slate-800 border-2 border-[#005B99] text-[#005B99] dark:text-[#60a5fa] rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2"
+                className="px-4 py-2 bg-white dark:bg-slate-800 border-2 border-[#005B99] text-[#005B99] dark:text-[#60a5fa] rounded-lg hover:bg-[#60A5FA]/10 dark:hover:bg-[#60A5FA]/10 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-[#005B99] focus:ring-offset-2"
               >
                 {content.nav.legalSupport}
               </Link>
             </div>
           </div>
-        </div>
+      </div>
       </section>
     </main>
   );

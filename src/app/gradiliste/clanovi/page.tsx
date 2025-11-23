@@ -456,7 +456,7 @@ export default function ClanoviPage() {
                       <td className="whitespace-nowrap py-2 pr-4">
                         <div className="flex items-center gap-2">
                           <Badge className={
-                            m.verification_method === 'email' ? 'bg-blue-500/80 text-white' :
+                            m.verification_method === 'email' ? 'bg-[#60A5FA]/80 text-white' :
                             m.verification_method === 'teams' ? 'bg-purple-500/80 text-white' :
                             m.verification_method === 'badge' ? 'bg-green-500/80 text-white' :
                             'bg-gray-600/80 text-white'
@@ -508,7 +508,7 @@ export default function ClanoviPage() {
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-white/80 bg-blue-50/10 p-2 rounded">
+                            <div className="flex items-center gap-2 text-xs text-white/80 bg-[#60A5FA]/10 p-2 rounded">
                               <Info className="w-4 h-4" />
                               <span>
                                 Aktivan član: {(typeof editDraft.is_anonymous !== 'undefined' ? editDraft.is_anonymous : m.is_anonymous) ? '❌ Ne' : '✅ Da'}
@@ -524,7 +524,7 @@ export default function ClanoviPage() {
 
                       {/* Card Sent */}
                       <td className="whitespace-nowrap py-2 pr-4">
-                        <Badge className={m.card_sent ? 'bg-blue-500/80 text-white' : 'bg-gray-600/80 text-white'}>
+                        <Badge className={m.card_sent ? 'bg-[#60A5FA]/80 text-white' : 'bg-gray-600/80 text-white'}>
                           {m.card_sent ? 'Poslana' : 'Nije poslana'}
                         </Badge>
                       </td>

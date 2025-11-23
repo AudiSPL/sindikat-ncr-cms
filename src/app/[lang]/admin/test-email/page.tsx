@@ -38,9 +38,9 @@ export default function TestEmailPage() {
   if ((session?.user as any)?.role !== 'super_admin') {
     return (
       <div className="p-8">
-        <h1 className="text-2xl font-bold text-red-600">
+        <h2 className="text-2xl font-bold text-red-600">
           Access Denied - Admin Only
-        </h1>
+        </h2>
       </div>
     );
   }
@@ -165,7 +165,7 @@ export default function TestEmailPage() {
             onClick={() => setActiveTab('email')}
             className={`px-6 py-3 rounded-lg font-semibold transition ${
               activeTab === 'email'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#60A5FA] text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
             }`}
           >
@@ -175,7 +175,7 @@ export default function TestEmailPage() {
             onClick={() => setActiveTab('pdf')}
             className={`px-6 py-3 rounded-lg font-semibold transition ${
               activeTab === 'pdf'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-[#60A5FA] text-white'
                 : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
             }`}
           >
@@ -199,7 +199,7 @@ export default function TestEmailPage() {
                   value={emailData.recipientEmail}
                   onChange={handleEmailInputChange}
                   placeholder="test@example.com"
-                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                 />
               </div>
 
@@ -213,7 +213,7 @@ export default function TestEmailPage() {
                   value={emailData.subject}
                   onChange={handleEmailInputChange}
                   placeholder="Email subject"
-                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                 />
               </div>
 
@@ -227,14 +227,14 @@ export default function TestEmailPage() {
                   onChange={handleEmailInputChange}
                   placeholder="Email message"
                   rows={5}
-                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                 />
               </div>
 
               <button
                 onClick={handleSendEmail}
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white font-semibold py-3 rounded-lg transition"
+                className="w-full bg-[#60A5FA] hover:bg-[#4A90E2] disabled:bg-slate-600 text-white font-semibold py-3 rounded-lg transition"
               >
                 {loading ? '⏳ Sending...' : '📧 Send Test Email'}
               </button>
@@ -259,7 +259,7 @@ export default function TestEmailPage() {
                     value={pdfData.memberId}
                     onChange={handlePdfInputChange}
                     placeholder="12345"
-                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                   />
                 </div>
 
@@ -273,7 +273,7 @@ export default function TestEmailPage() {
                     value={pdfData.membershipNumber}
                     onChange={handlePdfInputChange}
                     placeholder="M123456789"
-                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -288,7 +288,7 @@ export default function TestEmailPage() {
                   value={pdfData.fullName}
                   onChange={handlePdfInputChange}
                   placeholder="Marko Petrović"
-                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                 />
               </div>
 
@@ -303,7 +303,7 @@ export default function TestEmailPage() {
                     value={pdfData.city}
                     onChange={handlePdfInputChange}
                     placeholder="Beograd"
-                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                   />
                 </div>
 
@@ -317,7 +317,7 @@ export default function TestEmailPage() {
                     value={pdfData.organization}
                     onChange={handlePdfInputChange}
                     placeholder="NCR Atleos"
-                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -332,7 +332,7 @@ export default function TestEmailPage() {
                   value={pdfData.email}
                   onChange={handlePdfInputChange}
                   placeholder="marko@example.com"
-                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                 />
               </div>
 
@@ -346,7 +346,7 @@ export default function TestEmailPage() {
                     name="joinDate"
                     value={pdfData.joinDate}
                     onChange={handlePdfInputChange}
-                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                   />
                 </div>
 
@@ -358,7 +358,7 @@ export default function TestEmailPage() {
                     name="status"
                     value={pdfData.status}
                     onChange={handlePdfInputChange}
-                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-slate-700 text-white border border-slate-600 rounded-lg focus:ring-2 focus:ring-[#60A5FA] focus:border-transparent"
                   >
                     <option value="active">Aktivan</option>
                     <option value="inactive">Neaktivan</option>
