@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateVerificationToken } from '@/lib/jwt';
+import { sendDiscordNotification } from '@/lib/discord';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -72,7 +73,29 @@ export async function POST(request: Request) {
 
     console.log('✅ Member inserted with is_anonymous:', newMember?.is_anonymous);
 
-    if (insertError) throw insertError;
+    if (insertError) {
+      console.error('Insert error:', insertError);
+      throw insertError;
+    }
+
+    console.log('✅ Member inserted successfully:', newMember.id);
+
+    // 🔔 Send Discord notification
+    try {
+      await sendDiscordNotification({
+        full_name: newMember.full_name,
+        email: newMember.email,
+        quicklook_id: newMember.quicklook_id,
+        city: newMember.city,
+        division: newMember.division,
+        team: newMember.team,
+        is_anonymous: newMember.is_anonymous,
+        created_at: newMember.created_at,
+      });
+    } catch (discordError) {
+      // Log but don't fail the application
+      console.error('Discord notification failed (non-critical):', discordError);
+    }
 
     // Generate verification token (no memberId or qlid in URL)
     const token = generateVerificationToken(newMember.id, quicklook_id);
