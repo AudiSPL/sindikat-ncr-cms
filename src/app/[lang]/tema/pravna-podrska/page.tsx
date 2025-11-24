@@ -96,8 +96,33 @@ export default async function PravnaPodrskaPage({ params }: PravnaPodrskaPagePro
     }
   ];
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": lang === 'sr' ? "Početna" : "Home",
+        "item": `https://www.sindikatncr.com/${lang}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": lang === 'sr' ? 'Pravna podrška' : 'Legal support',
+        "item": `https://www.sindikatncr.com/${lang}/tema/pravna-podrska`
+      }
+    ]
+  };
+
   return (
     <main className="min-h-screen bg-[#F7FAFC] dark:bg-[#0F1419]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       <div className="max-w-screen-xl mx-auto px-3 md:px-5 py-6 md:py-10">
         {/* Page Title */}
         <div className="text-center mb-8">

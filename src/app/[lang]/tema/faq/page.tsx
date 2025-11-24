@@ -10,17 +10,51 @@ interface FAQPageProps {
 
 export async function generateMetadata({ params }: FAQPageProps): Promise<Metadata> {
   const { lang } = await params;
-  const content = getContent(lang as Language);
-  const firstQuestion = content.faq.categories[0]?.questions[0]?.question || content.nav.faq;
+  const isSerbian = lang === 'sr';
+  
+  const meta = isSerbian
+    ? {
+        title: 'Često Postavljena Pitanja - Sindikat NCR Atleos | FAQ',
+        description: 'Sva pitanja o sindikatu NCR Atleos: članstvo, anonimnost, prava zaposlenih, kolektivno pregovaranje, zaštita radnika. 33 detaljnih odgovora na vaša pitanja.',
+        keywords: 'NCR Atleos FAQ, pitanja o sindikatu, prava zaposlenih NCR, članstvo u sindikatu, zaštita radnika, kolektivno pregovaranje',
+      }
+    : {
+        title: 'Frequently Asked Questions - NCR Atleos Union | FAQ',
+        description: 'All questions about NCR Atleos Union: membership, anonymity, employee rights, collective bargaining, worker protection. 33 detailed answers to your questions.',
+        keywords: 'NCR Atleos FAQ, union questions, NCR employee rights, union membership, worker protection, collective bargaining',
+      };
 
   return {
-    title: content.nav.faq,
-    description: firstQuestion,
+    title: meta.title,
+    description: meta.description,
+    keywords: meta.keywords,
     openGraph: {
-      title: content.nav.faq,
-      description: firstQuestion,
+      title: meta.title,
+      description: meta.description,
       type: 'website',
       locale: lang === 'sr' ? 'sr_RS' : 'en_US',
+      url: `https://www.sindikatncr.com/${lang}/tema/faq`,
+      images: [
+        {
+          url: 'https://www.sindikatncr.com/brand/logo-sindikat.png',
+          width: 1200,
+          height: 630,
+          alt: 'NCR Atleos Union FAQ',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: meta.title,
+      description: meta.description,
+      images: ['https://www.sindikatncr.com/brand/logo-sindikat.png'],
+    },
+    alternates: {
+      canonical: `/${lang}/tema/faq`,
+      languages: {
+        'sr': '/sr/tema/faq',
+        'en': '/en/tema/faq',
+      },
     },
   };
 }
@@ -31,6 +65,25 @@ export default async function FAQPage({ params }: FAQPageProps) {
 
   // Flatten all questions from categories for schema.org
   const allQuestions = content.faq.categories.flatMap(cat => cat.questions);
+  
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": lang === 'sr' ? "Početna" : "Home",
+        "item": `https://www.sindikatncr.com/${lang}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": content.nav.faq,
+        "item": `https://www.sindikatncr.com/${lang}/tema/faq`
+      }
+    ]
+  };
   
   const faqSchema = {
     '@context': 'https://schema.org',
@@ -43,6 +96,130 @@ export default async function FAQPage({ params }: FAQPageProps) {
         text: item.answer,
       },
     })),
+  };
+
+  // HowTo Schema #1: How to Document Workplace Violations
+  const howToDocumentViolationsSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": lang === 'sr' 
+      ? "Kako dokumentovati kršenje radnih prava"
+      : "How to document workplace rights violations",
+    "description": lang === 'sr'
+      ? "Vodič za bezbedno i efikasno dokumentovanje kršenja vaših radnih prava"
+      : "Guide to safely and effectively documenting workplace rights violations",
+    "totalTime": "PT15M",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": lang === 'sr' ? "Zabeležite sve detalje" : "Record all details",
+        "text": lang === 'sr'
+          ? "Dokumentujte datum, vreme, lokaciju, prisutne osobe i tačan opis šta se desilo. Budite što precizniji."
+          : "Document date, time, location, people present, and exact description of what happened. Be as precise as possible."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": lang === 'sr' ? "Sačuvajte sve dokaze" : "Preserve all evidence",
+        "text": lang === 'sr'
+          ? "Napravite kopije svih relevantnih dokumenata, emailova, poruka. Čuvajte ih na LIČNOM uređaju, ne na službenom."
+          : "Make copies of all relevant documents, emails, messages. Store them on PERSONAL devices, not work devices."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": lang === 'sr' ? "Identifikujte svedoke" : "Identify witnesses",
+        "text": lang === 'sr'
+          ? "Napišite imena kolega koji su bili prisutni. Ne kontaktirajte ih odmah - samo zapišite ko je video šta se dogodilo."
+          : "Write down names of colleagues who were present. Don't contact them immediately - just note who witnessed what happened."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": lang === 'sr' ? "Koristite lične kanale" : "Use personal channels",
+        "text": lang === 'sr'
+          ? "Za skladištenje dokumenata koristite lični email (ne službeni). Koristite privatnu mrežu, ne korporativnu."
+          : "Use personal email (not work email) to store documents. Use private network, not corporate network."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 5,
+        "name": lang === 'sr' ? "Kontaktirajte sindikat" : "Contact the union",
+        "text": lang === 'sr'
+          ? "Pošaljite dokumentaciju sindikatu na office@sindikatncr.com sa ličnog email naloga. Sindikat će proceniti sledeće korake."
+          : "Send documentation to union at office@sindikatncr.com from personal email account. Union will assess next steps."
+      }
+    ],
+    "tool": [
+      {
+        "@type": "HowToTool",
+        "name": lang === 'sr' ? "Lični telefon ili računar" : "Personal phone or computer"
+      },
+      {
+        "@type": "HowToTool",
+        "name": lang === 'sr' ? "Lični email nalog" : "Personal email account"
+      },
+      {
+        "@type": "HowToTool",
+        "name": lang === 'sr' ? "Beležnica ili digitalni dokument" : "Notebook or digital document"
+      }
+    ]
+  };
+
+  // HowTo Schema #2: How to Request GDPR Data Deletion
+  const howToGDPRDeletionSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": lang === 'sr' 
+      ? "Kako povući saglasnost za korišćenje podataka po GDPR-u"
+      : "How to withdraw consent for data use under GDPR",
+    "description": lang === 'sr'
+      ? "Koraci za povlačenje saglasnosti za korišćenje fotografija ili ličnih podataka od strane poslodavca"
+      : "Steps to withdraw consent for use of photos or personal data by employer",
+    "totalTime": "PT10M",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": lang === 'sr' ? "Napišite formalni zahtev" : "Write formal request",
+        "text": lang === 'sr'
+          ? "Napišite kratak, jasan zahtev u kome navodite da želite da povučete saglasnost za korišćenje vaših ličnih podataka (fotografije, video snimci, lični podaci za marketing)."
+          : "Write a brief, clear request stating you wish to withdraw consent for use of your personal data (photos, videos, personal information for marketing)."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": lang === 'sr' ? "Navedite pravnu osnovu" : "Cite legal basis",
+        "text": lang === 'sr'
+          ? "Referišite se na GDPR (član 7, stav 3) i Zakon o zaštiti podataka o ličnosti. Navedite da imate pravo da povučete saglasnost u bilo kom trenutku."
+          : "Reference GDPR (Article 7, paragraph 3) and Data Protection Law. State that you have the right to withdraw consent at any time."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": lang === 'sr' ? "Pošaljite zahtev" : "Send the request",
+        "text": lang === 'sr'
+          ? "Pošaljite zahtev sa ličnog email naloga na zvaničnu HR adresu ili DPO (Data Protection Officer) vašeg poslodavca. Zadržite kopiju."
+          : "Send request from personal email to official HR address or employer's DPO (Data Protection Officer). Keep a copy."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": lang === 'sr' ? "Sačekajte odgovor" : "Wait for response",
+        "text": lang === 'sr'
+          ? "Poslodavac ima obavezu da odgovori u roku od 30 dana. Ako ne odgovore ili odbiju, možete se obratiti Povereniku za informacije od javnog značaja."
+          : "Employer must respond within 30 days. If they don't respond or refuse, you can contact the Commissioner for Information of Public Importance."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 5,
+        "name": lang === 'sr' ? "Eskalacija (ako je potrebno)" : "Escalation (if needed)",
+        "text": lang === 'sr'
+          ? "Ako poslodavac ne postupi, kontaktirajte sindikat za pravnu pomoć ili direktno podnesite pritužbu Povereniku."
+          : "If employer doesn't comply, contact union for legal help or file complaint directly with Commissioner."
+      }
+    ]
   };
 
   const relatedLinks = [
@@ -59,7 +236,25 @@ export default async function FAQPage({ params }: FAQPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
           __html: JSON.stringify(faqSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(howToDocumentViolationsSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(howToGDPRDeletionSchema),
         }}
       />
       <div className="space-y-8">

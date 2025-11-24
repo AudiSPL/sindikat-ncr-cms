@@ -28,6 +28,25 @@ export default async function AnonimnostPage({ params }: AnonimnostPageProps) {
   const { lang } = await params;
   const content = getContent(lang as Language);
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": lang === 'sr' ? "Početna" : "Home",
+        "item": `https://www.sindikatncr.com/${lang}`
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": content.nav.confidentiality,
+        "item": `https://www.sindikatncr.com/${lang}/tema/anonimnost`
+      }
+    ]
+  };
+
   const relatedLinks = [
     { href: `/${lang}/tema/pravna-podrska`, label: content.nav.legalSupport },
     { href: `/${lang}/tema/faq`, label: content.nav.faq },
@@ -41,6 +60,12 @@ export default async function AnonimnostPage({ params }: AnonimnostPageProps) {
       lang={lang as Language} 
       relatedLinks={relatedLinks}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       <div className="space-y-8">
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold">{content.confidentiality.title}</h1>

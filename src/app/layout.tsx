@@ -24,7 +24,24 @@ export const viewport = {
 export const metadata: Metadata = {
   title: "Sindikat NCR Atleos",
   description: "Sindikat NCR Atleos - Zajedno smo jači | Together We Are Stronger",
-  keywords: ["sindikat", "NCR", "Atleos", "Beograd", "workers union", "labor rights"],
+  keywords: [
+    // Generic labor/union terms (SAFE)
+    "sindikat", "radnički sindikat", "workers union", "labor union Serbia",
+    "workers rights Belgrade", "employee union", "labor rights",
+    
+    // Descriptive use (FAIR USE - identifying employer)
+    "sindikat zaposlenih", "union for employees",
+    "payment technology workers", "ATM industry union",
+    "Belgrade tech workers union",
+    
+    // Misspellings users might search (NEUTRAL)
+    "sindikat beograd", "labor union beograd",
+    
+    // Services offered (SAFE)
+    "collective bargaining", "legal support workers",
+    "employee protection", "workplace rights",
+    "union membership Serbia", "anonymous union"
+  ],
   authors: [{ name: "Sindikat Radnika NCR Atleos" }],
   creator: "Sindikat NCR Atleos",
   publisher: "Sindikat NCR Atleos",
@@ -118,6 +135,32 @@ export default function RootLayout({
                 "Employment Law",
                 "Collective Bargaining"
               ]
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Sindikat NCR Atleos",
+              "alternateName": ["NCR Atleos Union", "Atlios Union", "Atleos Union"],
+              "url": "https://www.sindikatncr.com",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://www.sindikatncr.com/sr/tema/faq?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              },
+              "inLanguage": ["sr", "en"],
+              "audience": {
+                "@type": "Audience",
+                "audienceType": "NCR Atleos employees"
+              },
+              "keywords": "NCR Atleos union, atlios, atleos, workers rights, collective bargaining, labor union Serbia"
             })
           }}
         />

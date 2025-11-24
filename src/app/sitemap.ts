@@ -31,8 +31,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
+  // ENHANCED: Prioritize FAQ and key tema pages
+  const highPriorityTemaPages = ['tema/faq'];
+  const standardTemaPages = TEMA_PAGE_SLUGS.filter(slug => !highPriorityTemaPages.includes(slug));
+  
+  // Filter out FAQ from main pages to avoid duplicates
+  const mainPageSlugsWithoutFAQ = MAIN_PAGE_SLUGS.filter(slug => slug !== 'tema/faq');
+  
   const mainPageEntries = LANGUAGES.flatMap((lang) =>
-    MAIN_PAGE_SLUGS.map((slug) => ({
+    mainPageSlugsWithoutFAQ.map((slug) => ({
       url: `${BASE_URL}/${lang}/${slug}`,
       lastModified,
       changeFrequency: 'monthly' as const,
@@ -40,8 +47,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
+  const highPriorityEntries = LANGUAGES.flatMap((lang) =>
+    highPriorityTemaPages.map((slug) => ({
+      url: `${BASE_URL}/${lang}/${slug}`,
+      lastModified,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    }))
+  );
+
   const temaPageEntries = LANGUAGES.flatMap((lang) =>
-    TEMA_PAGE_SLUGS.map((slug) => ({
+    standardTemaPages.map((slug) => ({
       url: `${BASE_URL}/${lang}/${slug}`,
       lastModified,
       changeFrequency: 'monthly' as const,
@@ -49,5 +65,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  return [...homepageEntries, ...mainPageEntries, ...temaPageEntries];
+  return [...homepageEntries, ...mainPageEntries, ...highPriorityEntries, ...temaPageEntries];
 }

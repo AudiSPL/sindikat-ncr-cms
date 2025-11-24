@@ -20,9 +20,17 @@ export function Hero({ lang }: HeroProps) {
       {/* Content */}
       <div className="relative z-10 flex min-h-[95vh] items-center">
         <div className="container mx-auto flex flex-col items-center justify-center px-4 py-14 text-center space-y-6 md:space-y-8">
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
-            {content.hero.title}
-          </h1>
+          <div>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
+              {content.hero.title}
+            </h1>
+            <p className="text-xl md:text-2xl font-semibold text-white/90 mt-3">
+              {lang === 'sr'
+                ? 'Sindikat radnika NCR Atleos'
+                : 'NCR Atleos Workers Union'
+              }
+            </p>
+          </div>
 
           <p className="text-lg md:text-xl lg:text-2xl text-white/90 dark:text-gray-200 max-w-4xl mx-auto">
             {content.hero.lead}

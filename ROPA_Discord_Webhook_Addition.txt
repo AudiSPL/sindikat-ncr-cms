@@ -1,0 +1,242 @@
+================================================================================
+ROPA DOCUMENT UPDATE - DISCORD WEBHOOK NOTIFICATIONS
+================================================================================
+
+Add this new processing activity to the end of the existing activities list
+in ROPA_Master_Full_SR_EN.docx
+
+================================================================================
+🇷🇸 SRPSKA VERZIJA
+================================================================================
+
+AKTIVNOST OBRADE #[broj]: Interne administrativne notifikacije o novim članovima
+
+1. NAZIV AKTIVNOSTI OBRADE
+   Interne administrativne notifikacije putem Discord platforme
+
+2. OPIS I SVRHA OBRADE
+   Automatsko obaveštavanje ovlašćenih administratora sindikata o novim prijavama za članstvo radi blagovremenog pregleda i odobravanja aplikacija. Notifikacije omogućavaju efikasno upravljanje procesom prijema novih članova.
+
+3. PRAVNI OSNOV OBRADE
+   - Član 12. stav 1. tačka 6) Zakona o zaštiti podataka o ličnosti (legitimni interesi sindikata za efikasno upravljanje članstvom)
+   - Član 17. stav 2. tačka 4) Zakona (obrada od strane sindikata u okviru zakonitih aktivnosti)
+   - Ekvivalentno: Art. 6(1)(f) i Art. 9(2)(d) GDPR
+
+4. KATEGORIJE LICA NA KOJE SE PODACI ODNOSE
+   - Kandidati za članstvo u sindikatu (lica koja podnose pristupnicu)
+   - Potencijalni članovi koji su podneli zahtev za učlanjenje
+
+5. KATEGORIJE LIČNIH PODATAKA
+   Osnovni identifikacioni podaci:
+   - Ime i prezime
+   - Email adresa
+   - Quicklook ID (QLID)
+   
+   Podaci o zaposlenju:
+   - Grad (lokacija rada)
+   - Odeljenje (Division)
+   - Tim
+   
+   Podaci o članstvu:
+   - Status anonimnosti (vidljiv/anoniman)
+   - Datum podnošenja pristupnice
+   - Vreme prijave
+
+6. KATEGORIJE PRIMALACA
+   Interni primaoci:
+   - Predsednik sindikata
+   - Ovlašćeni administratori sindikata
+   - Članovi upravnog odbora (prema potrebi)
+   
+   Eksterni obrađivači:
+   - Discord Inc. (San Francisco, CA, SAD) - isključivo za transport poruka
+
+7. PRENOSI U TREĆE ZEMLJE
+   DA - Discord Inc. ima servere u Sjedinjenim Američkim Državama
+   
+   Pravni osnov prenosa:
+   - Standardni ugovorni uslovi (SCC) u skladu sa GDPR
+   - Discord Terms of Service and Privacy Policy (služi kao DPA)
+   
+   Garancije:
+   - HTTPS enkripcija u prenosu
+   - Discord je GDPR compliant platforma
+   - Webhook URL zaštićen kao environment variable
+   - Pristup Discord serveru ograničen 2FA autentifikacijom
+
+8. ROKOVI ČUVANJA PODATAKA
+   
+   Na Discord platformi:
+   - Poruke se čuvaju u historiji Discord kanala prema Discord politici retencije
+   - Tipično 30-90 dana u zavisnosti od server postavki
+   - Administratori mogu ručno obrisati poruke
+   
+   U sistemu sindikata:
+   - N/A (notifikacije su tranzicione i ne čuvaju se nakon slanja)
+   - Originalni podaci se čuvaju u bazi podataka prema glavnom ROPA zapisu za članstvo
+
+9. OPIS TEHNIČKIH I ORGANIZACIONIH MERA BEZBEDNOSTI
+   
+   Tehničke mere:
+   - Discord webhook URL čuvan kao enkriptovana environment variable
+   - HTTPS protokol za sve komunikacije sa Discord API-jem
+   - Webhook notifikacije šalju se u privatni Discord kanal
+   - Rate limiting na API nivou (zaštita od злоупотребе)
+   - Error handling koji sprečava curenje podataka u logove
+   
+   Organizacione mere:
+   - Pristup Discord serveru ograničen na ovlašćene administratore
+   - Obavezna multifaktorska autentifikacija (2FA) za sve administratore
+   - Discord kanal je privatan (nije javno dostupan)
+   - Redovna kontrola liste administratora sa pristupom
+   - Edukacija administratora o zaštiti podataka
+   
+   Kadrovske mere:
+   - Ugovori o poverljivosti sa svim administratorima
+   - Jasno definisane uloge i odgovornosti
+   - Least-privilege princip (minimalni neophodni pristup)
+
+10. LEGITIMNI INTERESI (AKO JE PRIMENLJIVO)
+    
+    Legitimni interes sindikata:
+    - Efikasno i blagovremeno upravljanje procesom prijema novih članova
+    - Brza reakcija na nove aplikacije radi zaštite prava kandidata
+    - Transparentno praćenje procesa učlanjenja
+    
+    Balansiranje interesa:
+    - Interes kandidata: Brza obrada aplikacije i prijem u članstvo
+    - Interes sindikata: Efikasna administracija i zaštita prava članova
+    - Nema negativnog uticaja na prava kandidata (podaci nisu javni)
+    
+    Test neophodnosti:
+    - Discord webhook je proporcionalan cilju (brze notifikacije)
+    - Ne postoje manje invazivne alternative sa istom efikasnošću
+    - Minimizacija podataka (samo neophodne informacije)
+
+
+================================================================================
+🇬🇧 ENGLISH VERSION
+================================================================================
+
+PROCESSING ACTIVITY #[number]: Internal Administrative Notifications for New Members
+
+1. NAME OF PROCESSING ACTIVITY
+   Internal administrative notifications via Discord platform
+
+2. DESCRIPTION AND PURPOSE OF PROCESSING
+   Automated notification of authorized union administrators about new membership applications for timely review and approval. Notifications enable efficient management of the new member admission process.
+
+3. LEGAL BASIS FOR PROCESSING
+   - Article 12, paragraph 1, item 6) of the Personal Data Protection Act (legitimate interests of the union for efficient membership management)
+   - Article 17, paragraph 2, item 4) of the Act (processing by a trade union in the course of its legitimate activities)
+   - Equivalent: Art. 6(1)(f) and Art. 9(2)(d) GDPR
+
+4. CATEGORIES OF DATA SUBJECTS
+   - Membership candidates (persons submitting applications)
+   - Prospective members who have submitted membership requests
+
+5. CATEGORIES OF PERSONAL DATA
+   Basic identification data:
+   - Full name
+   - Email address
+   - Quicklook ID (QLID)
+   
+   Employment data:
+   - City (work location)
+   - Division
+   - Team
+   
+   Membership data:
+   - Anonymity status (visible/anonymous)
+   - Application submission date
+   - Registration time
+
+6. CATEGORIES OF RECIPIENTS
+   Internal recipients:
+   - Union President
+   - Authorized union administrators
+   - Executive board members (as needed)
+   
+   External processors:
+   - Discord Inc. (San Francisco, CA, USA) - for message transport only
+
+7. TRANSFERS TO THIRD COUNTRIES
+   YES - Discord Inc. has servers in the United States of America
+   
+   Legal basis for transfer:
+   - Standard Contractual Clauses (SCC) under GDPR
+   - Discord Terms of Service and Privacy Policy (serves as DPA)
+   
+   Safeguards:
+   - HTTPS encryption in transit
+   - Discord is a GDPR compliant platform
+   - Webhook URL protected as environment variable
+   - Discord server access restricted with 2FA authentication
+
+8. DATA RETENTION PERIODS
+   
+   On Discord platform:
+   - Messages are stored in Discord channel history according to Discord retention policy
+   - Typically 30-90 days depending on server settings
+   - Administrators can manually delete messages
+   
+   In union system:
+   - N/A (notifications are transient and not stored after sending)
+   - Original data is stored in database according to main ROPA record for membership
+
+9. DESCRIPTION OF TECHNICAL AND ORGANIZATIONAL SECURITY MEASURES
+   
+   Technical measures:
+   - Discord webhook URL stored as encrypted environment variable
+   - HTTPS protocol for all communications with Discord API
+   - Webhook notifications sent to private Discord channel
+   - Rate limiting at API level (protection against abuse)
+   - Error handling that prevents data leakage in logs
+   
+   Organizational measures:
+   - Discord server access restricted to authorized administrators
+   - Mandatory multi-factor authentication (2FA) for all administrators
+   - Discord channel is private (not publicly accessible)
+   - Regular review of administrator access list
+   - Administrator education on data protection
+   
+   Personnel measures:
+   - Confidentiality agreements with all administrators
+   - Clearly defined roles and responsibilities
+   - Least-privilege principle (minimal necessary access)
+
+10. LEGITIMATE INTERESTS (IF APPLICABLE)
+    
+    Legitimate interest of the union:
+    - Efficient and timely management of new member admission process
+    - Quick response to new applications to protect candidate rights
+    - Transparent tracking of membership process
+    
+    Balancing of interests:
+    - Candidate interest: Quick processing of application and membership admission
+    - Union interest: Efficient administration and protection of member rights
+    - No negative impact on candidate rights (data is not public)
+    
+    Necessity test:
+    - Discord webhook is proportionate to the goal (fast notifications)
+    - No less invasive alternatives with the same efficiency exist
+    - Data minimization (only necessary information)
+
+
+================================================================================
+INSTRUCTIONS FOR ADDING TO WORD DOCUMENT
+================================================================================
+
+1. Open ROPA_Master_Full_SR_EN.docx in Microsoft Word
+2. Navigate to the end of the existing processing activities list
+3. Copy the Serbian version section above (🇷🇸 SRPSKA VERZIJA)
+4. Paste it into the document, maintaining the same formatting style as existing activities
+5. Update the activity number #[broj] to the next sequential number
+6. Copy the English version section above (🇬🇧 ENGLISH VERSION)
+7. Paste it in the corresponding English section of the document
+8. Update the activity number #[number] to match the Serbian version
+9. Review formatting to ensure consistency with existing entries
+10. Save the document
+
+================================================================================
+

@@ -429,23 +429,23 @@ export const content: Record<Language, Content> = {
           questions: [
             {
               question: "Da li poslodavac može da zabrani sindikalno organizovanje i da li u mom ugovoru može da stoji da ne mogu da budem član sindikata?",
-              answer: "Ne. Pravo na sindikalno organizovanje je garantovano Ustavom i Zakonom o radu i ugovor o radu ne može ga zakonito ograničiti."
+              answer: "Ne, poslodavac ne može zabraniti sindikalno organizovanje niti staviti klauzulu protiv učlanjenja u sindikat u ugovor o radu. Ovo pravo je garantovano Ustavom Republike Srbije (član 56) i Zakonom o radu (član 206-215), što znači da bilo kakva odredba u ugovoru o radu koja ograničava ovo pravo je pravno nevalidna i ne proizvodi pravno dejstvo. U praksi to znači da čak i ako ste potpisali ugovor koji sadrži takvu klauzulu, ona se ne može primeniti. Ako poslodavac pokuša da vas spreči da se učlanite u sindikat ili vam zapreti zbog toga, to predstavlja kršenje fundamentalnih radničkih prava. Možete kontaktirati sindikat za besplatnu konsultaciju ili prijaviti slučaj Inspektoratu za rad."
             },
             {
               question: "Da li mogu biti kažnjen zbog sindikalne aktivnosti ili protesta?",
-              answer: "Ne, ako su aktivnosti u skladu sa zakonom. Odmazda zbog zakonite sindikalne aktivnosti može predstavljati povredu radnopravnih propisa i biti osnov za pravnu zaštitu."
+              answer: "Ne, ne možete biti kažnjeni zbog zakonite sindikalne aktivnosti ili protesta. Zakon o radu (član 206) i Ustav Republike Srbije (član 56) garantuju slobodu sindikalnog organizovanja i zabranjuju odmazdu protiv zaposlenih zbog sindikalne aktivnosti. Ako poslodavac pokuša da vas kazni, degradira, ili na bilo koji način diskriminiše zbog učlanjenja u sindikat ili učešća u zakonitim sindikalnim aktivnostima, to predstavlja teško kršenje radnog prava. U slučaju odmazde, imate pravo da podnesete prigovor Inspektoratu za rad u roku od 15 dana. Sindikat može pružiti besplatnu pravnu pomoć i zastupanje u ovom postupku."
             },
             {
               question: "Da li poslodavac može da me otpusti zbog članstva u sindikatu?",
-              answer: "Ne. Otpuštanje isključivo zbog sindikalnog članstva je teško kršenje Zakona o radu i može biti osnov za pokretanje postupka radi sudske zaštite, uključujući zahtev za vraćanje na posao i naknadu štete, u skladu sa odlukom nadležnog organa."
+              answer: "Ne, poslodavac ne može da vas otpusti isključivo zbog članstva u sindikatu. Otpustanje zbog sindikalnog članstva predstavlja teško kršenje Zakona o radu (član 206, stav 2) i Ustava Republike Srbije (član 56). Takav otpust je pravno nevažeći i predstavlja diskriminaciju na osnovu sindikalnog članstva, što je eksplicitno zabranjeno. Ako ste otpušteni zbog članstva u sindikatu, imate pravo da podnesete zahtev za vraćanje na posao i naknadu štete. Postupak se pokreće pred Inspektoratom za rad u roku od 15 dana od otkaza, a zatim se može nastaviti pred sudom. Sindikat pruža besplatnu pravnu pomoć i zastupanje u ovakvim slučajevima."
             },
             {
               question: "Šta ako me menadžer upozori da ne pričam o sindikatu?",
-              answer: "Takvo upozorenje može biti protivno Zakonu o radu i drugim propisima. Imate pravo da razgovarate o sindikatu sa kolegama tokom pauza i van radnog vremena, u skladu sa internim pravilima i zakonom."
+              answer: "Takvo upozorenje je protivno Zakonu o radu i može predstavljati pokušaj sprečavanja sindikalnog organizovanja, što je zabranjeno. Zakon o radu (član 206) garantuje slobodu sindikalnog organizovanja i zabranjuje poslodavcu da spreči, ograniči ili utiče na sindikalne aktivnosti zaposlenih. Upozorenje menadžera da ne pričate o sindikatu može biti protivzakonito, posebno ako je praćeno pretnjama ili pritiskom. Imate pravo da razgovarate o sindikatu sa kolegama tokom pauza i van radnog vremena. Ako menadžer nastavi sa pritiskom ili pretnjama, dokumentujte sve i kontaktirajte sindikat. Možete anonimno prijaviti slučaj, a sindikat će proceniti da li je reč o kršenju radnog prava i kako dalje postupiti."
             },
             {
               question: "Mogu li da prijavim kršenja anonimno?",
-              answer: "Da. Sindikat omogućava anonimno prijavljivanje, a posebna zaštita uzbunjivača može se primenjivati u skladu sa Zakonom o zaštiti uzbunjivača."
+              answer: 'Da, možete prijaviti kršenja anonimno putem sindikata. Sindikat omogućava anonimno prijavljivanje kršenja radnih prava, a Zakon o zaštiti uzbunjivača („Službeni glasnik RS", br. 128/2014) garantuje posebnu zaštitu onima koji prijave kršenja u javnom interesu. Ova zaštita se primenjuje kada prijavljujete kršenja koja se odnose na radna prava, bezbednost na radu, ili druge javne interese. Za anonimnu prijavu, kontaktirajte sindikat na office@sindikatncr.com sa ličnog email naloga. Možete ostaviti samo opšte informacije o problemu bez otkrivanja identiteta. Sindikat će proceniti slučaj i, ako je potrebno, pomoći vam da podnesete formalnu prijavu Inspektoratu za rad ili drugim nadležnim organima.'
             },
             {
               question: "Šta se dešava u prvoj godini članstva?",
