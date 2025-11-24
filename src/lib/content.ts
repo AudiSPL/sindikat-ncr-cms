@@ -86,10 +86,17 @@ export interface Content {
       content: string;
     }>;
   };
-  faq: Array<{
-    question: string;
-    answer: string;
-  }>;
+  faq: {
+    categories: Array<{
+      id: string;
+      title: string;
+      icon: string;
+      questions: Array<{
+        question: string;
+        answer: string;
+      }>;
+    }>;
+  };
   pristupnica: {
     title: string;
     content: string;
@@ -382,32 +389,205 @@ export const content: Record<Language, Content> = {
         }
       ]
     },
-    faq: [
-      {
-        question: "Šta je sindikat i zašto mi treba?",
-        answer: "Sindikat je organizacija zaposlenih koja štiti vaša prava kroz kolektivno pregovaranje. Kroz sindikat možete uticati na uslove rada, plate, benefite i druge aspekte radnog odnosa."
-      },
-      {
-        question: "Da li je članstvo stvarno anonimno?",
-        answer: "Anonimnost je dostupna do trenutka kada zakon zahteva drugačije (npr. u postupcima reprezentativnosti). Tada važe posebne zakonske zaštite za učesnike i predstavnike."
-      },
-      {
-        question: "Koliko košta članstvo?",
-        answer: "Nema članarine do marta/aprila 2026. Nakon dostizanja reprezentativnosti, članarina se uvodi glasanjem svih članova (obično oko 1% plate)."
-      },
-      {
-        question: "Gde se čuvaju moji podaci?",
-        answer: "Podaci se čuvaju u EU (Supabase Ireland) u skladu sa GDPR. Imamo audit logove svih pristupa i možemo obrisati vaše podatke u roku od 30 dana po zahtevu."
-      },
-      {
-        question: "Šta ako me poslodavac pita o članstvu?",
-        answer: "Poslodavac nema pravo da traži informacije o vašem članstvu u sindikatu, osim u slučajevima propisanim zakonom. Vaše članstvo je privatna stvar."
-      },
-      {
-        question: "Kako mogu da se pridružim?",
-        answer: "Kliknite na 'Pridruži se našoj priči' dugme i popunite formular. Možete ostaviti samo email za komunikaciju, ostalo može biti anonimno."
-      }
-    ],
+    faq: {
+      categories: [
+        {
+          id: "basic",
+          title: "📌 Osnovna pitanja o sindikatu",
+          icon: "BookOpen",
+          questions: [
+            {
+              question: "Šta je sindikat i zašto mi treba?",
+              answer: "Sindikat je organizacija zaposlenih koja štiti vaša prava kroz kolektivno pregovaranje i zastupanje, u skladu sa važećim propisima Republike Srbije."
+            },
+            {
+              question: "Da li je članstvo stvarno anonimno?",
+              answer: "Anonimnost traje do trenutka kada zakon zahteva identifikaciju radi utvrđivanja reprezentativnosti ili vođenja postupaka. Tada se primenjuju posebne zakonske zaštite."
+            },
+            {
+              question: "Koliko košta članstvo?",
+              answer: "Nema članarine do marta/aprila 2026. Nakon sticanja reprezentativnosti, članarina se može uvesti glasanjem članova."
+            },
+            {
+              question: "Gde se čuvaju moji podaci?",
+              answer: "Podaci se čuvaju u EU (Supabase Ireland), u skladu sa GDPR i Zakonom o zaštiti podataka o ličnosti. Sindikat će sprovesti brisanje bez nepotrebnog odlaganja, najčešće u roku od 30 dana, osim ako postoji zakonska obaveza dužeg čuvanja (npr. računovodstvena ili sudska dokumentacija)."
+            },
+            {
+              question: "Kako mogu da se pridružim?",
+              answer: "Kliknite na \"Pridruži se\" i popunite formular. Izaberite način verifikacije u zavisnosti od toga da li želite da budete anonimni ili ne."
+            },
+            {
+              question: "Da li moram da obavestim poslodavca da sam član?",
+              answer: "Ne. Članstvo u sindikatu je privatno i ne prijavljuje se poslodavcu, osim ako to sami izričito želite ili ako je neophodno u okviru zakonom propisanih postupaka."
+            }
+          ]
+        },
+        {
+          id: "legal",
+          title: "⚖️ Pravna prava i zaštita",
+          icon: "Scale",
+          questions: [
+            {
+              question: "Da li poslodavac može da zabrani sindikalno organizovanje i da li u mom ugovoru može da stoji da ne mogu da budem član sindikata?",
+              answer: "Ne. Pravo na sindikalno organizovanje je garantovano Ustavom i Zakonom o radu i ugovor o radu ne može ga zakonito ograničiti."
+            },
+            {
+              question: "Da li mogu biti kažnjen zbog sindikalne aktivnosti ili protesta?",
+              answer: "Ne, ako su aktivnosti u skladu sa zakonom. Odmazda zbog zakonite sindikalne aktivnosti može predstavljati povredu radnopravnih propisa i biti osnov za pravnu zaštitu."
+            },
+            {
+              question: "Da li poslodavac može da me otpusti zbog članstva u sindikatu?",
+              answer: "Ne. Otpuštanje isključivo zbog sindikalnog članstva je teško kršenje Zakona o radu i može biti osnov za pokretanje postupka radi sudske zaštite, uključujući zahtev za vraćanje na posao i naknadu štete, u skladu sa odlukom nadležnog organa."
+            },
+            {
+              question: "Šta ako me menadžer upozori da ne pričam o sindikatu?",
+              answer: "Takvo upozorenje može biti protivno Zakonu o radu i drugim propisima. Imate pravo da razgovarate o sindikatu sa kolegama tokom pauza i van radnog vremena, u skladu sa internim pravilima i zakonom."
+            },
+            {
+              question: "Mogu li da prijavim kršenja anonimno?",
+              answer: "Da. Sindikat omogućava anonimno prijavljivanje, a posebna zaštita uzbunjivača može se primenjivati u skladu sa Zakonom o zaštiti uzbunjivača."
+            },
+            {
+              question: "Šta se dešava u prvoj godini članstva?",
+              answer: "Odmah po učlanjenju dobijate pristup uslugama sindikata: savetovanju, informacijama, anonimnim kanalima za prijavu i mogućnosti učešća u sastancima, anketama i glasanju, u skladu sa Statutom sindikata."
+            }
+          ]
+        },
+        {
+          id: "privacy",
+          title: "🔐 Digitalna privatnost",
+          icon: "Lock",
+          questions: [
+            {
+              question: "Da li poslodavac može da vidi da sam posetio sajt sindikata?",
+              answer: "Ne, ako pristupate sa ličnih uređaja ili preko privatne/mobilne mreže. Preporučuje se da za sindikalnu komunikaciju koristite lične uređaje i privatne naloge."
+            },
+            {
+              question: "Da li sindikat koristi kolačiće trećih strana?",
+              answer: "Koristimo samo tehničke kolačiće neophodne za funkcionisanje sajta, bez marketinškog praćenja ili profilisanja korisnika."
+            },
+            {
+              question: "Da li mogu da napustim sindikat i šta se dešava sa mojim podacima?",
+              answer: "Možete istupiti iz sindikata u svakom trenutku. Podaci se brišu bez nepotrebnog odlaganja, najčešće u roku od 30 dana od obrade zahteva, osim ako postoji zakonska obaveza da se određeni podaci čuvaju duže (npr. finansijska dokumentacija ili podaci u toku sudskog postupka). Istupanjem prestaje pravo na podršku i beneficije sindikata."
+            }
+          ]
+        },
+        {
+          id: "participation",
+          title: "🙋 Učešće u sindikatu",
+          icon: "Users",
+          questions: [
+            {
+              question: "Kako mogu da učestvujem ako želim da ostanem anoniman?",
+              answer: "Možete učestvovati putem anonimnog glasanja, predloga, anketa i drugih digitalnih kanala, bez obaveze da javno otkrivate identitet."
+            },
+            {
+              question: "Da li mogu da predložim temu za pregovaranje?",
+              answer: "Da. Svaki član može predložiti problem ili inicijativu koja će biti razmotrena u skladu sa internim procedurama sindikata."
+            },
+            {
+              question: "Mogu li da se priključim radnim grupama?",
+              answer: "Da. Učešće u radnim grupama je dobrovoljno i zasniva se na vašem interesovanju i stručnosti."
+            },
+            {
+              question: "Šta ako ne želim javnu aktivnost?",
+              answer: "Možete ostati neaktivni član i učestvovati isključivo putem anonimnog glasanja i digitalnih kanala, bez javnog eksponiranja."
+            }
+          ]
+        },
+        {
+          id: "bargaining",
+          title: "📝 Kolektivno pregovaranje i ugovori",
+          icon: "FileText",
+          questions: [
+            {
+              question: "Šta je kolektivni ugovor i kako se pregovara?",
+              answer: "Kolektivni ugovor je pisani sporazum između sindikata i poslodavca koji definiše plate, radno vreme, beneficije i druge uslove rada. Pregovore vodi tim sindikata na osnovu prioriteta članova, a nacrt ugovora se usvaja glasanjem članova, u skladu sa Zakonom o radu."
+            },
+            {
+              question: "Koliko traje proces pregovaranja prvog ugovora?",
+              answer: "Proces zaključenja prvog kolektivnog ugovora često zahteva približno 12–18 meseci, u zavisnosti od složenosti tema i toka pregovora. U tom periodu primenjuju se postojeći uslovi rada, osim ako se ne dogovori nešto drugačije."
+            },
+            {
+              question: "Ko odlučuje šta će biti u kolektivnom ugovoru?",
+              answer: "Članovi odlučuju o ključnim pitanjima u skladu sa Statutom sindikata. Prioriteti se prikupljaju kroz ankete i sastanke, a konačna verzija ugovora se usvaja većinom glasova članova koji učestvuju u glasanju."
+            }
+          ]
+        },
+        {
+          id: "strikes",
+          title: "🤝 Štrajkovi i kolektivne akcije",
+          icon: "Megaphone",
+          questions: [
+            {
+              question: "Kada sindikat može da organizuje štrajk?",
+              answer: "Štrajk se razmatra kao poslednje sredstvo, nakon pokušaja pregovora i drugih mirnih rešenja. Neophodno je glasanje članova, obaveštenje poslodavcu i poštovanje procedura propisanih Zakonom o štrajku."
+            },
+            {
+              question: "Da li moram da učestvujem u štrajku?",
+              answer: "Ne možete biti prinuđeni da učestvujete u štrajku. Učešće je dobrovoljno, ali što više članova učestvuje u zakonski organizovanom štrajku, to su efekti sindikalne akcije snažniji. Poslodavac zakonito ne sme da vas kažnjava zbog učešća u zakonski organizovanom štrajku."
+            }
+          ]
+        },
+        {
+          id: "restructuring",
+          title: "💼 Poslodavac i restrukturiranje",
+          icon: "Briefcase",
+          questions: [
+            {
+              question: "Kako me sindikat štiti tokom restrukturiranja kompanije?",
+              answer: "Kolektivni ugovor može da predvidi procedure kod otpuštanja, prava prvenstva prilikom ponovnog zapošljavanja i zaštitu od proizvoljnih odluka. Sindikat se zalaže za transparentne i pravične kriterijume u skladu sa zakonom."
+            },
+            {
+              question: "Da li poslodavac mora da konsultuje sindikat za velike promene?",
+              answer: "Ako postoji kolektivni ugovor ili reprezentativan sindikat, poslodavac je dužan da pregovara o relevantnim promenama, posebno o masovnim otpuštanjima ili značajnoj izmeni uslova rada, u skladu sa Zakonom o radu."
+            },
+            {
+              question: "Šta ako poslodavac ne poštuje kolektivni ugovor?",
+              answer: "Možete pokrenuti pitanje preko sindikata. Sindikat može preduzeti korake pred nadležnim organima (inspekcija rada, mirno rešavanje sporova, sud) radi zaštite prava članova, u skladu sa važećim propisima."
+            }
+          ]
+        },
+        {
+          id: "representativeness",
+          title: "📊 Reprezentativnost i status sindikata",
+          icon: "BarChart3",
+          questions: [
+            {
+              question: "Šta znači reprezentativnost i zašto je važna?",
+              answer: "Reprezentativnost znači da sindikat predstavlja zakonom propisan minimalni procenat zaposlenih (15%) i time stiče zakonsko ovlašćenje da pregovara sa poslodavcem u vaše ime."
+            },
+            {
+              question: "Šta se dešava ako sindikat ne postigne reprezentativnost?",
+              answer: "Sindikat i dalje pruža podršku, informacije i savetovanje članovima, ali nema zakonsko pregovaračko ovlašćenje prema poslodavcu."
+            },
+            {
+              question: "Šta se dešava nakon postizanja reprezentativnosti?",
+              answer: "Sindikat dobija pravo na kolektivno pregovaranje, formalno učešće u procesima odlučivanja o radnim uslovima i mogućnost uvođenja članarine, u skladu sa zakonom i Statutom."
+            }
+          ]
+        },
+        {
+          id: "finance",
+          title: "💰 Finansije i transparentnost",
+          icon: "Wallet",
+          questions: [
+            {
+              question: "Kako se troše sredstva sindikata?",
+              answer: "Budžet odobravaju članovi u skladu sa Statutom i koristi se za pravnu pomoć, administraciju, obuku, komunikaciju i kampanje. Ključne informacije o troškovima redovno se objavljuju članstvu."
+            },
+            {
+              question: "Ko nadgleda finansije sindikata?",
+              answer: "Finansije nadgleda nadzorni odbor izabran od članova, uz periodične izveštaje i, po potrebi, reviziju, u skladu sa propisima i Statutom sindikata."
+            },
+            {
+              question: "Mogu li da vidim kako se koriste moje članarine?",
+              answer: "Da. Članovi imaju pravo uvida u finansijske izveštaje sindikata, uključujući zbirne prikaze prihoda i rashoda, nakon uvođenja članarine."
+            }
+          ]
+        }
+      ]
+    },
     pristupnica: {
       title: "Pridruži se našoj priči",
       content: "Pred vama je jednostavan korak ka boljoj budućnosti. Popunite formular poverljivo, bez straha od pritiska, i budite deo promene koja štiti sva vaša prava.",
@@ -741,32 +921,205 @@ export const content: Record<Language, Content> = {
         }
       ]
     },
-    faq: [
-      {
-        question: "What is a union and why do I need it?",
-        answer: "A union is an organization of employees that protects your rights through collective bargaining. Through the union you can influence working conditions, wages, benefits and other aspects of employment."
-      },
-      {
-        question: "Is membership really anonymous?",
-        answer: "Anonymity is available until the law requires otherwise (e.g., in representativeness procedures). Then special legal protections apply for participants and representatives."
-      },
-      {
-        question: "How much does membership cost?",
-        answer: "No membership fees until March/April 2026. After reaching representativeness, membership fees are introduced by voting of all members (usually about 1% of salary)."
-      },
-      {
-        question: "Where is my data stored?",
-        answer: "Data is stored in the EU (Supabase Ireland) in accordance with GDPR. We have audit logs of all access and can delete your data within 30 days upon request."
-      },
-      {
-        question: "What if my employer asks about membership?",
-        answer: "The employer has no right to request information about your union membership, except in cases prescribed by law. Your membership is a private matter."
-      },
-      {
-        question: "How can I join?",
-        answer: "Click the 'Join our story' button and fill out the form. You can leave only email for communication, everything else can be anonymous."
-      }
-    ],
+    faq: {
+      categories: [
+        {
+          id: "basic",
+          title: "📌 Basic union questions",
+          icon: "BookOpen",
+          questions: [
+            {
+              question: "What is a union and why do I need it?",
+              answer: "A union is an employee organization that protects your rights through collective bargaining and representation, in line with applicable Serbian law."
+            },
+            {
+              question: "Is membership really anonymous?",
+              answer: "Anonymity is maintained until the law requires identification for representativeness or legal proceedings. At that point, specific legal protections apply."
+            },
+            {
+              question: "How much does membership cost?",
+              answer: "There are no membership fees until March/April 2026. After the union becomes representative, fees may be introduced by a vote of the members."
+            },
+            {
+              question: "Where is my data stored?",
+              answer: "Data is stored in the EU (Supabase Ireland), in accordance with GDPR and Serbian data protection law. The union will delete your data without undue delay, typically within 30 days, unless there is a legal obligation to retain it longer (e.g. accounting or court-related records)."
+            },
+            {
+              question: "How can I join?",
+              answer: "Click \"Join our story\" and complete the form. Choose the verification method depending on whether you want to remain anonymous or not."
+            },
+            {
+              question: "Do I have to inform my employer that I'm a member?",
+              answer: "No. Union membership is private and is not reported to the employer, unless you explicitly choose to do so or it is necessary in specific legal procedures."
+            }
+          ]
+        },
+        {
+          id: "legal",
+          title: "⚖️ Legal rights & protection",
+          icon: "Scale",
+          questions: [
+            {
+              question: "Can my employer prohibit union organizing or include a clause that I cannot join a union?",
+              answer: "No. The right to organize in a union is guaranteed by the Constitution and labor law, and an employment contract cannot lawfully restrict it."
+            },
+            {
+              question: "Can I be punished for union activity or protests?",
+              answer: "No, as long as the activities are lawful. Retaliation for lawful union activity may constitute a breach of labor law and give grounds for legal protection."
+            },
+            {
+              question: "Can my employer dismiss me because of union membership?",
+              answer: "No. Termination solely due to union membership is a serious violation of labor law and may justify legal action, including claims for reinstatement and compensation, subject to the decision of the competent authority."
+            },
+            {
+              question: "What if my manager warns me not to talk about the union?",
+              answer: "Such a warning may conflict with labor law and other regulations. You have the right to discuss the union with colleagues during breaks and outside working hours, in line with internal rules and applicable law."
+            },
+            {
+              question: "Can I report violations anonymously?",
+              answer: "Yes. The union allows anonymous reporting, and specific whistleblower protection may apply under the Serbian Whistleblower Protection Act."
+            },
+            {
+              question: "What happens in the first year of membership?",
+              answer: "From the moment you join, you gain access to union services: advice, information, anonymous reporting channels and the opportunity to take part in meetings, surveys and voting, in line with the union's Statute."
+            }
+          ]
+        },
+        {
+          id: "privacy",
+          title: "🔐 Digital privacy",
+          icon: "Lock",
+          questions: [
+            {
+              question: "Can my employer see that I visited the union website?",
+              answer: "No, if you access it from personal devices or private/mobile networks. It is recommended that you use personal devices and accounts for union-related communication."
+            },
+            {
+              question: "Does the union use third-party cookies?",
+              answer: "We use only technical cookies necessary for the functioning of the site and do not use marketing tracking or user profiling."
+            },
+            {
+              question: "Can I leave the union and what happens to my data?",
+              answer: "You can leave the union at any time. Your data will be deleted without undue delay, typically within 30 days of processing your request, unless there is a legal obligation to retain certain data longer (e.g. financial records or data used in ongoing legal proceedings). Once you leave, you no longer have access to union support and benefits."
+            }
+          ]
+        },
+        {
+          id: "participation",
+          title: "🙋 Participation in the union",
+          icon: "Users",
+          questions: [
+            {
+              question: "How can I participate if I want to remain anonymous?",
+              answer: "You can participate through anonymous voting, proposals, surveys and other digital channels, without having to disclose your identity publicly."
+            },
+            {
+              question: "Can I propose topics for negotiation?",
+              answer: "Yes. Any member can propose an issue or initiative, which will be reviewed in line with the union's internal procedures."
+            },
+            {
+              question: "Can I join working groups?",
+              answer: "Yes. Participation in working groups is voluntary and based on your interest and expertise."
+            },
+            {
+              question: "What if I don't want public activity?",
+              answer: "You can remain a non-active member and participate only through anonymous voting and digital channels, without any public exposure."
+            }
+          ]
+        },
+        {
+          id: "bargaining",
+          title: "📝 Collective bargaining & agreements",
+          icon: "FileText",
+          questions: [
+            {
+              question: "What is a collective agreement and how is it negotiated?",
+              answer: "A collective agreement is a written contract between the union and the employer that sets out wages, working hours, benefits and other working conditions. Negotiations are conducted by the union team based on member priorities, and the draft agreement is adopted by a vote of the members, in line with labor law."
+            },
+            {
+              question: "How long does it take to negotiate the first agreement?",
+              answer: "Negotiating the first collective agreement often takes around 12–18 months, depending on the complexity of the issues and the course of negotiations. During that period, existing working conditions apply unless otherwise agreed."
+            },
+            {
+              question: "Who decides what goes into the collective agreement?",
+              answer: "Members decide on key issues in accordance with the union's Statute. Priorities are collected through surveys and meetings, and the final version of the agreement is adopted by a majority of members who participate in the vote."
+            }
+          ]
+        },
+        {
+          id: "strikes",
+          title: "🤝 Strikes & collective actions",
+          icon: "Megaphone",
+          questions: [
+            {
+              question: "When can the union organize a strike?",
+              answer: "A strike is considered a last resort, after attempts at negotiation and other peaceful solutions. A member vote is required, the employer must be notified, and all procedures set by the Strike Act must be followed."
+            },
+            {
+              question: "Do I have to take part in a strike?",
+              answer: "You cannot be forced to participate in a strike. Participation is voluntary, but the more members join a lawfully organized strike, the stronger its impact. The employer is not legally allowed to punish you for taking part in a lawfully organized strike."
+            }
+          ]
+        },
+        {
+          id: "restructuring",
+          title: "💼 Employer & restructuring",
+          icon: "Briefcase",
+          questions: [
+            {
+              question: "How does the union protect me during company restructuring?",
+              answer: "A collective agreement may set out procedures for redundancies, re-employment priorities and safeguards against arbitrary decisions. The union advocates for transparent and fair criteria in line with the law."
+            },
+            {
+              question: "Does the employer have to consult the union on major changes?",
+              answer: "Where there is a collective agreement or a representative union, the employer is required to negotiate relevant changes, especially mass redundancies or significant changes to working conditions, in line with labor law."
+            },
+            {
+              question: "What if the employer does not comply with the collective agreement?",
+              answer: "You can raise the issue through the union. The union may take action before the competent authorities (labor inspection, dispute resolution bodies, courts) to protect members' rights, in accordance with applicable regulations."
+            }
+          ]
+        },
+        {
+          id: "representativeness",
+          title: "📊 Representativeness & union status",
+          icon: "BarChart3",
+          questions: [
+            {
+              question: "What does representativeness mean and why is it important?",
+              answer: "Representativeness means the union represents at least the minimum percentage of employees required by law (15%) and thereby obtains the legal authority to negotiate with the employer on your behalf."
+            },
+            {
+              question: "What happens if the union does not become representative?",
+              answer: "The union continues to provide support, information and advice to members but does not have statutory bargaining rights with the employer."
+            },
+            {
+              question: "What happens after representativeness is achieved?",
+              answer: "The union gains the right to engage in collective bargaining, take part formally in decisions on working conditions and introduce membership fees, in accordance with the law and the union's Statute."
+            }
+          ]
+        },
+        {
+          id: "finance",
+          title: "💰 Finance & transparency",
+          icon: "Wallet",
+          questions: [
+            {
+              question: "How are union funds spent?",
+              answer: "The budget is approved by members in line with the Statute and is used for legal support, administration, training, communication and campaigns. Key information on expenditures is regularly shared with members."
+            },
+            {
+              question: "Who oversees the union's finances?",
+              answer: "Finances are overseen by a supervisory body elected by the members, with periodic reports and, where appropriate, audits, in line with regulations and the union's Statute."
+            },
+            {
+              question: "Can I see how my membership fees are used?",
+              answer: "Yes. Members have the right to access the union's financial reports, including summary income and expenditure overviews, once membership fees are introduced."
+            }
+          ]
+        }
+      ]
+    },
     pristupnica: {
       title: "Join our story",
       content: "A simple step towards a better future awaits you. Fill out the form confidentially, without fear of pressure, and be part of the change that protects all your rights.",

@@ -11,13 +11,14 @@ interface FAQPageProps {
 export async function generateMetadata({ params }: FAQPageProps): Promise<Metadata> {
   const { lang } = await params;
   const content = getContent(lang as Language);
+  const firstQuestion = content.faq.categories[0]?.questions[0]?.question || content.nav.faq;
 
   return {
     title: content.nav.faq,
-    description: content.faq[0].question,
+    description: firstQuestion,
     openGraph: {
       title: content.nav.faq,
-      description: content.faq[0].question,
+      description: firstQuestion,
       type: 'website',
       locale: lang === 'sr' ? 'sr_RS' : 'en_US',
     },
@@ -28,116 +29,21 @@ export default async function FAQPage({ params }: FAQPageProps) {
   const { lang } = await params;
   const content = getContent(lang as Language);
 
-  const faqSchema =
-    lang === 'sr'
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: [
-            {
-              '@type': 'Question',
-              name: 'Šta je sindikat i zašto mi treba?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Sindikat je organizacija zaposlenih koja štiti vaša prava kroz kolektivno pregovaranje. Kroz sindikat možete uticati na uslove rada, plate, benefite i druge aspekte radnog odnosa.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Da li je članstvo stvarno anonimno?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Anonimnost je dostupna do trenutka kada zakon zahteva drugačije (npr. u postupcima reprezentativnosti). Tada važe posebne zakonske zaštite za učesnike i predstavnike.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Koliko košta članstvo?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Nema članarine do marta/aprila 2026. Nakon dostizanja reprezentativnosti, članarina se uvodi glasanjem svih članova (obično oko 1% plate).',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Gde se čuvaju moji podaci?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Podaci se čuvaju u EU (Supabase Ireland) u skladu sa GDPR. Imamo audit logove svih pristupa i možemo obrisati vaše podatke u roku od 30 dana po zahtevu.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Šta ako me poslodavac pita o članstvu?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Poslodavac nema pravo da traži informacije o vašem članstvu u sindikatu, osim u slučajevima propisanim zakonom. Vaše članstvo je privatna stvar.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Kako mogu da se pridružim?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Kliknite na "Pridruži se našoj priči" dugme i popunite formular. Možete ostaviti samo email za komunikaciju, ostalo može biti anonimno.',
-              },
-            },
-          ],
-        }
-      : {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: [
-            {
-              '@type': 'Question',
-              name: 'What is a union and why do I need it?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'A union is an organization of employees that protects your rights through collective bargaining. Through the union you can influence working conditions, wages, benefits and other aspects of employment.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Is membership really anonymous?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Anonymity is available until the law requires otherwise (e.g., in representativeness procedures). Then special legal protections apply for participants and representatives.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'How much does membership cost?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'No membership fees until March/April 2026. After reaching representativeness, membership fees are introduced by voting of all members (usually about 1% of salary).',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'Where is my data stored?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Data is stored in the EU (Supabase Ireland) in accordance with GDPR. We have audit logs of all access and can delete your data within 30 days upon request.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'What if my employer asks about membership?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'The employer has no right to request information about your union membership, except in cases prescribed by law. Your membership is a private matter.',
-              },
-            },
-            {
-              '@type': 'Question',
-              name: 'How can I join?',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'Click the "Join our story" button and fill out the form. You can leave only email for communication, everything else can be anonymous.',
-              },
-            },
-          ],
-        };
+  // Flatten all questions from categories for schema.org
+  const allQuestions = content.faq.categories.flatMap(cat => cat.questions);
+  
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: allQuestions.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
 
   const relatedLinks = [
     { href: `/${lang}/tema/anonimnost`, label: content.nav.confidentiality },
@@ -168,6 +74,32 @@ export default async function FAQPage({ params }: FAQPageProps) {
         </div>
 
         <FAQAccordion lang={lang as Language} />
+
+        {/* Legal Disclaimer */}
+        <div className="mt-12 p-6 bg-muted/30 border-l-4 border-yellow-500 rounded-lg">
+          <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+            <svg 
+              className="h-5 w-5 text-yellow-600" 
+              fill="none" 
+              strokeWidth="2" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+              />
+            </svg>
+            {lang === 'sr' ? 'Pravno obaveštenje' : 'Legal Notice'}
+          </h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {lang === 'sr' 
+              ? 'Informacije sadržane na ovoj stranici imaju isključivo informativni karakter i ne predstavljaju pravni savet. Tumačenje i primena prava zavisi od okolnosti konkretnog slučaja, kao i od važećih propisa u trenutku primene. Sindikat ne snosi odgovornost za odluke koje pojedinci donesu oslanjajući se isključivo na ovaj tekst, bez dodatne stručne konsultacije.'
+              : 'The information on this page is provided for general information purposes only and does not constitute legal advice. The interpretation and application of the law depends on the specific facts of each case and on the regulations in force at the relevant time. The union cannot be held liable for decisions made by individuals who rely solely on this text without seeking additional professional advice.'
+            }
+          </p>
+        </div>
 
         <div className="text-center space-y-4">
           <h2 className="text-2xl font-semibold">
