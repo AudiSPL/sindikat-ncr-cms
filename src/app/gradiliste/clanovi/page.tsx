@@ -131,7 +131,30 @@ export default function ClanoviPage() {
         throw new Error(result.error || 'Failed to send emails');
       }
 
-      alert(`Email uspešno poslat!\n\nPoslano: ${result.sent}\nNeuspelo: ${result.failed}`);
+      let message = `Email proces završen!\n\n✅ Poslano: ${result.sent}\n❌ Neuspelo: ${result.failed}`;
+      
+      if (result.failed > 0 && result.failedEmails) {
+        message += '\n\n❌ Emailovi koji nisu poslati:';
+        result.failedEmails.forEach((email: string) => {
+          message += `\n   • ${email}`;
+        });
+        message += '\n\nMožete pokušati ponovo samo sa njima.';
+      } else {
+        message += '\n\n🎉 Svi emailovi su uspešno poslati!';
+      }
+      
+      alert(message);
+      
+      // Copy failed emails to clipboard
+      if (result.failed > 0 && result.failedEmails && result.failedEmails.length > 0) {
+        const failedList = result.failedEmails.join('\n');
+        navigator.clipboard.writeText(failedList).then(() => {
+          console.log('📋 Failed emails copied to clipboard:', failedList);
+        }).catch(err => {
+          console.error('Failed to copy to clipboard:', err);
+        });
+      }
+      
       setShowEmailModal(false);
       setSelectedIds(new Set());
       setEmailSubject('');
