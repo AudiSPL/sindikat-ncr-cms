@@ -74,6 +74,10 @@ export default function ClanoviPage() {
   const [editingId, setEditingId] = useState<string | number | null>(null);
   const [editDraft, setEditDraft] = useState<Partial<Member>>({});
   const [selectedIds, setSelectedIds] = useState<Set<string | number>>(new Set());
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -91,6 +95,54 @@ export default function ClanoviPage() {
       setLoading(false);
     }
   }
+
+  const handleSendBulkEmail = async () => {
+    const selectedArray = Array.from(selectedIds);
+    
+    if (selectedArray.length === 0) {
+      alert('Morate selektovati bar jednog člana');
+      return;
+    }
+
+    if (!emailSubject.trim() || !emailMessage.trim()) {
+      alert('Naslov i poruka su obavezni');
+      return;
+    }
+
+    if (!confirm(`Poslati email za ${selectedArray.length} članova?`)) {
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      const response = await fetch('/api/members/bulk-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          memberIds: selectedArray,
+          subject: emailSubject,
+          message: emailMessage,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send emails');
+      }
+
+      alert(`Email uspešno poslat!\n\nPoslano: ${result.sent}\nNeuspelo: ${result.failed}`);
+      setShowEmailModal(false);
+      setSelectedIds(new Set());
+      setEmailSubject('');
+      setEmailMessage('');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Greška: ' + (error as Error).message);
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const exportCSV = () => {
     const headers = ['Ime','Email','Quicklook ID','Organizacija','Aktivan Član','Spec. Status','Datum priključenja'];
@@ -287,12 +339,21 @@ export default function ClanoviPage() {
               CSV
             </Button>
             {selectedIds.size > 0 && (
-              <Button 
-                className="border border-red-400 bg-red-600/80 text-white hover:bg-red-500/80"
-                onClick={handleBulkDelete}
-              >
-                Obriši ({selectedIds.size})
-              </Button>
+              <>
+                <Button
+                  onClick={() => setShowEmailModal(true)}
+                  disabled={selectedIds.size === 0}
+                  className={`${primaryButton} px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed`}
+                >
+                  📧 Pošalji Email ({selectedIds.size})
+                </Button>
+                <Button 
+                  className="border border-red-400 bg-red-600/80 text-white hover:bg-red-500/80"
+                  onClick={handleBulkDelete}
+                >
+                  Obriši ({selectedIds.size})
+                </Button>
+              </>
             )}
           </div>
         </div>
@@ -582,6 +643,77 @@ export default function ClanoviPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Bulk Email Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className={`${glassCard} rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto`}>
+            <h2 className="text-2xl font-bold mb-4 text-white">
+              📧 Pošalji Email ({selectedIds.size} članova)
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-2">
+                  Naslov Email-a
+                </label>
+                <input
+                  type="text"
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  placeholder="npr. Poziv za distribuciju promotivnog materijala"
+                  className={`w-full px-3 py-2 rounded-lg ${inputClasses}`}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-white/70 mb-2">
+                  Poruka
+                </label>
+                <textarea
+                  value={emailMessage}
+                  onChange={(e) => setEmailMessage(e.target.value)}
+                  rows={12}
+                  placeholder="Poštovani/a,
+
+
+
+Pozivamo vas da učestvujete u distribuciji promotivnog materijala...
+
+
+
+S poštovanjem,
+
+Sindikat NCR Atleos"
+                  className={`w-full px-3 py-2 rounded-lg ${inputClasses} font-mono text-sm`}
+                />
+              </div>
+
+              <div className="text-sm text-white/60 bg-white/5 p-3 rounded-lg border border-white/10">
+                <strong>📌 Napomena:</strong> Svaki član će dobiti individualnu kopiju email-a. 
+                Drugi članovi neće videti ko je još primio email.
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <Button
+                onClick={handleSendBulkEmail}
+                disabled={isSending}
+                className={`flex-1 ${primaryButton} disabled:opacity-50`}
+              >
+                {isSending ? 'Šaljem...' : '📧 Pošalji Email'}
+              </Button>
+              <Button
+                onClick={() => setShowEmailModal(false)}
+                disabled={isSending}
+                className={`${secondaryButton} px-6`}
+              >
+                Otkaži
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
