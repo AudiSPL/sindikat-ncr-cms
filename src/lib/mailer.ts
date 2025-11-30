@@ -36,7 +36,7 @@ export async function sendMail({
   if (!apiKey) throw new Error('RESEND_API_KEY missing');
 
   const resend = new Resend(apiKey);
-  const from = `${fromName} <no.reply@sindikatncr.com>`;
+  const from = `${fromName} <predsednik@sindikatncr.com>`;
 
   const resp = await resend.emails.send({
     from,
