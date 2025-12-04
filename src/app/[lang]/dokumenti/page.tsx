@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DetailsLayout } from '@/components/DetailsLayout';
-import { FileText, Book, Shield, Clipboard, Eye, PenTool, Scale } from 'lucide-react';
+import { FileText, Book, Shield, Clipboard, Eye, PenTool, Scale, FileCheck } from 'lucide-react';
 import { Language } from '@/lib/content';
 
 interface DokumentiPageProps {
@@ -32,6 +32,15 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
   const isSerbian = lang === 'sr';
 
   const coreDocuments = [
+    {
+      id: 'resenje-upisa',
+      title: isSerbian ? 'Rešenje o upisu' : 'Ministry Registration',
+      icon: FileCheck,
+      description: isSerbian
+        ? 'Oficijalno rešenje Ministarstva za rad, zapošljavanje, boračka i socijalna pitanja o upisu Sindikata NCR Atleos u Registar sindikata.'
+        : 'Official resolution from the Ministry of Labor, Employment, Veterans and Social Affairs regarding the registration of Sindikat NCR Atleos in the Register of Trade Unions.',
+      pdf: '/documents/Resenje o upisu.pdf'
+    },
     {
       id: 1,
       title: 'STATUT',
@@ -136,7 +145,7 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
           <h2 className="text-2xl md:text-3xl font-bold text-[#0B2C49] dark:text-white mb-6 pb-3 border-b-2 border-[#F28C38]">
             {isSerbian ? 'Osnovni Dokumenti' : 'Core Documents'}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {coreDocuments.map((doc) => (
               <Card key={doc.id} className="hover:shadow-lg transition-all duration-300 flex flex-col bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700">
                 <CardHeader className="flex-grow pb-3">
