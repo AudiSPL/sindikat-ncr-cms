@@ -231,7 +231,14 @@ export async function POST(
     // 7. Update member in database
     const adminId = (session?.user as any)?.id; // Get admin UUID from session
     
-    const updateData: any = {
+    const updateData: {
+      status: string;
+      member_id: string;
+      card_sent: boolean;
+      approved_at: string;
+      approved_by: string | undefined;
+      notes?: string;
+    } = {
       status: 'active',        // ← CHANGED from 'approved'
       member_id: memberNumber,
       card_sent: true,
