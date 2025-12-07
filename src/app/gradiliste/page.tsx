@@ -22,6 +22,10 @@ interface Member {
   city?: string;
   organization?: string;
   quicklook_id?: string;
+  // Add these new fields:
+  verification_method?: string | null;
+  verification_status?: string | null;
+  deleted_at?: string | null;
 }
 
 export default function GradilisteDashboard() {
@@ -186,6 +190,35 @@ export default function GradilisteDashboard() {
       setActionId(null);
     } catch (error: any) {
       console.error('Error approving member:', error);
+      alert(`Greška: ${error.message}`);
+      setActionId(null);
+    }
+  };
+
+  const handleSendReminder = async (memberId: string, email: string, name: string) => {
+    if (!confirm(`Poslati podsetnik korisniku ${name} (${email})?`)) {
+      return;
+    }
+
+    setActionId(memberId);
+
+    try {
+      const response = await fetch(`/api/members/${memberId}/send-reminder`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        alert(`Greška: ${result.error || 'Failed to send reminder'}`);
+        setActionId(null);
+        return;
+      }
+
+      alert(`✅ Podsetnik uspešno poslat na ${email}`);
+      setActionId(null);
+    } catch (error: any) {
+      console.error('Error sending reminder:', error);
       alert(`Greška: ${error.message}`);
       setActionId(null);
     }
@@ -470,10 +503,48 @@ export default function GradilisteDashboard() {
                           {member.full_name} {member.member_id ? `• ${member.member_id}` : ''}
                         </p>
                         <p className="text-sm text-white/60">{member.email}</p>
+                        {/* Verification status */}
+                        <div className="mt-2">
+                          {!member.verification_method ? (
+                            <span className="inline-flex items-center gap-1 text-xs bg-red-900/30 text-red-400 px-2 py-1 rounded">
+                              ⚠️ Verifikacija nije završena
+                            </span>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <span className="inline-flex items-center gap-1 text-xs bg-green-900/30 text-green-400 px-2 py-1 rounded">
+                                ✅ {
+                                  member.verification_method === 'email' ? '📧 Email' :
+                                  member.verification_method === 'teams' ? '💬 Teams' :
+                                  member.verification_method === 'badge' ? '📸 Bedž' :
+                                  member.verification_method === 'inperson' ? '🤝 Lično' :
+                                  'Verifikovano'
+                                }
+                              </span>
+                              {member.verification_status === 'pending' && (
+                                <span className="text-xs text-yellow-400">(čeka potvrdu)</span>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {activeTab === 'pending' ? (
                           <>
+                            {/* Reminder button for unverified members */}
+                            {!member.verification_method && (
+                              <Button
+                                className="text-xs bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 h-auto"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleSendReminder(member.id, member.email, member.full_name);
+                                }}
+                                disabled={actionId === member.id}
+                                title="Pošalji podsetnik za verifikaciju"
+                              >
+                                📧
+                              </Button>
+                            )}
+                            
                             <Button
                               className={primaryButton}
                               onClick={() => handleApproveMember(member.id)}
@@ -549,7 +620,40 @@ export default function GradilisteDashboard() {
                         <div><b className="text-white">Ime i prezime:</b> {selected.full_name}</div>
                         <div><b className="text-white">Email:</b> {selected.email}</div>
                         <div><b className="text-white">Organizacija:</b> {selected.organization || '-'}</div>
-                        <div><b className="text-white">Grad:</b> {selected.city || '-'}</div>
+                        <div>
+                          <span className="text-white/60 text-sm">Grad:</span>
+                          <p className="text-white">{selected.city || '-'}</p>
+                        </div>
+
+                        {/* Add verification info */}
+                        <div>
+                          <span className="text-white/60 text-sm">Status verifikacije:</span>
+                          {!selected.verification_method ? (
+                            <p className="text-red-400">⚠️ Nije završena - korak 2 nije odabran</p>
+                          ) : (
+                            <div>
+                              <p className="text-green-400">
+                                ✅ Metod: {
+                                  selected.verification_method === 'email' ? 'Email verifikacija' :
+                                  selected.verification_method === 'teams' ? 'Teams poruka' :
+                                  selected.verification_method === 'badge' ? 'Fotografija bedža' :
+                                  selected.verification_method === 'inperson' ? 'Lični susret' :
+                                  selected.verification_method
+                                }
+                              </p>
+                              <p className="text-sm text-white/60">
+                                Status: {
+                                  selected.verification_status === 'code_verified' ? 'Verifikovan' :
+                                  selected.verification_status === 'contacted' ? 'Kontaktiran' :
+                                  selected.verification_status === 'verified' ? 'Potvrđen' :
+                                  selected.verification_status === 'pending' ? 'Čeka potvrdu' :
+                                  selected.verification_status || '-'
+                                }
+                              </p>
+                            </div>
+                          )}
+                        </div>
+
                         <div><b className="text-white">Članski broj:</b> {selected.member_id || '-'}</div>
                         <div className="mt-3">
                           <b className="text-white">Dokumenti:</b>

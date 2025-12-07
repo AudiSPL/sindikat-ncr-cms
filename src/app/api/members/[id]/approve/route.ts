@@ -40,26 +40,51 @@ export async function POST(
     const { id: memberId } = await params;
     console.log('Approving member:', memberId);
 
-    // 1. Get member data
+    // Parse override from request body
+    let body: any = {};
+    try {
+      body = await request.json();
+    } catch (e) {
+      // Body might be empty, that's okay
+    }
+    const { override, overrideReason } = body;
+
+    // Fetch member first for audit logging
     const { data: member, error: fetchError } = await supabase
+      .from('members')
+      .select('verification_method, verification_status, full_name')
+      .eq('id', memberId)
+      .single();
+
+    if (fetchError) {
+      return NextResponse.json({ error: 'Member not found' }, { status: 404 });
+    }
+
+    // Admin can approve regardless of verification status
+    // Just log if verification was incomplete
+
+    // Get full member data for approval process
+    const { data: fullMember, error: fullMemberError } = await supabase
       .from('members')
       .select('*')
       .eq('id', memberId)
       .single();
 
-    if (fetchError || !member) {
-      console.error('Member not found:', fetchError);
+    if (fullMemberError || !fullMember) {
+      console.error('Member not found:', fullMemberError);
       return NextResponse.json(
         { success: false, error: 'Member not found' },
         { status: 404 }
       );
     }
 
-    console.log('Member found:', member.email);
+    console.log('Member found:', (fullMember as any).email);
+
+    // Continue with approval...
 
     // 2. Generate member_id if not exists
-    const quicklookId = (member as any).quicklook_id;
-    const memberNumber = (member as any).member_id || generateMemberId((member as any).id, quicklookId);
+    const quicklookId = (fullMember as any).quicklook_id;
+    const memberNumber = (fullMember as any).member_id || generateMemberId((fullMember as any).id, quicklookId);
     console.log('Member number:', memberNumber);
 
     // 3. Prepare attachments array
@@ -75,14 +100,14 @@ export async function POST(
         body: JSON.stringify({
           memberId: memberId,
           memberData: {
-            fullName: (member as any).full_name,
-            email: (member as any).email,
-            city: (member as any).city,
-            organization: (member as any).division || (member as any).organization,
-            division: (member as any).division,
+            fullName: (fullMember as any).full_name,
+            email: (fullMember as any).email,
+            city: (fullMember as any).city,
+            organization: (fullMember as any).division || (fullMember as any).organization,
+            division: (fullMember as any).division,
             membershipNumber: memberNumber,
             status: 'active',
-            joinDate: (member as any).created_at,
+            joinDate: (fullMember as any).created_at,
           },
         }),
       });
@@ -111,12 +136,12 @@ export async function POST(
     console.log('Generating card PDF via generateMembershipCard()...');
     try {
       // Parse full name into first and last name
-      const nameParts = ((member as any).full_name || '').split(' ');
+      const nameParts = ((fullMember as any).full_name || '').split(' ');
       const firstName = nameParts[0] || '';
       const lastName = nameParts.slice(1).join(' ') || '';
       
       // Format join date as YYYY-MM-DD
-      const joinDate = new Date((member as any).created_at || new Date()).toISOString().split('T')[0];
+      const joinDate = new Date((fullMember as any).created_at || new Date()).toISOString().split('T')[0];
       
       // Generate card PDF buffer
       const cardPdfBytes = await generateMembershipCard(
@@ -148,7 +173,7 @@ export async function POST(
         <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
           <h2 style="color: #1a1a1a; margin-bottom: 15px;">✅ Vaše Članstvo je Odobreno</h2>
           
-          <p style="color: #333; line-height: 1.6;">Poštovani/Poštovana <strong>${(member as any).full_name}</strong>,</p>
+          <p style="color: #333; line-height: 1.6;">Poštovani/Poštovana <strong>${(fullMember as any).full_name}</strong>,</p>
           
           <p style="color: #333; line-height: 1.6;">
             Sa zadovoljstvom vam javljamo da je vaša prijava za članstvo u Sindikat Radnika NCR Atleos Beograd <strong>odobreno</strong>.
@@ -185,7 +210,7 @@ export async function POST(
     console.log('📧 Email being sent with attachments:', attachments);
     const { data: emailData, error: emailError } = await resend.emails.send({
       from: 'office@sindikatncr.com',
-      to: (member as any).email,
+      to: (fullMember as any).email,
       bcc: 'sindikatncratleos@gmail.com',
       subject: 'Sindikat Radnika NCR Atleos - Članstvo Odobreno',
       html: emailHtml,
@@ -206,20 +231,42 @@ export async function POST(
     // 7. Update member in database
     const adminId = (session?.user as any)?.id; // Get admin UUID from session
     
+    const updateData: any = {
+      status: 'active',        // ← CHANGED from 'approved'
+      member_id: memberNumber,
+      card_sent: true,
+      approved_at: new Date().toISOString(),
+      approved_by: adminId,
+    };
+
+    if (override) {
+      updateData.notes = `[OVERRIDE] ${overrideReason || 'Admin override - verification bypassed'}\n${member.notes || ''}`;
+    }
+    
     const { error: updateError } = await supabase
       .from('members')
-      .update({
-        status: 'active',        // ← CHANGED from 'approved'
-        member_id: memberNumber,
-        card_sent: true,
-        approved_at: new Date().toISOString(),
-        approved_by: adminId,
-      })
+      .update(updateData)
       .eq('id', memberId);
 
     if (updateError) {
       console.error('Error updating member:', updateError);
       throw new Error(`Database update failed: ${updateError.message}`);
+    }
+
+    // Add audit log entry for overrides
+    if (override) {
+      await supabase.from('audit_logs').insert({
+        admin_id: adminId,
+        action: 'override_approve_member',
+        target_type: 'member',
+        target_id: memberId.toString(),
+        details: {
+          member_name: member.full_name,
+          verification_method: member.verification_method,
+          verification_status: member.verification_status,
+          override_reason: overrideReason
+        }
+      });
     }
 
     console.log('✅ Member approved successfully');

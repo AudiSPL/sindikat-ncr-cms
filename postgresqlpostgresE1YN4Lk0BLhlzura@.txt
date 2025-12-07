@@ -1,0 +1,55 @@
+postgresql://postgres:E1YN4Lk0BLhlzura@db.loixkzynmlwlipwzqadt.supabase.co:5432/postgres?sslmode=require
+
+
+PAYLOAD_SECRET=ThM29PkuCK4HTeaw+D5FYiRIH6f7VgoRWXeOsDLT8Y0=
+DATABASE_URL=postgresql://postgres:E1YN4Lk0BLhlzura>@db.loixkzynmlwlipwzqadt.supabase.co:5432/postgres?sslmode=require
+PAYLOAD_PUBLIC_SERVER_URL=http://localhost:4000
+
+[System.Uri]::EscapeDataString("10mk2YgcRe-EZExzym3Oc3ovVo50UWUwV")
+
+
+$env:PAYLOAD_SECRET = "someSuperLongSecretValue1234567890"
+$env:DATABASE_URL   = "postgresql://postgres:OVDE_ENKODOVANA_LOZINKA@db.loixkzynmlwlipwzqadt.supabase.co:5432/postgres?sslmode=require"
+$env:PAYLOAD_PUBLIC_SERVER_URL = "http://localhost:3000"
+
+
+$env:PAYLOAD_SECRET = "ThM29PkuCK4HTeaw+D5FYiRIH6f7VgoRWXeOsDLT8Y0="
+$env:DATABASE_URL = "postgresql://postgres:E1YN4Lk0BLhlzura%3E%40db.loixkzynmlwlipwzqadt.supabase.co:5432/postgres?sslmode=require"
+$env:PAYLOAD_PUBLIC_SERVER_URL = "http://localhost:4000"
+
+
+
+Naputusindikatauveknekostrada
+
+# Nakon restartovanja PowerShell-a, proverite:
+git --version
+
+
+transaction pooler: postgresql://postgres.loixkzynmlwlipwzqadt:[YOUR-PASSWORD]@aws-1-eu-central-1.pooler.supabase.com:6543/postgres
+
+session pooler: postgresql://postgres.loixkzynmlwlipwzqadt:[YOUR-PASSWORD]@aws-1-eu-central-1.pooler.supabase.com:5432/postgres
+
+pooler: $env:PAYLOAD_SECRET = "ThM29PkuCK4HTeaw+D5FYiRIH6f7VgoRWXeOsDLT8Y0="
+$env:DATABASE_URL   = "postgresql://postgres.loixkzynmlwlipwzqadt:E1YN4Lk0BLhlzura%3E@aws-1-eu-central-1.pooler.supabase.com:6543/postgres?pgbouncer=true&sslmode=require"
+$env:PAYLOAD_PUBLIC_SERVER_URL = "http://localhost:3000"
+
+
+
+milossavin
+ajmorukegore
+
+
+
+sindikatncratleos@gmail.com
+Dolazisindikat25
+
+
+pqdv xgvi jkeq kxma
+
+
+# Postavite vaše ime i email (zamenite sa vašim podacima)
+git config --"AudiSPL"
+git config --"risto.krivodolac@gmail.com"
+
+# Proverite konfiguraciju
+git config --list

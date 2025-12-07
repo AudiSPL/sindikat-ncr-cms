@@ -43,7 +43,7 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
     },
     {
       id: 1,
-      title: 'STATUT',
+      title: isSerbian ? 'STATUT' : 'Statute',
       icon: FileText,
       description: isSerbian 
         ? 'Osnovni dokument koji definiše ciljeve, strukturu, principe i način rada sindikata NCR Atleos. Sadrži sve informacije o organizaciji, donošenju odluka i upravljanju sindikatom.'

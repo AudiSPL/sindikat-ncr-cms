@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useForm, Controller } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 type FormData = {
   full_name: string;
@@ -178,8 +179,18 @@ export default function NovaPristupnicaPage() {
 
       const result = await response.json();
 
-      // Redirect to verification page with token
-      router.push(`/${lang}/verify?token=${result.token}`);
+      // Show success message
+      toast.success(
+        lang === 'sr' 
+          ? '✅ Korak 1 završen! Preusmeravanje na korak 2...' 
+          : '✅ Step 1 complete! Redirecting to step 2...',
+        { duration: 2000 }
+      );
+
+      // Wait briefly for toast to show, then redirect
+      setTimeout(() => {
+        router.push(`/${lang}/verify?token=${result.token}`);
+      }, 1500);
     } catch (err: any) {
       setError(err.message);
       setIsSubmitting(false);

@@ -19,7 +19,7 @@ export function Logo({ className = "h-8 w-8" }: LogoProps) {
       
       {/* Desktop: Full circular logo (≥640px) */}
       <Image
-        src="/brand/Logo_blue_white_brand_navy.png"
+        src="/brand/Logo_blue_white_transparent.png"
         alt="Sindikat NCR Logo"
         width={32}
         height={32}

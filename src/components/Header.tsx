@@ -37,9 +37,9 @@ export function Header({ lang }: HeaderProps) {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6 py-3 md:py-4">
         {/* Logo */}
         <Link href={`/${lang}`} className="flex items-center gap-2 md:gap-3 hover:opacity-90 transition-opacity duration-200" onClick={closeMobileMenu}>
-          <Logo className="h-6 w-6 md:h-8 md:w-8" />
+          <Logo className="h-8 w-8 md:h-10 md:w-10" />
           <span className="font-bold text-sm md:text-lg text-slate-900 dark:text-white hidden sm:block">Sindikat Radnika NCR Atleos – Beograd</span>
-          <span className="font-bold text-sm md:text-lg text-slate-900 dark:text-white sm:hidden">Sindikat NCR</span>
+          <span className="font-bold text-sm md:text-lg text-slate-900 dark:text-white sm:hidden">Sindikat</span>
         </Link>
 
         {/* Desktop Navigation */}

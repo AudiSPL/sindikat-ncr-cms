@@ -12,8 +12,8 @@ import { Textarea } from '@/components/ui/textarea';
 const content = {
   sr: {
     header: {
-      title: 'Prijava primljena!',
-      subtitle: 'Poslednji korak: Verifikujte da radite u NCR Atleos',
+      title: 'Još jedan korak!',
+      subtitle: 'Verifikujte da radite u NCR Atleos',
     },
     infoBanner: 'Ova verifikacija štiti sindikat od lažnih prijava. Izaberite jedan način - svi su sigurni i privatni.',
     methods: {
@@ -152,8 +152,8 @@ const content = {
   },
   en: {
     header: {
-      title: 'Application Received!',
-      subtitle: 'Final step: Verify you work at NCR Atleos',
+      title: 'One more step!',
+      subtitle: 'Verify you work at NCR Atleos',
     },
     infoBanner: 'This verification protects the union from fake applications. Choose one method - all are secure and private.',
     methods: {
@@ -386,6 +386,18 @@ export default function VerifyClient({
   return (
     <div className="min-h-screen bg-[#0F1419] py-12 px-4">
       <div className="max-w-3xl mx-auto">
+        {/* Step 2 indicator */}
+        <div className="flex items-center justify-center mb-6">
+          <div className="flex items-center gap-2 bg-green-900/30 border border-green-500 rounded-full px-4 py-2">
+            <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center font-bold text-sm">
+              2
+            </div>
+            <span className="text-sm font-medium text-green-400">
+              {t.header.subtitle.split(':')[0]} {/* Shows "Poslednji korak" / "Final step" */}
+            </span>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-8">
           <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />

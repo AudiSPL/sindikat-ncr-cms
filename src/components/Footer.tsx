@@ -20,7 +20,7 @@ export function Footer({ lang }: FooterProps) {
           {/* Logo and Name */}
           <div className="space-y-2">
             <div className="flex items-center space-x-3">
-              <Logo className="h-8 w-8" />
+              <Logo className="h-10 w-10" />
               <span className="font-bold text-lg text-white">Sindikat Radnika NCR Atleos – Beograd</span>
             </div>
             <p className="text-sm text-white/90">
