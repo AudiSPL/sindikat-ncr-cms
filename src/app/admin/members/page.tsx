@@ -81,7 +81,7 @@ export default function AdminMembersPage() {
       case 'incomplete':
         return allMembers.filter(m => 
           m.verification_method === null &&
-          m.status !== 'deleted'
+          !(m as any).deleted_at
         );
       
       case 'approved':
@@ -91,7 +91,7 @@ export default function AdminMembersPage() {
       
       case 'deleted':
         return allMembers.filter(m => 
-          m.status === 'deleted' || (m as any).deleted_at !== null
+          (m as any).deleted_at !== null
         );
       
       default:
@@ -104,7 +104,7 @@ export default function AdminMembersPage() {
   const incompleteCount = incompleteApplications.length;
   const approvedCount = approvedMembers.length;
   const deletedCount = allMembers?.filter(m => 
-    m.status === 'deleted' || (m as any).deleted_at !== null
+    (m as any).deleted_at !== null
   ).length || 0;
 
   // Handler functions
