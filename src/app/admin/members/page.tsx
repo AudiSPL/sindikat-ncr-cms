@@ -155,24 +155,6 @@ export default function AdminMembersPage() {
     }
   };
 
-  const handleSendReminder = async (memberId: number, email: string, name: string) => {
-    try {
-      const response = await fetch(`/api/members/${memberId}/send-reminder`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send reminder');
-      }
-
-      toast.success(`Podsetnik poslat na ${email}`);
-    } catch (error) {
-      toast.error('Greška pri slanju podsetnika');
-      console.error(error);
-    }
-  };
-
   const glassCard = "bg-[rgba(30,30,40,0.6)] border border-white/10 backdrop-blur-md shadow-[0_30px_80px_rgba(0,0,0,0.3)] text-white";
 
   if (loading) {
