@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
         <p>This is a test email with a PDF attachment.</p>
         <p>Check the attachments section below.</p>
       `,
+      replyTo: 'office@sindikatncr.com',
       attachments: [
         {
           filename: 'test-document.pdf',

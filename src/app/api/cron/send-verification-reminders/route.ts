@@ -79,6 +79,7 @@ export async function GET(request: Request) {
           from: process.env.UNION_EMAIL || 'office@sindikatncr.com',
           to: member.email,
           bcc: 'sindikatncratleos@gmail.com',
+          replyTo: 'office@sindikatncr.com',
           subject: 'Završite prijavljivanje - Sindikat NCR Atleos',
           html: `
             <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5;">

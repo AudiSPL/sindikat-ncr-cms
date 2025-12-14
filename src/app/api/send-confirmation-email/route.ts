@@ -458,6 +458,7 @@ export async function POST(request: Request) {
       subject: t.subject,
       html: generateEmailHTML(lang as 'sr' | 'en', name, verifyUrl),
       text: generatePlainText(lang as 'sr' | 'en', name, verifyUrl),
+      replyTo: 'office@sindikatncr.com',
     });
 
     if (error) {

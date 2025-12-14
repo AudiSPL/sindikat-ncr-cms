@@ -214,6 +214,7 @@ export async function POST(
       bcc: 'sindikatncratleos@gmail.com',
       subject: 'Sindikat Radnika NCR Atleos - Članstvo Odobreno',
       html: emailHtml,
+      replyTo: 'office@sindikatncr.com',
       attachments: attachments,
     });
 
