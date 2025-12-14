@@ -26,6 +26,7 @@ interface Member {
   verification_method?: string | null;
   verification_status?: string | null;
   deleted_at?: string | null;
+  is_anonymous?: boolean;
 }
 
 export default function GradilisteDashboard() {
@@ -344,14 +345,25 @@ export default function GradilisteDashboard() {
   };
 
   const stats = {
-    total: members.length,
+    total: members.filter(m => 
+      m.status === 'active' && 
+      !m.deleted_at
+    ).length,
     pending: members.filter(m => m.status === 'pending').length,
-    approved: members.filter(m => m.status === 'active').length,
+    active: members.filter(m => 
+      m.status === 'active' && 
+      !m.deleted_at && 
+      !m.is_anonymous
+    ).length,
     rejected: members.filter(m => m.status === 'inactive').length,
   };
 
   const goal = 334;
-  const currentCount = members.filter(m => m.status === 'active').length;
+  const currentCount = members.filter(m => 
+    m.status === 'active' && 
+    !m.deleted_at && 
+    !m.is_anonymous
+  ).length;
   const penetrationData = [
     { name: 'Članovi', value: currentCount, fill: 'hsl(var(--brand-orange))' },
     { name: 'Preostalo do 334', value: Math.max(goal - currentCount, 0), fill: 'hsl(var(--muted))' },
@@ -419,11 +431,11 @@ export default function GradilisteDashboard() {
 
           <Card onClick={() => goToList('approved')} className={`${glassCard} cursor-pointer transition hover:shadow-[0_0_25px_rgba(230,126,34,0.25)]`}>
             <CardHeader className="flex flex-row items-center justify-between pb-2 text-white">
-              <CardTitle className="text-sm font-semibold text-white">Odobreno</CardTitle>
+              <CardTitle className="text-sm font-semibold text-white">Aktivni</CardTitle>
               <CheckCircle className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white">{stats.approved}</div>
+              <div className="text-2xl font-bold text-white">{stats.active}</div>
             </CardContent>
           </Card>
 
