@@ -32,6 +32,8 @@ type Member = {
   card_sent?: boolean | null;
   special_status?: string;
   is_active_member?: boolean;
+  deleted_at?: string | null;
+  is_anonymous?: boolean;
 };
 
 const GOAL = 334;
@@ -72,7 +74,14 @@ export default function AnalyticsPage() {
     }
   }
 
-  const activeMembers = useMemo(() => members.filter(m => m.status === 'active'), [members]);
+  const activeMembers = useMemo(() => 
+    members.filter(m => 
+      m.status === 'active' && 
+      !m.deleted_at && 
+      !m.is_anonymous
+    ), 
+    [members]
+  );
   const currentCount = activeMembers.length;
   const penetrationRate = ((currentCount / GOAL) * 100).toFixed(2);
 
