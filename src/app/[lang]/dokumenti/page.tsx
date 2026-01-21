@@ -8,6 +8,11 @@ interface DokumentiPageProps {
   params: Promise<{ lang: string }>;
 }
 
+// Emoji icon component for DSM
+const LightbulbEmoji = ({ className }: { className?: string }) => (
+  <span className={className?.replace('h-6 w-6', 'text-2xl') || 'text-2xl'} role="img" aria-label="lightbulb">💡</span>
+);
+
 export async function generateMetadata({ params }: DokumentiPageProps): Promise<Metadata> {
   const { lang } = await params;
 
@@ -39,7 +44,8 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
       description: isSerbian
         ? 'Oficijalno rešenje Ministarstva za rad, zapošljavanje, boračka i socijalna pitanja o upisu Sindikata NCR Atleos u Registar sindikata.'
         : 'Official resolution from the Ministry of Labor, Employment, Veterans and Social Affairs regarding the registration of Sindikat NCR Atleos in the Register of Trade Unions.',
-      pdf: '/documents/Resenje o upisu.pdf'
+      pdf: '/documents/Resenje o upisu.pdf',
+      fullWidth: false
     },
     {
       id: 1,
@@ -48,7 +54,8 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
       description: isSerbian 
         ? 'Osnovni dokument koji definiše ciljeve, strukturu, principe i način rada sindikata NCR Atleos. Sadrži sve informacije o organizaciji, donošenju odluka i upravljanju sindikatom.'
         : 'The founding document that defines the goals, structure, principles, and operations of the NCR Atleos Union. Contains all information about organization, decision-making, and union management.',
-      pdf: '/documents/СТАТУТ.pdf'
+      pdf: '/documents/СТАТУТ.pdf',
+      fullWidth: false
     },
     {
       id: 2,
@@ -57,7 +64,8 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
       description: isSerbian
         ? 'Definiše uslove i procedure članstva, prava i obaveze članova sindikata. Obavezna literatura za sve nove članove.'
         : 'Defines the conditions and procedures for membership, as well as member rights and responsibilities. Essential reading for all new members.',
-      pdf: '/documents/Правилник Синдиката (ср).pdf'
+      pdf: '/documents/Правилник Синдиката (ср).pdf',
+      fullWidth: false
     },
     {
       id: 3,
@@ -66,7 +74,18 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
       description: isSerbian
         ? 'Objašnjava kako sindikat obrađuje, čuva i štiti vaše lične podatke, u skladu sa GDPR i lokalnim propisima.'
         : 'Explains how the union processes, stores, and protects your personal data in compliance with GDPR and local regulations.',
-      pdf: '/documents/Privacy Policy.pdf'
+      pdf: '/documents/Privacy Policy.pdf',
+      fullWidth: false
+    },
+    {
+      id: 'dsm',
+      title: isSerbian ? 'Metodologija Digitalnog Sindikata (DSM™)' : 'Digital Syndicate Methodology (DSM™)',
+      icon: LightbulbEmoji,
+      description: isSerbian
+        ? 'Registrovana metodologija za digitalno organizovanje sindikata. Autorsko delo deponovano u Zavodu za intelektualnu svojinu Republike Srbije. Broj potvrde: 10.309.'
+        : 'Registered methodology for digital union organizing. Copyright work deposited with the Intellectual Property Office of the Republic of Serbia. Certificate number: 10.309.',
+      pdf: '/documents/DSM_Metodologija.pdf',
+      fullWidth: true
     }
   ];
 
@@ -147,19 +166,22 @@ export default async function DokumentiPage({ params }: DokumentiPageProps) {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {coreDocuments.map((doc) => (
-              <Card key={doc.id} className="hover:shadow-lg transition-all duration-300 flex flex-col bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700">
-                <CardHeader className="flex-grow pb-3">
-                  <div className="flex items-center space-x-3 mb-3">
+              <Card 
+                key={doc.id} 
+                className={`hover:shadow-lg transition-all duration-300 flex flex-col bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 ${doc.fullWidth ? 'col-span-1 md:col-span-2 lg:col-span-4' : ''}`}
+              >
+                <CardHeader className={`flex-grow ${doc.fullWidth ? 'pb-2' : 'pb-3'}`}>
+                  <div className={`flex items-center space-x-3 ${doc.fullWidth ? 'mb-2' : 'mb-3'}`}>
                     <doc.icon className="h-6 w-6 text-[#F28C38]" />
                     <CardTitle className="text-base md:text-lg font-bold text-[#0B2C49] dark:text-white">
                       {doc.title}
                     </CardTitle>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  <p className={`text-sm text-gray-600 dark:text-gray-300 ${doc.fullWidth ? 'leading-snug' : 'leading-relaxed'}`}>
                     {doc.description}
                   </p>
                 </CardHeader>
-                <CardContent className="pt-0 pb-4">
+                <CardContent className={`pt-0 ${doc.fullWidth ? 'pb-2' : 'pb-4'}`}>
                   <a 
                     href={doc.pdf} 
                     download
